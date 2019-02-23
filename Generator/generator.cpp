@@ -1,24 +1,20 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <fstream>
-#include <iostream>
-using namespace std; //com isto posso escrever string e o compilador vai perceber
+#include "generator.h"
 
 void plano(int lado, string ficheiro){
-
     ofstream file;
     file.open(ficheiro);
+
     float x, y, z;
     y = 0;
-    x = lado/2;
+    x = lado/2;   //Verificar se está bem assim.
     z = lado/2;
 
-
-	file << x << "," << y << "," << z << endl; //isto é um vértice
+    //Escreve os vértices de um triangulo no ficheiro
+	file << x << "," << y << "," << z << endl; 
 	file << x << "," << y << "," << -z << endl; 
 	file << -x << "," << y << "," << -z << endl; 
 
+	//Vértices do outro triângulo
 	file << -x << "," << y << "," << -z << endl; 
 	file << -x << "," << y << "," << z << endl; 
 	file << x << "," << y << "," << z << endl; 
@@ -27,14 +23,15 @@ void plano(int lado, string ficheiro){
     file.close();
 }
 
+
 int main(int argc, char **argv){
 	if(argc > 1){
 
-		if(strcmp(argv[1], "Plano") == 0){
+		if(strcmp(argv[1], "Plano") == 0 && argc == 4){
 		    plano(atoi(argv[2]), argv[3]);
 		}
 		else{
-			printf("Erro\n");
+			printf("Introduza os parâmetros corretamente\n");
 		}
 
 	}
