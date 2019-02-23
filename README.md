@@ -1,2 +1,2 @@
-# CG
+# CG-Trabalho
 Computer Graphics assignment
