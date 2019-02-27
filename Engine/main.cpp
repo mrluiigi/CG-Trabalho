@@ -5,7 +5,10 @@
 #endif
 
 #include <math.h>
+#include "tinyxml2.h"
 
+using namespace tinyxml2;
+using namespace std;
 
 
 void changeSize(int w, int h) {
@@ -54,6 +57,13 @@ void renderScene(void) {
     glEnd();
     // End of frame
     glutSwapBuffers();
+}
+
+void parseXML(char* file){
+    XMLDocument doc;
+    doc.LoadFile( "dream.xml" );
+
+    //fazer parse ao ficheiro aqui!
 }
 
 

@@ -87,6 +87,12 @@
 		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/main.cpp">
 			<Option target="Engine"/>
 		</Unit>
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.h">
+			<Option target="Engine"/>
+		</Unit>
 		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
