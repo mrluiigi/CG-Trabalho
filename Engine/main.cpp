@@ -61,7 +61,8 @@ void renderScene(void) {
 
 void parseXML(char* file){
     XMLDocument doc;
-    doc.LoadFile( "dream.xml" );
+    doc.LoadFile( file );
+    
 
     //fazer parse ao ficheiro aqui!
 }
