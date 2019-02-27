@@ -9,6 +9,8 @@ void plano(int lado, string ficheiro){
     x = lado/2;   //Verificar se está bem assim.
     z = lado/2;
 
+    file << 6 << endl;
+
     //Escreve os vértices de um triangulo no ficheiro
 	file << x << "," << y << "," << z << endl; 
 	file << x << "," << y << "," << -z << endl; 
