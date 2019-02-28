@@ -15,6 +15,14 @@ math.h
 -
 tinyxml2.h
 /home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.h
+fstream
+-
+iostream
+-
+string
+-
+vector
+-
 
 /home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.h
 ctype.h

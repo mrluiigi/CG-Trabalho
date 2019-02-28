@@ -6,9 +6,29 @@
 
 #include <math.h>
 #include "tinyxml2.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace tinyxml2;
 using namespace std;
+
+
+
+class Vertice{
+    public:
+        float x;
+        float y;
+        float z;
+};
+
+class Triangle{
+public:
+    Vertice p1;
+    Vertice p2;
+    Vertice p3;
+};
 
 
 void changeSize(int w, int h) {
@@ -59,17 +79,64 @@ void renderScene(void) {
     glutSwapBuffers();
 }
 
-void parseXML(char* file){
+std::vector<string> parseXML(char* file){
     XMLDocument doc;
-    doc.LoadFile( file );
-    
+    XMLElement * pRoot;
+    std::vector<string> res;
 
-    //fazer parse ao ficheiro aqui!
+    XMLError loaded = doc.LoadFile( file );
+
+    if(loaded == tinyxml2::XML_SUCCESS) {
+        pRoot = doc.FirstChildElement("scene");
+        XMLElement * model = pRoot->FirstChildElement("model");
+
+        const char * nome = model->Attribute("file");
+        res.push_back(nome);
+
+    }
+    return res;
 }
 
+//Corrigir, não está a dar bem no final da linha
+Vertice toVertice(string s){
+    Vertice v;
+
+    float array[3];
+    int i = 0;
+
+    std::string delimiter = ",";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        array[i] = stof(token);
+        i++;
+        s.erase(0, pos + delimiter.length());
+    }
+    v.x = array[0];
+    v.y = array[1];
+    v.z = array[2];
+    return v;
+}
+
+void lerficheiro(char* fileXML){
+
+    std::vector<string> v = parseXML(fileXML);
+    ifstream file(v[0]);
+
+    string s;
+    getline(file, s);
+    while(getline(file, s)){
+        Vertice v = toVertice(s);
+        cout << v.x  << "," << v.y << "," << v.z << "\n";
+
+    }
+
+    file.close();
+}
 
 int main(int argc, char **argv) {
-
+    lerficheiro(argv[1]);
 // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
