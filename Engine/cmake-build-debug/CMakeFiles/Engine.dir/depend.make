@@ -4,4 +4,6 @@
 CMakeFiles/Engine.dir/main.cpp.o: ../main.cpp
 CMakeFiles/Engine.dir/main.cpp.o: ../tinyxml2.h
 
+CMakeFiles/Engine.dir/tinyxml2.cpp.o: ../tinyxml2.cpp
+CMakeFiles/Engine.dir/tinyxml2.cpp.o: ../tinyxml2.h
 

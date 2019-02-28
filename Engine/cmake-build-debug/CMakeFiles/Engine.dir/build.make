@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/mrluiigi/clion-2018.3.4/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /opt/clion-2018.3.4/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/mrluiigi/clion-2018.3.4/bin/cmake/linux/bin/cmake -E remove -f
+RM = /opt/clion-2018.3.4/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mrluiigi/Desktop/CG-Trabalho/Engine
+CMAKE_SOURCE_DIR = /home/barbosa/Desktop/CG-Trabalho/Engine
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug
+CMAKE_BINARY_DIR = /home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Engine.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/Engine.dir/flags.make
 
 CMakeFiles/Engine.dir/tinyxml2.cpp.o: CMakeFiles/Engine.dir/flags.make
 CMakeFiles/Engine.dir/tinyxml2.cpp.o: ../tinyxml2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Engine.dir/tinyxml2.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Engine.dir/tinyxml2.cpp.o -c /home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Engine.dir/tinyxml2.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Engine.dir/tinyxml2.cpp.o -c /home/barbosa/Desktop/CG-Trabalho/Engine/tinyxml2.cpp
 
 CMakeFiles/Engine.dir/tinyxml2.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Engine.dir/tinyxml2.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.cpp > CMakeFiles/Engine.dir/tinyxml2.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/barbosa/Desktop/CG-Trabalho/Engine/tinyxml2.cpp > CMakeFiles/Engine.dir/tinyxml2.cpp.i
 
 CMakeFiles/Engine.dir/tinyxml2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Engine.dir/tinyxml2.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.cpp -o CMakeFiles/Engine.dir/tinyxml2.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/barbosa/Desktop/CG-Trabalho/Engine/tinyxml2.cpp -o CMakeFiles/Engine.dir/tinyxml2.cpp.s
 
 CMakeFiles/Engine.dir/main.cpp.o: CMakeFiles/Engine.dir/flags.make
 CMakeFiles/Engine.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Engine.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Engine.dir/main.cpp.o -c /home/mrluiigi/Desktop/CG-Trabalho/Engine/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Engine.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Engine.dir/main.cpp.o -c /home/barbosa/Desktop/CG-Trabalho/Engine/main.cpp
 
 CMakeFiles/Engine.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Engine.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mrluiigi/Desktop/CG-Trabalho/Engine/main.cpp > CMakeFiles/Engine.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/barbosa/Desktop/CG-Trabalho/Engine/main.cpp > CMakeFiles/Engine.dir/main.cpp.i
 
 CMakeFiles/Engine.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Engine.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mrluiigi/Desktop/CG-Trabalho/Engine/main.cpp -o CMakeFiles/Engine.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/barbosa/Desktop/CG-Trabalho/Engine/main.cpp -o CMakeFiles/Engine.dir/main.cpp.s
 
 # Object files for target Engine
 Engine_OBJECTS = \
@@ -99,7 +99,7 @@ Engine: /usr/lib/x86_64-linux-gnu/libGLX.so
 Engine: /usr/lib/x86_64-linux-gnu/libGLU.so
 Engine: /usr/lib/x86_64-linux-gnu/libglut.so
 Engine: CMakeFiles/Engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable Engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable Engine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Engine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -112,6 +112,6 @@ CMakeFiles/Engine.dir/clean:
 .PHONY : CMakeFiles/Engine.dir/clean
 
 CMakeFiles/Engine.dir/depend:
-	cd /home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mrluiigi/Desktop/CG-Trabalho/Engine /home/mrluiigi/Desktop/CG-Trabalho/Engine /home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug /home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug /home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles/Engine.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/barbosa/Desktop/CG-Trabalho/Engine /home/barbosa/Desktop/CG-Trabalho/Engine /home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug /home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug /home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/CMakeFiles/Engine.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Engine.dir/depend
 

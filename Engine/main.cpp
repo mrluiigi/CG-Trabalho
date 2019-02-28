@@ -23,6 +23,8 @@ class Vertice{
         float z;
 };
 
+std::vector<Vertice> vertices;
+
 class Triangle{
 public:
     Vertice p1;
@@ -60,7 +62,7 @@ void changeSize(int w, int h) {
 void renderScene(void) {
 
     // clear buffers
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // set the camera
     glLoadIdentity();
     gluLookAt(5.0,5.0,5.0,
@@ -72,6 +74,54 @@ void renderScene(void) {
 
 
     // put drawing instructions here
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(1, 0, 0);
+
+    /*for(int i = 0; i < vertices.size(); i++ ){
+        Vertice v = vertices[i];
+        glVertex3f(v.x, v.y, v.z);
+
+    }*/
+
+    int x = 2;
+    int y1 = 0;
+    int y2 = 2;
+    int z = 2;
+
+    //base debaixo
+    glVertex3f(x,y1,z);
+    glVertex3f(x,y1,-z);
+    glVertex3f(-x,y1,-z);
+
+    glVertex3f(-x,y1,-z);
+    glVertex3f(-x,y1,z);
+    glVertex3f(x,y1,z);
+
+    //base de cima
+    glColor3f(1, 1, 0);
+    glVertex3f(x,y2,z);
+    glVertex3f(x,y2,-z);
+    glVertex3f(-x,y2,-z);
+
+    glVertex3f(-x,y2,-z);
+    glVertex3f(-x,y2,z);
+    glVertex3f(x,y2,z);
+
+    //face do lado direito
+    glColor3f(0, 0, 1);
+    glVertex3f(x,y1,-z);
+    glVertex3f(x,y2,z);
+    glVertex3f(x,y1,z);
+
+    glVertex3f(x,y2,z);
+    glVertex3f(x,y1,-z);
+    glVertex3f(x,y2,-z);
+
+
+
+
+
 
 
     glEnd();
@@ -129,7 +179,7 @@ void lerficheiro(char* fileXML){
     while(getline(file, s)){
         Vertice v = toVertice(s);
         cout << v.x  << "," << v.y << "," << v.z << "\n";
-
+        vertices.push_back(v);
     }
 
     file.close();
@@ -141,9 +191,9 @@ int main(int argc, char **argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(1920,1080);
+    glutInitWindowSize(800,800);
     glutCreateWindow("Projeto_CG");
-    glClearColor(1.0,1.0,1.0,1.0);
+   // glClearColor(1.0,1.0,1.0,1.0);
 
 // Required callback registry
     glutDisplayFunc(renderScene);

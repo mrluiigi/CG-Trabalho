@@ -1,4 +1,5 @@
 #include "generator.h"
+#include <string>
 
 void plano(int lado, string ficheiro){
     ofstream file;
@@ -12,14 +13,14 @@ void plano(int lado, string ficheiro){
     file << 6 << endl;
 
     //Escreve os vértices de um triangulo no ficheiro
-	file << x << "," << y << "," << z << endl; 
-	file << x << "," << y << "," << -z << endl; 
-	file << -x << "," << y << "," << -z << endl; 
+	file << x << "," << y << "," << z << "," << endl; 
+	file << x << "," << y << "," << -z << "," << endl; 
+	file << -x << "," << y << "," << -z << "," << endl; 
 
 	//Vértices do outro triângulo
-	file << -x << "," << y << "," << -z << endl; 
-	file << -x << "," << y << "," << z << endl; 
-	file << x << "," << y << "," << z << endl; 
+	file << -x << "," << y << "," << -z << "," << endl; 
+	file << -x << "," << y << "," << z << "," << endl; 
+	file << x << "," << y << "," << z << "," << endl; 
 
 
     file.close();
@@ -27,10 +28,16 @@ void plano(int lado, string ficheiro){
 
 
 int main(int argc, char **argv){
+	
+
+
 	if(argc > 1){
+		string dir1 = "../Models/";
+		dir1.insert(10,argv[3]);
+		cout << dir1;
 
 		if(strcmp(argv[1], "Plano") == 0 && argc == 4){
-		    plano(atoi(argv[2]), argv[3]);
+		    plano(atoi(argv[2]), dir1);
 		}
 		else{
 			printf("Introduza os parâmetros corretamente\n");

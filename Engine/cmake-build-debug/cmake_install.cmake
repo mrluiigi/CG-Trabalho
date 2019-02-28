@@ -1,4 +1,4 @@
-# Install script for directory: /home/mrluiigi/Desktop/CG-Trabalho/Engine
+# Install script for directory: /home/barbosa/Desktop/CG-Trabalho/Engine
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
