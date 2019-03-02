@@ -107,69 +107,68 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
 
 	file << nVertices << endl;
 
-	for(int i = 0; i < slices; i++) {
-       /*
+	
+	float xDownLeft = radius *sin((0) * alpha);
+	float yDownLeft = 0;
+	float zDownLeft = radius * cos((0) * alpha);
 
-	    float xd = radius * cos(beta)  * sin((i+1)*alpha);
-	    float yd = radius * sin(beta);
-	    float zd = radius * cos(beta) * cos((i+1)*alpha);
+	
+	for(int i = 0; i < slices; i++) {		
+		float xDownRight = radius *sin((i+1) * alpha);
+		float yDownRight = 0;
+		float zDownRight = radius * cos((i+1) * alpha);
 
-	    float xe = radius * cos(beta) * sin(i*alpha);
-	    float ye = radius * sin(beta);
-	    float ze = radius * cos(beta) * cos(i*alpha);*/
-
+		float xTemp = xDownRight;
+		float yTemp = yDownRight;
+		float zTemp = zDownRight;
 
 	    for(int j = 0; j < stacks; j++) {
-	        //base para cima
-	        x1 = radius * cos(beta * j) *sin(i * alpha);
-	        y1 = radius * sin(beta * j);
-	        z1 = radius * cos(beta * j) *cos(i * alpha); //baixo esquerda
-
-	        x2 = radius * cos(beta * j)* sin((i + 1) * alpha);
-	        y2 = radius * sin(beta * j);
-	        z2 = radius* cos(beta * j) * cos((i + 1) * alpha); //baixo direita
 	        
-	        x3 = radius * cos(beta * (j+1)) * sin(i * alpha);
-	        y3 = radius * sin(beta * (j+1));
-	        z3 = radius * cos(beta * (j+1)) * cos(i * alpha); //cima esquerda
+	        float xUpLeft = radius * cos(beta * (j+1)) * sin(i * alpha);
+	        float yUpLeft = radius * sin(beta * (j+1));
+	        float zUpLeft = radius * cos(beta * (j+1)) * cos(i * alpha); 
+
+	        float xUpRight = radius * cos(beta * (j+1)) * sin((i + 1) * alpha);
+	        float yUpRight = yUpLeft;
+	        float zUpRight = radius * cos(beta * (j+1)) * cos((i + 1) * alpha); 
+
+	        //baixo para cima
+	        file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+
+    		//cima para baixo
+    		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
 
 
-	        //cima para base
-	        x4 = radius * cos(beta * (j+1)) * sin((i + 1) * alpha);
-	        y4 = radius * sin(beta * (j+1));
-	        z4 = radius * cos(beta * (j+1)) * cos((i + 1) * alpha); //cima direita
+    		//metade de baixo da esfera
+    		file << xDownLeft << "," << -yDownLeft << "," << zDownLeft << "," << endl;
+            file << xDownRight << "," << -yDownRight << "," << zDownRight << "," << endl;
+            file << xUpLeft << "," << -yUpLeft << "," << zUpLeft << "," << endl;
 
-	        x5 = radius * cos(beta * (j+1)) * sin(i * alpha);
-	        y5 = radius * sin(beta * (j+1));
-	        z5 = radius * cos(beta * (j+1)) * cos(i * alpha); //cima esquerda
+            file << xUpRight << "," << -yUpRight << "," << zUpRight << "," << endl;
+            file << xUpLeft << "," << -yUpLeft << "," << zUpLeft << "," << endl;
+            file << xDownRight << "," << -yDownRight << "," << zDownRight << "," << endl;
 
-	        x6 = radius * cos(beta * j)* sin((i + 1) * alpha);
-	        y6 = radius * sin(beta * j);
-	        z6 = radius* cos(beta * j) * cos((i + 1) * alpha); //baixo direita
+            xDownLeft = xUpLeft;
+            yDownLeft = yUpLeft;
+            zDownLeft = zUpLeft;
 
-	        file << x1 << "," << y1 << "," << z1 << "," << endl;
-    		file << x2 << "," << y2 << "," << z2 << "," << endl;
-    		file << x3 << "," << y3 << "," << z3 << "," << endl;
-
-    		file << x4 << "," << y4 << "," << z4 << "," << endl;
-    		file << x5 << "," << y5 << "," << z5 << "," << endl;
-    		file << x6 << "," << y6 << "," << z6 << "," << endl;
-
-    		file << x1 << "," << -y1 << "," << z1 << "," << endl;
-            file << x2 << "," << -y2 << "," << z2 << "," << endl;
-            file << x3 << "," << -y3 << "," << z3 << "," << endl;
-
-            file << x4 << "," << -y4 << "," << z4 << "," << endl;
-            file << x5 << "," << -y5 << "," << z5 << "," << endl;
-            file << x6 << "," << -y6 << "," << z6 << "," << endl;
+            xDownRight = xUpRight;
+            yDownRight = yUpRight;
+            zDownRight = zUpRight;
 	    }
 
+	    xDownLeft = xTemp;
+        yDownLeft = yTemp;
+        zDownLeft = zTemp;
 
 	}
 
     file.close();
 }
-
 
 
 
