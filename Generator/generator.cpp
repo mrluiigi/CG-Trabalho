@@ -108,19 +108,18 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
 	file << nVertices << endl;
 
 	
-	float xDownLeft = radius *sin((0) * alpha);
-	float yDownLeft = 0;
-	float zDownLeft = radius * cos((0) * alpha);
 
 	
-	for(int i = 0; i < slices; i++) {		
+	for(int i = 0; i < slices; i++) {	
+
+		float xDownLeft = radius *sin(i * alpha);
+		float yDownLeft = 0;
+		float zDownLeft = radius * cos(i * alpha);
+	
+
 		float xDownRight = radius *sin((i+1) * alpha);
 		float yDownRight = 0;
 		float zDownRight = radius * cos((i+1) * alpha);
-
-		float xTemp = xDownRight;
-		float yTemp = yDownRight;
-		float zTemp = zDownRight;
 
 	    for(int j = 0; j < stacks; j++) {
 	        
@@ -161,9 +160,6 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
             zDownRight = zUpRight;
 	    }
 
-	    xDownLeft = xTemp;
-        yDownLeft = yTemp;
-        zDownLeft = zTemp;
 
 	}
 
