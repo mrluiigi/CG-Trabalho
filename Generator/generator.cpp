@@ -102,7 +102,7 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
 	file.open(ficheiro);
 	int nVertices = 2*slices*stacks*3;
 	float alpha = (2*M_PI)/slices;
-	float beta = (2*M_PI)/stacks;
+	float beta = (M_PI)/stacks;
 	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5, x6, y6, z6;
 
 	file << nVertices << endl;
@@ -154,6 +154,14 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
     		file << x4 << "," << y4 << "," << z4 << "," << endl;
     		file << x5 << "," << y5 << "," << z5 << "," << endl;
     		file << x6 << "," << y6 << "," << z6 << "," << endl;
+
+    		file << x1 << "," << -y1 << "," << z1 << "," << endl;
+            file << x2 << "," << -y2 << "," << z2 << "," << endl;
+            file << x3 << "," << -y3 << "," << z3 << "," << endl;
+
+            file << x4 << "," << -y4 << "," << z4 << "," << endl;
+            file << x5 << "," << -y5 << "," << z5 << "," << endl;
+            file << x6 << "," << -y6 << "," << z6 << "," << endl;
 	    }
 
 
@@ -173,16 +181,35 @@ void cone(float radius, float height, int slices, int stacks, string ficheiro){
 	float alpha = (2*M_PI)/slices;
 
 	float ladeira = sqrt(height*height+radius*radius);
-	float divisaoPequena = (ladeira/stacks)/2;
-	float beta = -1/(tan(height/radius)); //angulo entre a base do cone e a superficie lateral
+	float divisaoPequena = (ladeira/stacks);
+	float beta = atan(height/radius); //angulo entre a base do cone e a superficie lateral
 
 	float y = 0;
+	float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
 	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5, x6, y6, z6;
 
 	float qtdSubRadius = cos(beta) * divisaoPequena;
 	float qtdAddY = sin(beta) * divisaoPequena;
 
 	file << nVertices << endl;
+
+	for(int i = 0; i < slices; i++) {
+		bx1 = 0;
+		by1 = 0;
+		bz1 = 0;
+
+		bx2 = radius * sin((i+1)*alpha);
+		by2 = 0;
+		bz2 = radius * cos((i+1)*alpha);
+
+		bx3 = radius * sin(i*alpha);
+		by3 = 0;
+		bz3 = radius * cos(i*alpha);
+
+		file << bx1 << "," << by1 << "," << bz1 << "," << endl;
+    	file << bx2 << "," << by2 << "," << bz2 << "," << endl;
+    	file << bx3 << "," << by3 << "," << bz3 << "," << endl;
+	}
 
 	for(int j = 0; j < stacks; j++) {
 
