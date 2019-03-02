@@ -187,33 +187,66 @@ void lerficheiro(char* fileXML){
     }
 }
 
+void printHelp(){
+    cout << "##################################################" << endl;
+    cout << "#                                                #" << endl;
+    cout << "# Como invocar: ./Engine ../{XML FILE}           #" << endl;
+    cout << "#                                                #" << endl;
+    cout << "#                                                #" << endl;
+    cout << "#  Movimentos:                                   #" << endl;
+    cout << "#        w: Move a câmara para cima              #" << endl;
+    cout << "#        s: Move a câmara para baixo             #" << endl;
+    cout << "#        a: Move a câmara para a esquerda        #" << endl;
+    cout << "#        d: Move a câmara para a direita         #" << endl;
+    cout << "#   KEY_UP: Move a câmara para cime              #" << endl;
+    cout << "# KEY_DOWN: Move a câmara para baixo             #" << endl;
+    cout << "# KEY_LEFT: Move a câmara para a esquerda        #" << endl;
+    cout << "# KEY_RIGHT: Move a câmara para a direita        #" << endl;
+    cout << "#                                                #" << endl;
+    cout << "##################################################" << endl;
+
+
+}
+
+
 int main(int argc, char **argv) {
 
-    lerficheiro(argv[1]);
+    if(argc < 2){
+        cout << "Argumentos insuficientes" << endl;
+        cout << "Faça ./Engine -h para ajuda" << endl;
+        return 0;
+    }
+    else if(!strcmp(argv[1], "-h")){
+        printHelp();
+        return 0;
+    }
+    else {
+        lerficheiro(argv[1]);
 
 // init GLUT and the window
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
-    glutInitWindowPosition(100,100);
-    glutInitWindowSize(800,800);
-    glutCreateWindow("Projeto_CG");
+        glutInit(&argc, argv);
+        glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+        glutInitWindowPosition(100, 100);
+        glutInitWindowSize(800, 800);
+        glutCreateWindow("Projeto_CG");
 
 // Required callback registry
-    glutDisplayFunc(renderScene);
-    glutReshapeFunc(changeSize);
+        glutDisplayFunc(renderScene);
+        glutReshapeFunc(changeSize);
 
 
 // put here the registration of the keyboard callbacks
-    glutKeyboardFunc(processKeys);
-    glutSpecialFunc(processSpecialKeys);
+        glutKeyboardFunc(processKeys);
+        glutSpecialFunc(processSpecialKeys);
 
 //  OpenGL settings
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 // enter GLUT's main cycle
-    glutMainLoop();
+        glutMainLoop();
 
-    return 1;
+        return 1;
+    }
 }
