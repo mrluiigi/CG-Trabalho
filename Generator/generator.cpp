@@ -107,29 +107,101 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
 
 	file << nVertices << endl;
 
-	
+	 
 
-	
+
+
+
+
+
+
+	/*
 	for(int i = 0; i < slices; i++) {	
 
-		float xDownLeft = radius *sin(i * alpha);
-		float yDownLeft = 0;
-		float zDownLeft = radius * cos(i * alpha);
-	
+		float xDownLeft = radius * cos(M_PI/2 - beta) * sin(i * alpha);
+		float yDownLeft = radius * sin(M_PI/2 - beta);
+		float zDownLeft = radius * cos(M_PI/2 - beta) * cos(i * alpha);
 
-		float xDownRight = radius *sin((i+1) * alpha);
-		float yDownRight = 0;
-		float zDownRight = radius * cos((i+1) * alpha);
+		float xDownRight = radius * cos(M_PI/2 - beta) * sin((i + 1) * alpha);
+		float yDownRight = yDownLeft;
+		float zDownRight = radius * cos(M_PI/2 - beta) * cos((i + 1) * alpha);
 
-	    for(int j = 0; j < stacks; j++) {
+
+		file << 0 << "," << radius << "," << 0 << "," << endl;
+    	file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
+    	file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+
+	}*/
+
+	for(int j = 0; j < stacks; j++) {
+		for(int i = 0; i < slices; i++) {
+			float xUpLeft = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);
+			float yUpLeft = radius * sin(M_PI/2 - beta * j);
+			float zUpLeft = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
+
+			float xUpRight = radius * cos(M_PI/2 - beta * j) * sin((i + 1) * alpha);
+			float yUpRight = yUpLeft;
+			float zUpRight = radius * cos(M_PI/2 - beta * j) * cos((i + 1) * alpha);
+
+			float xDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * sin(i * alpha);
+			float yDownLeft = radius * sin(M_PI/2 - beta * (j+1));
+			float zDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * cos(i * alpha);
+
+			float xDownRight = radius * cos(M_PI/2 - beta * (j+1)) * sin((i + 1) * alpha);
+			float yDownRight = yDownLeft;
+			float zDownRight = radius * cos(M_PI/2 - beta * (j+1)) * cos((i + 1) * alpha);
+
+
+			//baixo para cima
+	        file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+
+    		//cima para baixo
+    		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+
+		}
+	}
+
+
+
+		/*float xUpLeft = 0;
+        float yUpLeft = radius;
+        float zUpLeft = 0; 
+
+        float xUpRight = 0;
+        float yUpRight = radius;
+        float zUpRight = 0; 
+
+		
+
+	    for(int j = stacks; j > stacks -3; j--) {
+
+	    	float xDownLeft =  radius * cos(beta * (j-1)) * sin(i * alpha);
+			float yDownLeft = radius * sin(beta * (j-1));
+			float zDownLeft = radius * cos(beta * (j-1)) * cos(i * alpha);
+		
+
+			float xDownRight = radius * cos(beta * (j-1)) * sin((i + 1) * alpha);
+			float yDownRight = yDownLeft;
+			float zDownRight = radius * cos(beta * (j-1)) * cos((i + 1) * alpha);
+
+
+
+
+
 	        
-	        float xUpLeft = radius * cos(beta * (j+1)) * sin(i * alpha);
+	       float xUpLeft = radius * cos(beta * (j+1)) * sin(i * alpha);
 	        float yUpLeft = radius * sin(beta * (j+1));
 	        float zUpLeft = radius * cos(beta * (j+1)) * cos(i * alpha); 
 
 	        float xUpRight = radius * cos(beta * (j+1)) * sin((i + 1) * alpha);
 	        float yUpRight = yUpLeft;
 	        float zUpRight = radius * cos(beta * (j+1)) * cos((i + 1) * alpha); 
+
+	        
 
 	        //baixo para cima
 	        file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
@@ -151,17 +223,17 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
             file << xUpLeft << "," << -yUpLeft << "," << zUpLeft << "," << endl;
             file << xDownRight << "," << -yDownRight << "," << zDownRight << "," << endl;
 
-            xDownLeft = xUpLeft;
-            yDownLeft = yUpLeft;
-            zDownLeft = zUpLeft;
+            xUpLeft  = xDownLeft;
+            yUpLeft  = yDownLeft;
+            zUpLeft  = zDownLeft;
 
-            xDownRight = xUpRight;
-            yDownRight = yUpRight;
-            zDownRight = zUpRight;
+            xUpRight  = xDownRight;
+            yUpRight  = yDownRight;
+            zUpRight  = zDownRight;
 	    }
 
 
-	}
+	}*/
 
     file.close();
 }
