@@ -116,18 +116,16 @@ void processKeys(unsigned char c, int xx, int yy) {
 
 std::vector<string> parseXML(char* file){
     XMLDocument doc;
-    XMLElement * pRoot;
+
     std::vector<string> res;
 
-    XMLError loaded = doc.LoadFile( file );
-
-    if(loaded == tinyxml2::XML_SUCCESS) {
-        pRoot = doc.FirstChildElement("scene");
-        XMLElement * model = pRoot->FirstChildElement("model");
-
-        const char * nome = model->Attribute("file");
-        res.push_back(nome);
-
+    if(!(doc.LoadFile(file))) {
+        XMLElement* root = doc.FirstChildElement();
+        for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
+            string nome = child->Attribute("file");
+            res.push_back(nome);
+            cout << nome << endl;
+        }
     }
     return res;
 }
@@ -157,17 +155,22 @@ Vertice toVertice(string s){
 void lerficheiro(char* fileXML){
 
     std::vector<string> v = parseXML(fileXML);
-    ifstream file(v[0]);
 
-    string s;
-    getline(file, s);
-    while(getline(file, s)){
-        Vertice v = toVertice(s);
-        cout << v.x  << "," << v.y << "," << v.z << "\n";
-        vertices.push_back(v);
+    vector<string>::iterator it;
+    for(it = v.begin(); it != v.end(); it++){
+        ifstream file(v[ std::distance(v.begin(), it) ]);
+
+        string s;
+        getline(file, s);
+        while(getline(file, s)){
+            Vertice v = toVertice(s);
+            cout << v.x  << "," << v.y << "," << v.z << "\n";
+            vertices.push_back(v);
+        }
+
+        file.close();
+
     }
-
-    file.close();
 }
 
 int main(int argc, char **argv) {

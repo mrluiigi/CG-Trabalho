@@ -8,28 +8,28 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
+				<Option working_dir="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
+				<Option working_dir="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Engine">
-				<Option output="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Engine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
+				<Option output="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Engine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -44,15 +44,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 Engine"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 Engine"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Engine/fast">
-				<Option output="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Engine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
+				<Option output="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Engine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -67,33 +67,33 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 Engine/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 Engine/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
+				<Option working_dir="/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/barbosa/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/barbosa/Desktop/CG-Trabalho/Engine/main.cpp">
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/main.cpp">
 			<Option target="Engine"/>
 		</Unit>
-		<Unit filename="/home/barbosa/Desktop/CG-Trabalho/Engine/tinyxml2.cpp">
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.cpp">
 			<Option target="Engine"/>
 		</Unit>
-		<Unit filename="/home/barbosa/Desktop/CG-Trabalho/Engine/tinyxml2.h">
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/tinyxml2.h">
 			<Option target="Engine"/>
 		</Unit>
-		<Unit filename="/home/barbosa/Desktop/CG-Trabalho/Engine/CMakeLists.txt">
+		<Unit filename="/home/mrluiigi/Desktop/CG-Trabalho/Engine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
