@@ -26,14 +26,6 @@ class Vertice{
 
 std::vector<Vertice> vertices;
 
-class Triangle{
-public:
-    Vertice p1;
-    Vertice p2;
-    Vertice p3;
-};
-
-
 void changeSize(int w, int h) {
 
     // Prevent a divide by zero, when window is too short
@@ -59,7 +51,6 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void renderScene(void) {
 
     // clear buffers
@@ -70,7 +61,6 @@ void renderScene(void) {
     gluLookAt(r*cos(alfaV)*sin(alfaH), r*sin(alfaV),r*cos(alfaV)*cos(alfaH),
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
-
 
     // put the geometric transformations here
 
@@ -108,29 +98,34 @@ void processKeys(unsigned char c, int xx, int yy) {
         alfaV -= M_PI/8;
     }
 
-
     glutPostRedisplay();
 
-
 }
 
-std::vector<string> parseXML(char* file){
-    XMLDocument doc;
+void processSpecialKeys(int key, int xx, int yy) {
 
-    std::vector<string> res;
+    switch(key) {
 
-    if(!(doc.LoadFile(file))) {
-        XMLElement* root = doc.FirstChildElement();
-        for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
-            string nome = child->Attribute("file");
-            res.push_back(nome);
-            cout << nome << endl;
-        }
+        case GLUT_KEY_LEFT :
+            alfaH -= M_PI/8;
+            break;
+        case GLUT_KEY_RIGHT :
+            alfaH += M_PI/8;
+            break;
+        case GLUT_KEY_UP :
+            if(alfaV >= -M_PI/2)
+                alfaV -= M_PI/8;
+            break;
+        case GLUT_KEY_DOWN :
+            if(alfaV <= M_PI/2)
+                alfaV += M_PI/8;
+            break;
     }
-    return res;
+
+    glutPostRedisplay();
 }
 
-//Corrigir, não está a dar bem no final da linha
+
 Vertice toVertice(string s){
     Vertice v;
 
@@ -152,6 +147,27 @@ Vertice toVertice(string s){
     return v;
 }
 
+/** Parse ao ficheiro XML */
+std::vector<string> parseXML(char* file){
+    XMLDocument doc;
+
+    std::vector<string> res;
+
+    //Se conseguir carregar o ficheiro
+    if(!(doc.LoadFile(file))) {
+        XMLElement* root = doc.FirstChildElement();
+
+        for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
+            string nome = child->Attribute("file");
+            //Põe no vetor
+            res.push_back(nome);
+            cout << nome << endl;
+        }
+    }
+    return res;
+}
+
+/** Processa os vértices lidos do ficheiro */
 void lerficheiro(char* fileXML){
 
     std::vector<string> v = parseXML(fileXML);
@@ -167,21 +183,20 @@ void lerficheiro(char* fileXML){
             cout << v.x  << "," << v.y << "," << v.z << "\n";
             vertices.push_back(v);
         }
-
         file.close();
-
     }
 }
 
 int main(int argc, char **argv) {
+
     lerficheiro(argv[1]);
+
 // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(800,800);
     glutCreateWindow("Projeto_CG");
-    glutKeyboardFunc(processKeys);
 
 // Required callback registry
     glutDisplayFunc(renderScene);
@@ -189,7 +204,8 @@ int main(int argc, char **argv) {
 
 
 // put here the registration of the keyboard callbacks
-
+    glutKeyboardFunc(processKeys);
+    glutSpecialFunc(processSpecialKeys);
 
 //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
