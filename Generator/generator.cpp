@@ -2,9 +2,9 @@
 #include <string>
 #include <math.h>
 
-void plano(int lado, string ficheiro){
+void plano(int lado, string fileName){
     ofstream file;
-    file.open(ficheiro);
+    file.open(fileName);
 
     float x, y, z;
     y = 0;
@@ -27,9 +27,9 @@ void plano(int lado, string ficheiro){
     file.close();
 }
 
-void caixa(float x, float y, float z, string ficheiro){
+void caixa(float x, float y, float z, string fileName){
 	ofstream file;
-	file.open(ficheiro);
+	file.open(fileName);
 
 	y = y/2;
 	x = x/2;
@@ -97,23 +97,14 @@ void caixa(float x, float y, float z, string ficheiro){
 }
 
 
-void esfera(float radius, int slices, int stacks, string ficheiro){
+void esfera(float radius, int slices, int stacks, string fileName){
 	ofstream file;
-	file.open(ficheiro);
+	file.open(fileName);
 	int nVertices = 2*slices*stacks*3;
 	float alpha = (2*M_PI)/slices;
 	float beta = (M_PI)/stacks;
-	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5, x6, y6, z6;
 
 	file << nVertices << endl;
-
-	 
-
-
-
-
-
-
 
 	/*
 	for(int i = 0; i < slices; i++) {	
@@ -132,134 +123,68 @@ void esfera(float radius, int slices, int stacks, string ficheiro){
     	file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
 
 	}*/
-
+	//cada iteração desenha uma camada horizontal (do topo para baixo)
 	for(int j = 0; j < stacks; j++) {
+		//cada iteração desenha uma fatia da camada horizontal
 		for(int i = 0; i < slices; i++) {
+			//Vértice no canto superior esquerdo
 			float xUpLeft = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);
 			float yUpLeft = radius * sin(M_PI/2 - beta * j);
 			float zUpLeft = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
-
+			//Vértice no canto superior direito
 			float xUpRight = radius * cos(M_PI/2 - beta * j) * sin((i + 1) * alpha);
 			float yUpRight = yUpLeft;
 			float zUpRight = radius * cos(M_PI/2 - beta * j) * cos((i + 1) * alpha);
-
+			//Vértice no canto inferior esquerdo
 			float xDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * sin(i * alpha);
 			float yDownLeft = radius * sin(M_PI/2 - beta * (j+1));
 			float zDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * cos(i * alpha);
-
+			//Vértice no canto inferior direito
 			float xDownRight = radius * cos(M_PI/2 - beta * (j+1)) * sin((i + 1) * alpha);
 			float yDownRight = yDownLeft;
 			float zDownRight = radius * cos(M_PI/2 - beta * (j+1)) * cos((i + 1) * alpha);
 
-
-			//baixo para cima
+			//triângulo com 2 vértices em baixo e um em cima
 	        file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
     		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
     		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
 
-    		//cima para baixo
+    		//triângulo com 2 vértices em cima e um em baixo
     		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
     		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
     		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-
 		}
 	}
-
-
-
-		/*float xUpLeft = 0;
-        float yUpLeft = radius;
-        float zUpLeft = 0; 
-
-        float xUpRight = 0;
-        float yUpRight = radius;
-        float zUpRight = 0; 
-
-		
-
-	    for(int j = stacks; j > stacks -3; j--) {
-
-	    	float xDownLeft =  radius * cos(beta * (j-1)) * sin(i * alpha);
-			float yDownLeft = radius * sin(beta * (j-1));
-			float zDownLeft = radius * cos(beta * (j-1)) * cos(i * alpha);
-		
-
-			float xDownRight = radius * cos(beta * (j-1)) * sin((i + 1) * alpha);
-			float yDownRight = yDownLeft;
-			float zDownRight = radius * cos(beta * (j-1)) * cos((i + 1) * alpha);
-
-
-
-
-
-	        
-	       float xUpLeft = radius * cos(beta * (j+1)) * sin(i * alpha);
-	        float yUpLeft = radius * sin(beta * (j+1));
-	        float zUpLeft = radius * cos(beta * (j+1)) * cos(i * alpha); 
-
-	        float xUpRight = radius * cos(beta * (j+1)) * sin((i + 1) * alpha);
-	        float yUpRight = yUpLeft;
-	        float zUpRight = radius * cos(beta * (j+1)) * cos((i + 1) * alpha); 
-
-	        
-
-	        //baixo para cima
-	        file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
-    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-
-    		//cima para baixo
-    		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
-    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-
-
-    		//metade de baixo da esfera
-    		file << xDownLeft << "," << -yDownLeft << "," << zDownLeft << "," << endl;
-            file << xDownRight << "," << -yDownRight << "," << zDownRight << "," << endl;
-            file << xUpLeft << "," << -yUpLeft << "," << zUpLeft << "," << endl;
-
-            file << xUpRight << "," << -yUpRight << "," << zUpRight << "," << endl;
-            file << xUpLeft << "," << -yUpLeft << "," << zUpLeft << "," << endl;
-            file << xDownRight << "," << -yDownRight << "," << zDownRight << "," << endl;
-
-            xUpLeft  = xDownLeft;
-            yUpLeft  = yDownLeft;
-            zUpLeft  = zDownLeft;
-
-            xUpRight  = xDownRight;
-            yUpRight  = yDownRight;
-            zUpRight  = zDownRight;
-	    }
-
-
-	}*/
-
     file.close();
 }
 
 
 
-void cone(float radius, float height, int slices, int stacks, string ficheiro){
+void cone(float radius, float height, int slices, int stacks, string fileName){
 	ofstream file;
-	file.open(ficheiro);
+	file.open(fileName);
 
 	int nVertices = 2*slices*stacks*3;
 	float alpha = (2*M_PI)/slices;
-
-	float ladeira = sqrt(height*height+radius*radius);
-	float divisaoPequena = (ladeira/stacks);
-	float beta = atan(height/radius); //angulo entre a base do cone e a superficie lateral
+	float coneSlant = sqrt(height*height+radius*radius);
+	float segment = (coneSlant/stacks);
+	//ângulo entre a base e a superficie lateral do cone
+	float beta = atan(height/radius);
 
 	float y = 0;
 	float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
-	float x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5, x6, y6, z6;
-
-	float qtdSubRadius = cos(beta) * divisaoPequena;
-	float qtdAddY = sin(beta) * divisaoPequena;
+	float xDownLeft, yDownLeft, zDownLeft;
+	float xDownRight, yDownRight, zDownRight;
+	float xUpLeft, yUpLeft, zUpLeft;
+	float xUpRight, yUpRight, zUpRight;
+	//diferença entre 
+	float qtdSubRadius = cos(beta) * segment;
+	//difenença entra a altura de cada camada 
+	float qtdAddY = sin(beta) * segment;
 
 	file << nVertices << endl;
 
+	//base do cone
 	for(int i = 0; i < slices; i++) {
 		bx1 = 0;
 		by1 = 0;
@@ -277,58 +202,47 @@ void cone(float radius, float height, int slices, int stacks, string ficheiro){
     	file << bx2 << "," << by2 << "," << bz2 << "," << endl;
     	file << bx3 << "," << by3 << "," << bz3 << "," << endl;
 	}
-
+	//cada iteração desenha uma camada horizontal (da base até ao topo)
 	for(int j = 0; j < stacks; j++) {
-
-		float novoRaio = radius - qtdSubRadius;
-		float novoY = y + qtdAddY;
-
+		//distância entre um dos vértices superiores e o eixo dos yy's
+		float newRadius = radius - qtdSubRadius;
+		//distância entre um dos vértices superiores e o plano xOz
+		float newY = y + qtdAddY;
+		//cada iteração desenha uma fatia da camada horizontal
 		for(int i = 0; i < slices; i++) {
 
-			//em baixo esquerda
-			x1 = radius*sin(alpha*i);
-			y1 = y;
-			z1 = radius*cos(alpha*i);
+			//Vértice no canto inferior esquerdo
+			xDownLeft = radius*sin(alpha*i);
+			yDownLeft = y;
+			zDownLeft = radius*cos(alpha*i);
 
-			//em baixo direita
-			x2 = radius*sin(alpha*(i+1));
-			y2 = y;
-			z2 = radius*cos(alpha*(i+1));
+			//Vértice no canto inferior direito
+			xDownRight = radius*sin(alpha*(i+1));
+			yDownRight = y;
+			zDownRight = radius*cos(alpha*(i+1));
 
-			//em cima esquerda
-			x3 = novoRaio*sin(alpha*i);
-			y3 = novoY;
-			z3 = novoRaio*cos(alpha*i);
+			//Vértice no canto superior esquerdo
+			xUpLeft = newRadius*sin(alpha*i);
+			yUpLeft = newY;
+			zUpLeft = newRadius*cos(alpha*i);
 
+			//Vértice no canto superior direito
+			xUpRight = newRadius*sin(alpha*(i+1));
+			yUpRight = newY;
+			zUpRight = newRadius*cos(alpha*(i+1));
 
-
-			//em cima direita
-			x4 = novoRaio*sin(alpha*(i+1));
-			y4 = novoY;
-			z4 = novoRaio*cos(alpha*(i+1));
-
-			//em cima esquerda
-			x5 = novoRaio*sin(alpha*i);
-			y5 = novoY;
-			z5 = novoRaio*cos(alpha*i);
-
-			//em baixo direita
-			x6 = radius*sin(alpha*(i+1));
-			y6 = y;
-			z6 = radius*cos(alpha*(i+1));
-
-
-			file << x1 << "," << y1 << "," << z1 << "," << endl;
-    		file << x2 << "," << y2 << "," << z2 << "," << endl;
-    		file << x3 << "," << y3 << "," << z3 << "," << endl;
-
-    		file << x4 << "," << y4 << "," << z4 << "," << endl;
-    		file << x5 << "," << y5 << "," << z5 << "," << endl;
-    		file << x6 << "," << y6 << "," << z6 << "," << endl;
+			//triângulo com 2 vértices em baixo e um em cima
+			file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+    		//triângulo com 2 vértices em cima e um em baixo
+    		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+    		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
 		}
 
-		y = novoY;
-		radius = novoRaio;
+		y = newY;
+		radius = newRadius;
 	}
 
     file.close();
