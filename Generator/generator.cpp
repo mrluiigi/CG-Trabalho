@@ -12,8 +12,6 @@ void plano(int lado, string fileName){
     x = lado/2;
     z = lado/2;
 
-    file << 6 << endl;
-
     //Escreve os vértices de um triangulo no ficheiro
 	file << -x << "," << y << "," << z << "," << endl; 
 	file << x << "," << y << "," << z << "," << endl; 
@@ -36,8 +34,6 @@ void caixa(float x, float y, float z, string fileName){
 	y = y/2;
 	x = x/2;
 	z = z/2;
-
-	file << 36 << endl;
 
 	//base de baixo
     file << x << "," << -y << "," << z << "," << endl;
@@ -102,11 +98,9 @@ void caixa(float x, float y, float z, string fileName){
 void esfera(float radius, int slices, int stacks, string fileName){
 	ofstream file;
 	file.open(fileName);
-	int nVertices = 2*slices*stacks*3;
+
 	float alpha = (2*M_PI)/slices;
 	float beta = (M_PI)/stacks;
-
-	file << nVertices << endl;
 
 	/*
 	for(int i = 0; i < slices; i++) {	
@@ -165,7 +159,6 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
 	ofstream file;
 	file.open(fileName);
 
-	int nVertices = 2*slices*stacks*3;
 	float alpha = (2*M_PI)/slices;
 	float coneSlant = sqrt(height*height+radius*radius);
 	float segment = (coneSlant/stacks);
@@ -182,8 +175,6 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
 	float qtdSubRadius = cos(beta) * segment;
 	//difenença entra a altura de cada camada 
 	float qtdAddY = sin(beta) * segment;
-
-	file << nVertices << endl;
 
 	//base do cone
 	for(int i = 0; i < slices; i++) {
