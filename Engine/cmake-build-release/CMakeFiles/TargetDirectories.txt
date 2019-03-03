@@ -1,3 +1,0 @@
-/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-release/CMakeFiles/rebuild_cache.dir
-/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-release/CMakeFiles/Engine.dir
-/home/mrluiigi/Desktop/CG-Trabalho/Engine/cmake-build-release/CMakeFiles/edit_cache.dir
