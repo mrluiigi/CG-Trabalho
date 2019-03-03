@@ -175,11 +175,9 @@ void lerficheiro(char* fileXML){
     vector<string>::iterator it;
     for(it = v.begin(); it != v.end(); it++){
         ifstream file(v[ std::distance(v.begin(), it) ]);
-
         string s;
         while(getline(file, s)){
             Vertice v = toVertice(s);
-            cout << v.x  << "," << v.y << "," << v.z << "\n";
             vertices.push_back(v);
         }
         file.close();
