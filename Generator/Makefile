@@ -6,4 +6,3 @@ program:
 
 clean:
 	rm -f generator
-	rm -f *.3d

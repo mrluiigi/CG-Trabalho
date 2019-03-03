@@ -7,8 +7,8 @@ using namespace std; //com isto posso escrever string e o compilador vai percebe
 
 void plano(int lado, string ficheiro);
 
-void cubo(float comp, float larg, float altura, int divisions);
+void caixa(float x, float y, float z, string ficheiro);
 
-void sphere(float radius, int slices, int stacks);
+void esfera(float radius, int slices, int stacks, string ficheiro);
 
-void cone(float radius, float height, int slices, int stacks);
+void cone(float radius, float height, int slices, int stacks, string ficheiro);

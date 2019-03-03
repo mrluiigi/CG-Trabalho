@@ -2,6 +2,7 @@
 #include <string>
 #include <math.h>
 
+
 void plano(int lado, string fileName){
     ofstream file;
     file.open(fileName);
@@ -26,6 +27,7 @@ void plano(int lado, string fileName){
 
     file.close();
 }
+
 
 void caixa(float x, float y, float z, string fileName){
 	ofstream file;
@@ -159,7 +161,6 @@ void esfera(float radius, int slices, int stacks, string fileName){
 }
 
 
-
 void cone(float radius, float height, int slices, int stacks, string fileName){
 	ofstream file;
 	file.open(fileName);
@@ -249,36 +250,37 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void printHelp(){
+    cout << "################################################################" << endl;
+    cout << "#                                                              #" << endl;
+    cout << "# Como invocar:                                                #" << endl;
+    cout << "#      ./generator {COMANDO} {FICHEIRO}                        #" << endl;
+    cout << "#                                                              #" << endl;
+    cout << "#                                                              #" << endl;
+    cout << "# Comandos:                                                    #" << endl;
+    cout << "#      -Plano [Tamanho]                                        #" << endl;
+    cout << "#      -Caixa [Tamanho X] [Tamanho Y] [Tamanho Z] [DIVISÕES]   #" << endl;
+    cout << "#      -Esfera [RAIO] [SLICES] [STACKS]                        #" << endl;
+    cout << "#      -Cone [RAIO] [ALTURA] [SLICES] [STACKS]                 #" << endl;
+    cout << "#                                                              #" << endl;
+    cout << "################################################################" << endl;
+}
 
 int main(int argc, char **argv){
 	
-
-
-	if(argc > 1){
+	if (argc < 2){
+		cout << "Parâmetros insuficientes" << endl;
+		cout << "Faça ./generator -h para ajuda." << endl;
+		return -1;
+	} 
+	else if(!strcmp(argv[1], "-h")){
+        printHelp();
+        return 0;
+    }
+	else if(argc > 1){
 		string dir1 = "../Models/";
 		dir1.insert(10,argv[argc-1]);
-		cout << dir1;
+		cout << dir1 << endl;
 
 		if(strcmp(argv[1], "Plano") == 0 && argc == 4){
 		    plano(atoi(argv[2]), dir1);
@@ -297,11 +299,9 @@ int main(int argc, char **argv){
 		}
 
 		else{
-			printf("Introduza os parâmetros corretamente\n");
+			cout << "Introduza os parâmetros corretamente" << endl;
+			cout << "Faça ./generator -h para ajuda." << endl;
 		}
-
-	}
-	else{
-		printf("Parâmetros insuficientes\n");
+		return 1;
 	}
 }

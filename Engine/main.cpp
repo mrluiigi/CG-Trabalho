@@ -193,19 +193,17 @@ void printHelp(){
     cout << "# Como invocar: ./Engine ../{XML FILE}           #" << endl;
     cout << "#                                                #" << endl;
     cout << "#                                                #" << endl;
-    cout << "#  Movimentos:                                   #" << endl;
-    cout << "#        w: Move a câmara para cima              #" << endl;
-    cout << "#        s: Move a câmara para baixo             #" << endl;
-    cout << "#        a: Move a câmara para a esquerda        #" << endl;
-    cout << "#        d: Move a câmara para a direita         #" << endl;
-    cout << "#   KEY_UP: Move a câmara para cime              #" << endl;
-    cout << "# KEY_DOWN: Move a câmara para baixo             #" << endl;
-    cout << "# KEY_LEFT: Move a câmara para a esquerda        #" << endl;
-    cout << "# KEY_RIGHT: Move a câmara para a direita        #" << endl;
+    cout << "# Movimentos:                                    #" << endl;
+    cout << "#          w: Move a câmara para cima            #" << endl;
+    cout << "#          s: Move a câmara para baixo           #" << endl;
+    cout << "#          a: Move a câmara para a esquerda      #" << endl;
+    cout << "#          d: Move a câmara para a direita       #" << endl;
+    cout << "#     KEY_UP: Move a câmara para cime            #" << endl;
+    cout << "#   KEY_DOWN: Move a câmara para baixo           #" << endl;
+    cout << "#   KEY_LEFT: Move a câmara para a esquerda      #" << endl;
+    cout << "#  KEY_RIGHT: Move a câmara para a direita       #" << endl;
     cout << "#                                                #" << endl;
     cout << "##################################################" << endl;
-
-
 }
 
 
@@ -227,7 +225,7 @@ int main(int argc, char **argv) {
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
         glutInitWindowPosition(100, 100);
-        glutInitWindowSize(800, 800);
+        glutInitWindowSize(1920, 1080);
         glutCreateWindow("Projeto_CG");
 
 // Required callback registry
