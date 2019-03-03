@@ -177,7 +177,6 @@ void lerficheiro(char* fileXML){
         ifstream file(v[ std::distance(v.begin(), it) ]);
 
         string s;
-        getline(file, s);
         while(getline(file, s)){
             Vertice v = toVertice(s);
             cout << v.x  << "," << v.y << "," << v.z << "\n";
