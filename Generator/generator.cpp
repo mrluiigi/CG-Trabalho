@@ -102,42 +102,35 @@ void esfera(float radius, int slices, int stacks, string fileName){
 	float alpha = (2*M_PI)/slices;
 	float beta = (M_PI)/stacks;
 
-	/*
-	for(int i = 0; i < slices; i++) {	
-
-		float xDownLeft = radius * cos(M_PI/2 - beta) * sin(i * alpha);
-		float yDownLeft = radius * sin(M_PI/2 - beta);
-		float zDownLeft = radius * cos(M_PI/2 - beta) * cos(i * alpha);
-
-		float xDownRight = radius * cos(M_PI/2 - beta) * sin((i + 1) * alpha);
-		float yDownRight = yDownLeft;
-		float zDownRight = radius * cos(M_PI/2 - beta) * cos((i + 1) * alpha);
-
-
-		file << 0 << "," << radius << "," << 0 << "," << endl;
-    	file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
-    	file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-
-	}*/
 	//cada iteração desenha uma camada horizontal (do topo para baixo)
 	for(int j = 0; j < stacks; j++) {
+
+		//valores no eixo do y são constantes para cada stack
+		float yUpLeft = radius * sin(M_PI/2 - beta * j);
+		float yUpRight = yUpLeft;
+		float yDownLeft = radius * sin(M_PI/2 - beta * (j+1));
+		float yDownRight = yDownLeft;
+
+		//Vértice no canto superior esquerdo
+		float xUpLeft = radius * cos(M_PI/2 - beta * j) * sin(0 * alpha);
+		float zUpLeft = radius * cos(M_PI/2 - beta * j) * cos(0 * alpha);
+
+		//Vértice no canto inferior esquerdo
+		float xDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * sin(0 * alpha);		
+		float zDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * cos(0 * alpha);
+
+
 		//cada iteração desenha uma fatia da camada horizontal
 		for(int i = 0; i < slices; i++) {
-			//Vértice no canto superior esquerdo
-			float xUpLeft = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);
-			float yUpLeft = radius * sin(M_PI/2 - beta * j);
-			float zUpLeft = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
+			
+			
 			//Vértice no canto superior direito
-			float xUpRight = radius * cos(M_PI/2 - beta * j) * sin((i + 1) * alpha);
-			float yUpRight = yUpLeft;
+			float xUpRight = radius * cos(M_PI/2 - beta * j) * sin((i + 1) * alpha);		
 			float zUpRight = radius * cos(M_PI/2 - beta * j) * cos((i + 1) * alpha);
-			//Vértice no canto inferior esquerdo
-			float xDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * sin(i * alpha);
-			float yDownLeft = radius * sin(M_PI/2 - beta * (j+1));
-			float zDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * cos(i * alpha);
+
+			
 			//Vértice no canto inferior direito
 			float xDownRight = radius * cos(M_PI/2 - beta * (j+1)) * sin((i + 1) * alpha);
-			float yDownRight = yDownLeft;
 			float zDownRight = radius * cos(M_PI/2 - beta * (j+1)) * cos((i + 1) * alpha);
 
 			//triângulo com 2 vértices em baixo e um em cima
@@ -149,6 +142,12 @@ void esfera(float radius, int slices, int stacks, string fileName){
     		file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
     		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
     		file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
+
+    		//vértices da direita passam a ser os da esquerda na próxima iteração
+    		xUpLeft = xUpRight;
+    		zUpLeft = zUpRight;
+    		xDownLeft = xDownRight;
+    		zDownLeft = zDownRight;	
 		}
 	}
     file.close();
