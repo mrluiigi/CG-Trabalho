@@ -3,7 +3,7 @@
 #include <math.h>
 
 
-void plano(int lado, string fileName){
+void plano(float lado, string fileName){
     ofstream file;
     file.open(fileName);
 
@@ -27,70 +27,76 @@ void plano(int lado, string fileName){
 }
 
 
-void caixa(float x, float y, float z, string fileName){
+void caixa(float x, float y, float z, int divisions, string fileName){
 	ofstream file;
 	file.open(fileName);
 
-	y = y/2;
+	float divX = x/divisions;
+	float divY = y/divisions;
+	float divZ = z/divisions;
+
 	x = x/2;
+	y = y/2;
 	z = z/2;
 
-	//base de baixo
-    file << x << "," << -y << "," << z << "," << endl;
-    file << -x << "," << -y << "," << -z << "," << endl;
-    file << x << "," << -y << "," << -z << "," << endl;
-    
-    file << -x << "," << -y << "," << -z << "," << endl;
-    file << x << "," << -y << "," << z << "," << endl;
-    file << -x << "," << -y << "," << z << "," << endl;
+	for(int i = 0; i < divisions; i++){
+		for(int j = 0; j < divisions; j++){
+			//Base de baixo
+			file << -x + i*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
+			file << -x + i*divX << "," << -y << "," << -z + j*divZ << "," << endl;
+			file << -x + (i+1)*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
 
-    //base de cima
-    file << x << "," << y << "," << z << "," << endl;
-    file << x << "," << y << "," << -z << "," << endl;
-    file << -x << "," << y << "," << -z << "," << endl;
+			file << -x + (i+1)*divX << "," << -y << "," << -z + j*divZ << "," << endl;
+			file << -x + (i+1)*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
+			file << -x + i*divX << "," << -y << "," << -z + j*divZ << "," << endl;
 
-    file << -x << "," << y << "," << -z << "," << endl;
-    file << -x << "," << y << "," << z << "," << endl;
-    file << x << "," << y << "," << z << "," << endl;
-    
-    //face 4
-    file << x << "," << -y << "," << -z << "," << endl;
-    file << x << "," << y << "," << z << "," << endl;
-    file << x << "," << -y << "," << z << "," << endl;
-    
-    file << x << "," << y << "," << z << "," << endl;
-    file << x << "," << -y << "," << -z << "," << endl;
-    file << x << "," << y << "," << -z << "," << endl;
+			//Base de Cima
+			file << -x + i*divX << "," << y << "," << -z + j*divZ << "," << endl;
+			file << -x + i*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
+			file << -x + (i+1)*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
 
-    //face 1
-    file << x << "," << y << "," << z << "," << endl;
-    file << -x << "," << y << "," << z << "," << endl;
-    file << x << "," << -y << "," << z << "," << endl;
+			file << -x + (i+1)*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
+			file << -x + (i+1)*divX << "," << y << "," << -z + j*divZ << "," << endl;
+			file << -x + i*divX << "," << y << "," << -z + j*divZ << "," << endl;
+		
+			//Face da frente
+			file << -x + (i+1)*divX << "," << - y + (j+1)*divY << "," << z << "," << endl;
+    		file << -x + i*divX << "," << - y  + (j+1)*divY << "," << z << "," << endl;
+		    file << -x + (i+1)*divX << "," << -y + j*divY << "," << z << "," << endl;
 
-	file << x << "," << -y << "," << z << "," << endl;
-    file << -x << "," << y << "," << z << "," << endl;
-    file << -x << "," << -y << "," << z << "," << endl;
+			file << -x + (i+1)*divX  << "," << -y + j*divY << "," << z << "," << endl;
+		    file << -x + i*divX << "," << -y + (j+1)*divY << "," << z << "," << endl;
+		    file << -x + i*divX << "," << -y + j*divY  << "," << z << "," << endl;
 
-    //face 2
-    file << -x << "," << -y << "," << z << "," << endl;
-    file << -x << "," << y << "," << z << "," << endl;
-    file << -x << "," << -y << "," << -z << "," << endl;
+		    //Face de trás
+    		file << -x + i*divX << "," << - y  + (j+1)*divY << "," << -z << "," << endl;
+		    file << -x + (i+1)*divX << "," << - y + (j+1)*divY << "," << -z << "," << endl;
+		    file << -x + (i+1)*divX << "," << -y + j*divY << "," << -z << "," << endl;
 
-    file << -x << "," << -y << "," << -z << "," << endl;
-    file << -x << "," << y << "," << z << "," << endl;
-    file << -x << "," << y << "," << -z << "," << endl;
+		    file << -x + i*divX << "," << -y + (j+1)*divY << "," << -z << "," << endl;
+			file << -x + (i+1)*divX  << "," << -y + j*divY << "," << -z << "," << endl;
+		    file << -x + i*divX << "," << -y + j*divY  << "," << -z << "," << endl;
 
-    //face 3
-    file << -x << "," << -y << "," << -z << "," << endl;
-    file << -x << "," << y << "," << -z << "," << endl;
-    file << x << "," << y << "," << -z << "," << endl;
+		    //Face do lado esquerdo
+		    file << -x << "," << -y + j*divY << "," << -z + (i+1)*divZ << "," << endl;
+		    file << -x << "," << -y + (j+1)*divY << "," << -z + (i+1)*divZ << "," << endl;
+		    file << -x << "," << -y + j*divY << "," << -z + i*divZ<< "," << endl;
 
-    file << -x << "," << -y << "," << -z << "," << endl;
-    file << x << "," << y << "," << -z << "," << endl;
-    file << x << "," << -y << "," << -z << "," << endl;
+		    file << -x << "," << -y +j*divY << "," << -z + i*divZ << "," << endl;
+		    file << -x << "," << -y + (j+1)*divY<< "," << -z + (i+1)*divZ << "," << endl;
+		    file << -x << "," << -y + (j+1)*divY<< "," << -z + i*divZ << "," << endl;
 
+		    //Face do lado direito
+		    file << x << "," << -y + (j+1)*divY << "," << -z + (i+1)*divZ << "," << endl;
+		    file << x << "," << -y + j*divY << "," << -z + (i+1)*divZ << "," << endl;
+		    file << x << "," << -y + j*divY << "," << -z + i*divZ<< "," << endl;
 
-
+		    file << x << "," << -y + (j+1)*divY<< "," << -z + (i+1)*divZ << "," << endl;
+		    file << x << "," << -y +j*divY << "," << -z + i*divZ << "," << endl;
+		    file << x << "," << -y + (j+1)*divY<< "," << -z + i*divZ << "," << endl;
+		}
+	}
+	
     file.close();
 }
 
@@ -273,19 +279,19 @@ int main(int argc, char **argv){
 		cout << dir1 << endl;
 
 		if(strcmp(argv[1], "Plano") == 0 && argc == 4){
-		    plano(atoi(argv[2]), dir1);
+		    plano(atof(argv[2]), dir1);
 		}
 
-		else if(strcmp(argv[1], "Caixa") == 0 && argc == 6){
-		    caixa(atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), dir1);
+		else if(strcmp(argv[1], "Caixa") == 0 && argc == 7){
+		    caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), dir1);
 		}
 
 		else if(strcmp(argv[1], "Esfera") == 0 && argc == 6){
-		    esfera(atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), dir1);
+		    esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), dir1);
 		}
 
 		else if(strcmp(argv[1], "Cone") == 0 && argc == 7){
-		    cone(atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), dir1);
+		    cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), dir1);
 		}
 
 		else{
