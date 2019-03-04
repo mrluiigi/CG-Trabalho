@@ -282,8 +282,12 @@ int main(int argc, char **argv){
 		    plano(atof(argv[2]), dir1);
 		}
 
-		else if(strcmp(argv[1], "Caixa") == 0 && argc == 7){
-		    caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), dir1);
+		else if(strcmp(argv[1], "Caixa") == 0 && (argc == 6 || argc == 7)){	
+			if(argc == 6){
+				caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, dir1);
+			}
+			else
+		    	caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), dir1);
 		}
 
 		else if(strcmp(argv[1], "Esfera") == 0 && argc == 6){
