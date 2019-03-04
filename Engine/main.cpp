@@ -198,7 +198,7 @@ void lerficheiro(char* fileXML){
 void printHelp(){
     cout << "##################################################" << endl;
     cout << "#                                                #" << endl;
-    cout << "# Como invocar: ./Engine ../{XML FILE}           #" << endl;
+    cout << "# Como invocar: ./engine ../{XML FILE}           #" << endl;
     cout << "#                                                #" << endl;
     cout << "#                                                #" << endl;
     cout << "# Movimentos:                                    #" << endl;
@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
 
     if(argc < 2){
         cout << "Argumentos insuficientes" << endl;
-        cout << "Faça ./Engine -h para ajuda" << endl;
+        cout << "Faça ./engine -h para ajuda" << endl;
         return 0;
     }
     else if(!strcmp(argv[1], "-h")){
