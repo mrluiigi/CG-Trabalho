@@ -24,7 +24,13 @@ class Vertice{
         float z;
 };
 
-std::vector<Vertice> vertices;
+class Model{
+    public:
+        vector<Vertice> vertices;
+
+}
+
+std::vector<Model> models;
 
 void changeSize(int w, int h) {
 
@@ -70,10 +76,11 @@ void renderScene(void) {
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
 
-    for(int i = 0; i < vertices.size(); i++ ){
-        Vertice v = vertices[i];
-        glVertex3f(v.x, v.y, v.z);
-
+    for(int i = 0; i < models.size(); i++ ){
+        Model m = models[i];
+        for(int j = 0, j < m.vertices.size(), j++)
+            Vertice v = m.vertices[j];
+            glVertex3f(v.x, v.y, v.z);
     }
 
     glEnd();
@@ -125,7 +132,7 @@ void processSpecialKeys(int key, int xx, int yy) {
     glutPostRedisplay();
 }
 
-
+//obtem um vértice a partir de uma linha do ficheiro .3d
 Vertice toVertice(string s){
     Vertice v;
 
@@ -175,12 +182,14 @@ void lerficheiro(char* fileXML){
     vector<string>::iterator it;
     for(it = v.begin(); it != v.end(); it++){
         ifstream file(v[ std::distance(v.begin(), it) ]);
+        Model m;
         string s;
         while(getline(file, s)){
             Vertice v = toVertice(s);
-            vertices.push_back(v);
+            m.vertices.push_back(v);
         }
         file.close();
+        models.push_back(m);
     }
 }
 
