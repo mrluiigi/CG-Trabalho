@@ -1,0 +1,6 @@
+# Don't track content of these folders
+Engine/cmake-build-debug
+Engine/cmake-build-release
+Engine/.idea
+
+Generator/generator

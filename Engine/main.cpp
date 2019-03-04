@@ -16,6 +16,7 @@ using namespace std;
 
 float alfaH = 0;
 float alfaV = 0;
+float r = 10;
 
 class Vertice{
     public:
@@ -28,7 +29,7 @@ class Model{
     public:
         vector<Vertice> vertices;
 
-}
+};
 
 std::vector<Model> models;
 
@@ -63,7 +64,6 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // set the camera
     glLoadIdentity();
-    float r = 10;
     gluLookAt(r*cos(alfaV)*sin(alfaH), r*sin(alfaV),r*cos(alfaV)*cos(alfaH),
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
@@ -78,9 +78,10 @@ void renderScene(void) {
 
     for(int i = 0; i < models.size(); i++ ){
         Model m = models[i];
-        for(int j = 0, j < m.vertices.size(), j++)
+        for(int j = 0; j < m.vertices.size(); j++) {
             Vertice v = m.vertices[j];
             glVertex3f(v.x, v.y, v.z);
+        }
     }
 
     glEnd();
@@ -104,6 +105,15 @@ void processKeys(unsigned char c, int xx, int yy) {
     else if (c == 's' && alfaV > -M_PI/2) {
         alfaV -= M_PI/8;
     }
+    else if(c == '1'){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    }
+    else if(c == '2'){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else if(c == '3'){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
     glutPostRedisplay();
 
@@ -112,20 +122,12 @@ void processKeys(unsigned char c, int xx, int yy) {
 void processSpecialKeys(int key, int xx, int yy) {
 
     switch(key) {
-
-        case GLUT_KEY_LEFT :
-            alfaH -= M_PI/8;
-            break;
-        case GLUT_KEY_RIGHT :
-            alfaH += M_PI/8;
-            break;
         case GLUT_KEY_UP :
-            if(alfaV >= -M_PI/2)
-                alfaV -= M_PI/8;
+            if(r > 3)
+                r -= 1;
             break;
         case GLUT_KEY_DOWN :
-            if(alfaV <= M_PI/2)
-                alfaV += M_PI/8;
+            r += 1;
             break;
     }
 
@@ -204,10 +206,11 @@ void printHelp(){
     cout << "#          s: Move a câmara para baixo           #" << endl;
     cout << "#          a: Move a câmara para a esquerda      #" << endl;
     cout << "#          d: Move a câmara para a direita       #" << endl;
-    cout << "#     KEY_UP: Move a câmara para cime            #" << endl;
-    cout << "#   KEY_DOWN: Move a câmara para baixo           #" << endl;
-    cout << "#   KEY_LEFT: Move a câmara para a esquerda      #" << endl;
-    cout << "#  KEY_RIGHT: Move a câmara para a direita       #" << endl;
+    cout << "#     KEY_UP: Reduz o raio da câmara             #" << endl;
+    cout << "#   KEY_DOWN: Aumenta o raio da câmara           #" << endl;
+    cout << "#          1: GL_POINT                           #" << endl;
+    cout << "#          2: GL_LINE                            #" << endl;
+    cout << "#          3: GL_FILL                            #" << endl;
     cout << "#                                                #" << endl;
     cout << "##################################################" << endl;
 }

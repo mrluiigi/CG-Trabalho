@@ -1,0 +1,4 @@
+<scene> 
+	<model file="../../Models/plano.3d" />
+	<model file="../../Models/cone.3d" />
+</scene>
