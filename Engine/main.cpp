@@ -14,8 +14,11 @@
 using namespace tinyxml2;
 using namespace std;
 
-float alfaH = 0;
-float alfaV = 0;
+//ângulo horizontal da câmera
+float alfa = 0;
+//ângulo vertical da câmera
+float beta = 0;
+// raio / distância da câmera à origem
 float r = 10;
 
 class Vertice{
@@ -30,7 +33,7 @@ class Model{
         vector<Vertice> vertices;
 
 };
-
+//Vector global com os modelos obtidos a partir dos ficheiros .3d
 std::vector<Model> models;
 
 void changeSize(int w, int h) {
@@ -64,7 +67,7 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // set the camera
     glLoadIdentity();
-    gluLookAt(r*cos(alfaV)*sin(alfaH), r*sin(alfaV),r*cos(alfaV)*cos(alfaH),
+    gluLookAt(r*cos(beta)*sin(alfa), r*sin(beta),r*cos(beta)*cos(alfa),
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
@@ -92,19 +95,21 @@ void renderScene(void) {
 void processKeys(unsigned char c, int xx, int yy) {
 
 // put code to process regular keys in here
-
+    //rodar horizontalmente
     if (c == 'a') {
-        alfaH -= M_PI/8;
+        alfa -= M_PI/8;
     }
     else if (c == 'd') {
-        alfaH += M_PI/8;
+        alfa += M_PI/8;
     }
-    else if (c == 'w' && alfaV < M_PI/2) {
-        alfaV += M_PI/8;
+    //rodar verticalmente
+    else if (c == 'w' && beta < M_PI/2) {
+        beta += M_PI/8;
     }
-    else if (c == 's' && alfaV > -M_PI/2) {
-        alfaV -= M_PI/8;
+    else if (c == 's' && beta > -M_PI/2) {
+        beta -= M_PI/8;
     }
+    //mudar tipo de vizualização
     else if(c == '1'){
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
     }
@@ -122,11 +127,11 @@ void processKeys(unsigned char c, int xx, int yy) {
 void processSpecialKeys(int key, int xx, int yy) {
 
     switch(key) {
-        case GLUT_KEY_UP :
+        case GLUT_KEY_UP : //aproximar a câmera da origem
             if(r > 3)
                 r -= 1;
             break;
-        case GLUT_KEY_DOWN :
+        case GLUT_KEY_DOWN ://afastar a câmera da origem
             r += 1;
             break;
     }
@@ -144,9 +149,9 @@ Vertice toVertice(string s){
     std::string delimiter = ",";
     size_t pos = 0;
     std::string token;
-    while ((pos = s.find(delimiter)) != std::string::npos) {
-        token = s.substr(0, pos);
-        array[i] = stof(token);
+    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
+        token = s.substr(0, pos);   //obter substring entre virgulas
+        array[i] = stof(token);     //transformar substring em float
         i++;
         s.erase(0, pos + delimiter.length());
     }
@@ -165,18 +170,16 @@ std::vector<string> parseXML(char* file){
     //Se conseguir carregar o ficheiro
     if(!(doc.LoadFile(file))) {
         XMLElement* root = doc.FirstChildElement();
-
         for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
             string nome = child->Attribute("file");
-            //Põe no vetor
+            //Põe no vetor o nome do ficheiro modelo
             res.push_back(nome);
-            cout << nome << endl;
         }
     }
     return res;
 }
 
-/** Processa os vértices lidos do ficheiro */
+/** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
 void lerficheiro(char* fileXML){
 
     std::vector<string> v = parseXML(fileXML);
