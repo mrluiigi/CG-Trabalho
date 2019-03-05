@@ -274,28 +274,26 @@ int main(int argc, char **argv){
         return 0;
     }
 	else if(argc > 1){
-		string dir1 = "../Models/";
-		dir1.insert(10,argv[argc-1]);
-		cout << dir1 << endl;
-
+		string file = argv[argc-1];
+		//Plano: lado
 		if(strcmp(argv[1], "Plano") == 0 && argc == 4){
-		    plano(atof(argv[2]), dir1);
+		    plano(atof(argv[2]), file);
 		}
-
+		//Plano: lado x, lado y, lado z, número de divisões(opcional)
 		else if(strcmp(argv[1], "Caixa") == 0 && (argc == 6 || argc == 7)){	
 			if(argc == 6){
-				caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, dir1);
+				caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, file);
 			}
 			else
-		    	caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), dir1);
+		    	caixa(atof(argv[2]), atof(argv[3]), atof(argv[4]), atoi(argv[5]), file);
 		}
-
+		//Esfera: raio, slices,stacks
 		else if(strcmp(argv[1], "Esfera") == 0 && argc == 6){
-		    esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), dir1);
+		    esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), file);
 		}
-
+		//raio, altura, slices, stacks,
 		else if(strcmp(argv[1], "Cone") == 0 && argc == 7){
-		    cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), dir1);
+		    cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), file);
 		}
 
 		else{
