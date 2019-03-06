@@ -201,7 +201,7 @@ void lerficheiro(char* fileXML){
 void printHelp(){
     cout << "##################################################" << endl;
     cout << "#                                                #" << endl;
-    cout << "# Como invocar: ./engine ../{XML FILE}           #" << endl;
+    cout << "# Como invocar: ./engine <XML file>              #" << endl;
     cout << "#                                                #" << endl;
     cout << "#                                                #" << endl;
     cout << "# Movimentos:                                    #" << endl;
