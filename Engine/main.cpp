@@ -30,11 +30,36 @@ class Vertice{
 
 class Model{
     public:
+    	string name;
         vector<Vertice> vertices;
 
 };
-//Vector global com os modelos obtidos a partir dos ficheiros .3d
-std::vector<Model> models;
+
+//0 -> translate
+//1 -> rotate
+//2 -> scale
+
+class geometricTransforms {
+public:
+    int type;
+    float x;
+    float y;
+    float z;
+    float angle;
+};
+
+
+class Group{
+public:
+    vector<geometricTransforms> transforms;
+    vector<Model> models;
+    vector<Group> subGroups;
+
+
+};
+
+
+vector<Group> groups;
 
 void changeSize(int w, int h) {
 
@@ -62,7 +87,6 @@ void changeSize(int w, int h) {
 }
 
 void renderScene(void) {
-
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // set the camera
@@ -78,14 +102,17 @@ void renderScene(void) {
 
     glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
+    for(int k = 0; k < groups.size(); k++) {
+    	std::vector<Model> models = groups[k].models;
+	    for(int i = 0; i < models.size(); i++ ){
+	        Model m = models[i];
 
-    for(int i = 0; i < models.size(); i++ ){
-        Model m = models[i];
-        for(int j = 0; j < m.vertices.size(); j++) {
-            Vertice v = m.vertices[j];
-            glVertex3f(v.x, v.y, v.z);
-        }
-    }
+	        for(int j = 0; j < m.vertices.size(); j++) {
+	            Vertice v = m.vertices[j];
+	            glVertex3f(v.x, v.y, v.z);
+	        }
+	    }
+	}
 
     glEnd();
     // End of frame
@@ -161,41 +188,81 @@ Vertice toVertice(string s){
     return v;
 }
 
+
+Group parseGroup(XMLElement *group){
+	Group g;
+    for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
+        if( string(child->Name()).compare("translate") == 0) {
+        	float x = atof(child->Attribute("X"));
+        	float y = atof(child->Attribute("Y"));
+        	float z = atof(child->Attribute("Z"));
+        	geometricTransforms gt;
+        	gt.type = 0;
+        	gt.x = x;
+        	gt.y = y;
+        	gt.z = z;
+        	g.transforms.push_back(gt);
+        }
+        else if( string(child->Name()).compare("models") == 0) {
+        	    for(XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
+		        	Model m;
+		        	m.name = modelXML->Attribute("file");
+		        	g.models.push_back(m);
+		        }
+        }
+
+    }
+    return g;
+}
+
+
+
 /** Parse ao ficheiro XML */
-std::vector<string> parseXML(char* file){
+std::vector<Group> parseXML(char* file){
     XMLDocument doc;
 
-    std::vector<string> res;
-
+    std::vector<Group> res;
     //Se conseguir carregar o ficheiro
     if(!(doc.LoadFile(file))) {
         XMLElement* root = doc.FirstChildElement();
         for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
-            string nome = child->Attribute("file");
-            //Põe no vetor o nome do ficheiro modelo
-            res.push_back(nome);
+            if( string(child->Name()).compare("group") == 0) {
+                Group g = parseGroup(child);
+                res.push_back(g);
+            }
+            
         }
     }
     return res;
 }
 
+Model parse3D(Model m) {
+    ifstream file(m.name);
+    string s;
+    while(getline(file, s)){
+        Vertice v = toVertice(s);
+        m.vertices.push_back(v);
+    }
+    file.close();
+    return m;
+
+}
+
 /** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
 void lerficheiro(char* fileXML){
+    groups = parseXML(fileXML);
 
-    std::vector<string> v = parseXML(fileXML);
 
-    vector<string>::iterator it;
-    for(it = v.begin(); it != v.end(); it++){
-        ifstream file(v[ std::distance(v.begin(), it) ]);
-        Model m;
-        string s;
-        while(getline(file, s)){
-            Vertice v = toVertice(s);
-            m.vertices.push_back(v);
-        }
-        file.close();
-        models.push_back(m);
+    for (int i = 0; i < groups.size(); i++) {
+
+
+    	for (int j = 0; j < groups[i].models.size(); j++) {
+
+    		groups[i].models[j] = parse3D(groups[i].models[j]);
+    	}
     }
+
+
 }
 
 void printHelp(){
