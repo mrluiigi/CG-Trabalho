@@ -100,9 +100,32 @@ void renderScene(void) {
 
     // put drawing instructions here
 
-    glBegin(GL_TRIANGLES);
     glColor3f(1, 0, 0);
+        	
+
     for(int k = 0; k < groups.size(); k++) {
+    	glPushMatrix();
+    	std::vector<geometricTransforms> gts = groups[k].transforms;
+
+    	for(int i = 0; i < gts.size(); i++ ){
+	        geometricTransforms gt = gts[i];
+
+	        if(gt.type == 0) {
+	        	//cout << gt.x << gt.y <<gt.z;
+	        	glTranslatef(gt.x,gt.y,gt.z);
+	        }
+	        else if(gt.type == 1) {
+	        	//cout << gt.x << gt.y <<gt.z;
+	        	glRotatef(gt.angle,gt.x,gt.y,gt.z);
+	        }
+	        else if(gt.type == 2) {
+	        	//cout << gt.x << gt.y <<gt.z;
+	        	glScalef(gt.x,gt.y,gt.z);
+	        }
+	    }
+
+	        glBegin(GL_TRIANGLES);
+
     	std::vector<Model> models = groups[k].models;
 	    for(int i = 0; i < models.size(); i++ ){
 	        Model m = models[i];
@@ -112,9 +135,10 @@ void renderScene(void) {
 	            glVertex3f(v.x, v.y, v.z);
 	        }
 	    }
+	        glEnd();
+	    glPopMatrix();
 	}
 
-    glEnd();
     // End of frame
     glutSwapBuffers();
 }
@@ -130,10 +154,10 @@ void processKeys(unsigned char c, int xx, int yy) {
         alfa += M_PI/8;
     }
     //rodar verticalmente
-    else if (c == 'w' && beta < M_PI/2) {
+    else if (c == 'w' && beta + M_PI/8< M_PI/2) {
         beta += M_PI/8;
     }
-    else if (c == 's' && beta > -M_PI/2) {
+    else if (c == 's' && beta - M_PI/8 > -M_PI/2) {
         beta -= M_PI/8;
     }
     //mudar tipo de vizualização
@@ -192,17 +216,29 @@ Vertice toVertice(string s){
 Group parseGroup(XMLElement *group){
 	Group g;
     for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
-        if( string(child->Name()).compare("translate") == 0) {
-        	float x = atof(child->Attribute("X"));
-        	float y = atof(child->Attribute("Y"));
-        	float z = atof(child->Attribute("Z"));
+    	string childName = string(child->Name());
+        if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
         	geometricTransforms gt;
-        	gt.type = 0;
-        	gt.x = x;
-        	gt.y = y;
-        	gt.z = z;
+        	gt.x = atof(child->Attribute("X"));
+        	gt.y = atof(child->Attribute("Y"));
+        	gt.z = atof(child->Attribute("Z"));
+        	if ( childName.compare("translate") == 0) {
+	        	gt.type = 0;
+        	}
+        	else if ( childName.compare("scale") == 0) {
+	        	gt.type = 2;
+        	}
         	g.transforms.push_back(gt);
         }
+        else if( childName.compare("rotate") == 0) {
+        	geometricTransforms gt;
+        	gt.x = atof(child->Attribute("axisX"));
+        	gt.y = atof(child->Attribute("axisY"));
+        	gt.z = atof(child->Attribute("axisZ"));
+        	gt.angle = atof(child->Attribute("angle"));
+        	gt.type = 1;
+        	g.transforms.push_back(gt);
+        }        
         else if( string(child->Name()).compare("models") == 0) {
         	    for(XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
 		        	Model m;
@@ -215,7 +251,7 @@ Group parseGroup(XMLElement *group){
     return g;
 }
 
-
+	
 
 /** Parse ao ficheiro XML */
 std::vector<Group> parseXML(char* file){

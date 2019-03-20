@@ -1,9 +1,18 @@
 <scene> 
 	<group> 
 		<translate X="5" Y="0" Z="2" /> 
-		<rotate angle="45" axisX="0" axisY="1" axisZ="0" /> 
+		<rotate angle="45" axisX="1" axisY="0" axisZ="0" />
+		<scale X="1" Y="2" Z="3" /> 
 		<models> 
 			<model file="../../Models/esfera.3d" />
 		</models> 
 	</group> 
+	<group> 
+		<translate X="0" Y="2" Z="10" /> 
+		<scale X="0.1" Y="0.1" Z="0.1" /> 
+		<models> 
+			<model file="../../Models/esfera.3d" />
+		</models> 
+	</group> 
+
 </scene>
