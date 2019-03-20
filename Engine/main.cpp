@@ -86,6 +86,49 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void drawGroup(Group group) {
+	glPushMatrix();
+	std::vector<geometricTransforms> gts = group.transforms;
+
+	for(int i = 0; i < gts.size(); i++ ){
+        geometricTransforms gt = gts[i];
+
+        if(gt.type == 0) {
+        	//cout << gt.x << gt.y <<gt.z;
+        	glTranslatef(gt.x,gt.y,gt.z);
+        }
+        else if(gt.type == 1) {
+        	//cout << gt.x << gt.y <<gt.z;
+        	glRotatef(gt.angle,gt.x,gt.y,gt.z);
+        }
+        else if(gt.type == 2) {
+        	//cout << gt.x << gt.y <<gt.z;
+        	glScalef(gt.x,gt.y,gt.z);
+        }
+    }
+
+        glBegin(GL_TRIANGLES);
+
+	std::vector<Model> models = group.models;
+    for(int i = 0; i < models.size(); i++ ){
+        Model m = models[i];
+
+        for(int j = 0; j < m.vertices.size(); j++) {
+            Vertice v = m.vertices[j];
+            glVertex3f(v.x, v.y, v.z);
+        }
+    }
+    glEnd();
+
+    for(int i = 0; i < group.subGroups.size(); i++ ){
+    	drawGroup(group.subGroups[i]);
+    	cout << group.subGroups[i].models[0].name << "\n"; 
+    }
+
+
+    glPopMatrix();
+}
+
 void renderScene(void) {
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -104,39 +147,7 @@ void renderScene(void) {
         	
 
     for(int k = 0; k < groups.size(); k++) {
-    	glPushMatrix();
-    	std::vector<geometricTransforms> gts = groups[k].transforms;
-
-    	for(int i = 0; i < gts.size(); i++ ){
-	        geometricTransforms gt = gts[i];
-
-	        if(gt.type == 0) {
-	        	//cout << gt.x << gt.y <<gt.z;
-	        	glTranslatef(gt.x,gt.y,gt.z);
-	        }
-	        else if(gt.type == 1) {
-	        	//cout << gt.x << gt.y <<gt.z;
-	        	glRotatef(gt.angle,gt.x,gt.y,gt.z);
-	        }
-	        else if(gt.type == 2) {
-	        	//cout << gt.x << gt.y <<gt.z;
-	        	glScalef(gt.x,gt.y,gt.z);
-	        }
-	    }
-
-	        glBegin(GL_TRIANGLES);
-
-    	std::vector<Model> models = groups[k].models;
-	    for(int i = 0; i < models.size(); i++ ){
-	        Model m = models[i];
-
-	        for(int j = 0; j < m.vertices.size(); j++) {
-	            Vertice v = m.vertices[j];
-	            glVertex3f(v.x, v.y, v.z);
-	        }
-	    }
-	        glEnd();
-	    glPopMatrix();
+    	drawGroup(groups[k]);
 	}
 
     // End of frame
@@ -247,6 +258,9 @@ Group parseGroup(XMLElement *group){
 		        }
         }
 
+    	else if( childName.compare("group") == 0) {
+    		g.subGroups.push_back(parseGroup(child));
+    	}
     }
     return g;
 }
@@ -272,16 +286,25 @@ std::vector<Group> parseXML(char* file){
     return res;
 }
 
-Model parse3D(Model m) {
-    ifstream file(m.name);
-    string s;
-    while(getline(file, s)){
-        Vertice v = toVertice(s);
-        m.vertices.push_back(v);
-    }
-    file.close();
-    return m;
+Group parse3D(Group group) {
 
+	for (int i = 0; i < group.models.size(); i++) {
+		Model m = group.models[i];
+		ifstream file(m.name);
+	    string s;
+	    while(getline(file, s)){
+	        Vertice v = toVertice(s);
+	        m.vertices.push_back(v);
+	    }
+	    file.close();
+	    group.models[i] = m;
+    }
+
+	for (int i = 0; i < group.subGroups.size(); i++) {
+		group.subGroups[i] = parse3D(group.subGroups[i]);
+	}
+	return group;
+   
 }
 
 /** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
@@ -291,11 +314,8 @@ void lerficheiro(char* fileXML){
 
     for (int i = 0; i < groups.size(); i++) {
 
-
-    	for (int j = 0; j < groups[i].models.size(); j++) {
-
-    		groups[i].models[j] = parse3D(groups[i].models[j]);
-    	}
+    	groups[i] = parse3D(groups[i]);
+    	
     }
 
 
