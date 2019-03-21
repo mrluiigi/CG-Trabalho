@@ -1,0 +1,90 @@
+<scene> 
+	
+	<group>
+		<scale X="10.91" Y="10.91" Z="10.91" /> 
+		<models> 
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>  
+
+	<group>
+		Mercurio
+		<translate X="80" Y="0" Z="0" /> 
+		<scale X="0.038" Y=".038" Z=".038" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+	<group>
+		Venus
+		<translate X="100" Y="0" Z="0" /> 
+		<scale X="0.095" Y="0.095" Z="0.095" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+	<group>
+		Terra
+		<translate X="140" Y="0" Z="0" /> 
+		<scale X="0.1" Y="0.1" Z="0.1" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+		<group> 
+			Ĺua
+			<translate X="20" Y="10" Z="15" />
+			<scale X="0.5" Y="0.5" Z="0.5" /> 
+			<models> 
+				<model file="../../Models/esfera.3d" />
+			</models> 
+		</group>
+	</group>
+
+	<group>
+		Marte
+		<translate X="180" Y="0" Z="0" /> 
+		<scale X=".053" Y=".053" Z=".053" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+	<group>
+		Jupiter
+		<translate X="220" Y="0" Z="0" /> 
+		<scale X="1.12" Y="1.12" Z="1.12" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>	
+
+	<group>
+		Saturno
+		<translate X="250" Y="0" Z="0" /> 
+		<scale X=".945" Y=".945" Z=".945" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+	<group>
+		Urano
+		<translate X="280" Y="0" Z="0" /> 
+		<scale X=".4" Y=".4" Z=".4" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+	<group>
+		Neptuno
+		<translate X="310" Y="0" Z="0" /> 
+		<scale X=".388" Y=".388" Z=".388" />
+		<models>
+			<model file="../../Models/esfera.3d" />
+		</models>
+	</group>
+
+</scene>
