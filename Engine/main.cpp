@@ -35,30 +35,24 @@ class Model{
 
 };
 
-//0 -> translate
-//1 -> rotate
-//2 -> scale
-
 class GeometricTransforms {
-public:
-    int type;
-    float x;
-    float y;
-    float z;
-    float angle;
+    public:
+        int type;   //0 -> translate;   1 -> rotate;    2 -> scale
+        float x;
+        float y;
+        float z;
+        float angle;
 };
 
 
 class Group{
-public:
-    vector<GeometricTransforms> transforms;
-    vector<Model> models;
-    vector<Group> subGroups;
-
-
+    public:
+        vector<GeometricTransforms> transforms;
+        vector<Model> models;
+        vector<Group> subGroups;
 };
 
-
+/** Vetor global de group */
 vector<Group> groups;
 
 void changeSize(int w, int h) {
@@ -121,7 +115,7 @@ void drawGroup(Group group) {
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
     	drawGroup(group.subGroups[i]);
-    	cout << group.subGroups[i].models[0].name << "\n"; 
+    	//cout << group.subGroups[i].models[0].name << "\n";
     }
 
     glPopMatrix();
@@ -215,7 +209,7 @@ Vertice toVertice(string s){
     return v;
 }
 
-
+/** Parse a um grupo */
 Group parseGroup(XMLElement *group){
 	Group g;
     for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
@@ -257,31 +251,28 @@ Group parseGroup(XMLElement *group){
     return g;
 }
 
-	
 
 /** Parse ao ficheiro XML */
-std::vector<Group> parseXML(char* file){
+void parseXML(char* file){
     XMLDocument doc;
 
-    std::vector<Group> res;
     //Se conseguir carregar o ficheiro
     if(!(doc.LoadFile(file))) {
         XMLElement* root = doc.FirstChildElement();
         for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
             if( string(child->Name()).compare("group") == 0) {
                 Group g = parseGroup(child);
-                res.push_back(g);
+                groups.push_back(g);
             }
-            
         }
     }
-    return res;
 }
 
-Group parse3D(Group group) {
+/** Parse aos models do grupo */
+void parse3D(Group *group) {
 
-	for (int i = 0; i < group.models.size(); i++) {
-		Model m = group.models[i];
+	for (int i = 0; i < (*group).models.size(); i++) {
+		Model m = (*group).models[i];
 		ifstream file(m.name);
 	    string s;
 	    while(getline(file, s)){
@@ -289,22 +280,24 @@ Group parse3D(Group group) {
 	        m.vertices.push_back(v);
 	    }
 	    file.close();
-	    group.models[i] = m;
+        (*group).models[i] = m;
     }
 
-	for (int i = 0; i < group.subGroups.size(); i++) {
-		group.subGroups[i] = parse3D(group.subGroups[i]);
+	for (int i = 0; i < (*group).subGroups.size(); i++) {
+        parse3D(&(*group).subGroups[i]);
 	}
-	return group;
-   
+
 }
 
-/** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
+/** Extrai informação do XML e processa os vértices dos modelos */
 void lerficheiro(char* fileXML){
-    groups = parseXML(fileXML);
+
+    cout << "A inicializar parse ao XML..." << endl;
+    parseXML(fileXML);
+    cout << "Parse terminado" << endl;
 
     for (int i = 0; i < groups.size(); i++) {
-    	groups[i] = parse3D(groups[i]);
+    	parse3D(&groups[i]);
     }
 }
 
@@ -365,6 +358,7 @@ int main(int argc, char **argv) {
         glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+        cout << "Desenho da imagem" << endl;
 // enter GLUT's main cycle
         glutMainLoop();
 
