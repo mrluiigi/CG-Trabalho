@@ -19,7 +19,7 @@ float alfa = 0;
 //ângulo vertical da câmera
 float beta = 0;
 // raio / distância da câmera à origem
-float r = 10;
+float r = 400;
 
 class Vertice{
     public:
@@ -33,26 +33,105 @@ class Model{
     	string name;
         vector<Vertice> vertices;
 
+
+
 };
 
-class GeometricTransforms {
+
+//obtem um vértice a partir de uma linha do ficheiro .3d
+Vertice toVertice(string s){
+    Vertice v;
+
+    float array[3];
+    int i = 0;
+
+    std::string delimiter = ",";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
+        token = s.substr(0, pos);   //obter substring entre virgulas
+        array[i] = stof(token);     //transformar substring em float
+        i++;
+        s.erase(0, pos + delimiter.length());
+    }
+    v.x = array[0];
+    v.y = array[1];
+    v.z = array[2];
+    return v;
+}
+
+class Models{
     public:
-        int type;   //0 -> translate;   1 -> rotate;    2 -> scale
-        float x;
-        float y;
-        float z;
-        float angle;
+		vector<Model> vec;
+
+	bool contains(string name) {
+		for (int i = 0; i < vec.size(); i++){
+			if(name.compare(vec[i].name) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void addModel(string name) {
+		if(!contains(name)) {
+			Model m;
+			m.name = name;
+			vec.push_back(m);
+		}
+	}
+
+	void loadModels() {
+		for (int i = 0; i < vec.size(); i++){	
+			Model &m = vec[i];
+			ifstream file(m.name);
+		    string s;
+		    while(getline(file, s)){
+		        Vertice v = toVertice(s);
+			    m.vertices.push_back(v);
+			}
+		    file.close();
+	    }
+	}
+
+	vector<Vertice>& getModel(string name) {
+		for (int i = 0; i < vec.size(); i++){
+			if(name.compare(vec[i].name) == 0) {
+				return vec[i].vertices;
+			}
+		}
+
+		//return NULL;
+	}
+};
+
+Models allModels;
+
+
+//0 -> translate
+//1 -> rotate
+//2 -> scale
+
+class geometricTransforms {
+public:
+    int type;
+    float x;
+    float y;
+    float z;
+    float angle;
 };
 
 
 class Group{
-    public:
-        vector<GeometricTransforms> transforms;
-        vector<Model> models;
-        vector<Group> subGroups;
+public:
+    vector<geometricTransforms> transforms;
+    vector<string> models;
+    vector<Group> subGroups;
+
+
 };
 
-/** Vetor global de group */
+
 vector<Group> groups;
 
 void changeSize(int w, int h) {
@@ -82,10 +161,10 @@ void changeSize(int w, int h) {
 
 void drawGroup(Group group) {
 	glPushMatrix();
-	std::vector<GeometricTransforms> gts = group.transforms;
+	vector<geometricTransforms> &gts = group.transforms;
 
 	for(int i = 0; i < gts.size(); i++ ){
-        GeometricTransforms gt = gts[i];
+        geometricTransforms gt = gts[i];
 
         if(gt.type == 0) {
         	//cout << gt.x << gt.y <<gt.z;
@@ -101,22 +180,24 @@ void drawGroup(Group group) {
         }
     }
 
-    glBegin(GL_TRIANGLES);
-		std::vector<Model> models = group.models;
-    	for(int i = 0; i < models.size(); i++ ){
-        	Model m = models[i];
+        glBegin(GL_TRIANGLES);
 
-        	for(int j = 0; j < m.vertices.size(); j++) {
-            	Vertice v = m.vertices[j];
-            	glVertex3f(v.x, v.y, v.z);
-        	}
-    	}
+	std::vector<string> models = group.models;
+    for(int i = 0; i < models.size(); i++ ){
+        vector<Vertice> &vertices = allModels.getModel(models[i]);
+
+        for(int j = 0; j < vertices.size(); j++) {
+            Vertice v = vertices[j];
+            glVertex3f(v.x, v.y, v.z);
+        }
+    }
     glEnd();
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
     	drawGroup(group.subGroups[i]);
-    	//cout << group.subGroups[i].models[0].name << "\n";
+    	//cout << group.subGroups[i].models[0].name << "\n"; 
     }
+
 
     glPopMatrix();
 }
@@ -130,9 +211,14 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    // drawing instructions here
+    // put the geometric transformations here
+
+
+    // put drawing instructions here
+
     glColor3f(1, 0, 0);
         	
+
     for(int k = 0; k < groups.size(); k++) {
     	drawGroup(groups[k]);
 	}
@@ -142,21 +228,21 @@ void renderScene(void) {
 }
 
 void processKeys(unsigned char c, int xx, int yy) {
-// code to process regular keys in here
 
+// put code to process regular keys in here
     //rodar horizontalmente
     if (c == 'a') {
-        alfa -= M_PI/8;
+        alfa -= M_PI/24;
     }
     else if (c == 'd') {
-        alfa += M_PI/8;
+        alfa += M_PI/24;
     }
     //rodar verticalmente
-    else if (c == 'w' && beta + M_PI/8< M_PI/2) {
-        beta += M_PI/8;
+    else if (c == 'w' && beta + M_PI/24< M_PI/2) {
+        beta += M_PI/24;
     }
-    else if (c == 's' && beta - M_PI/8 > -M_PI/2) {
-        beta -= M_PI/8;
+    else if (c == 's' && beta - M_PI/24 > -M_PI/2) {
+        beta -= M_PI/24;
     }
     //mudar tipo de vizualização
     else if(c == '1'){
@@ -170,6 +256,7 @@ void processKeys(unsigned char c, int xx, int yy) {
     }
 
     glutPostRedisplay();
+
 }
 
 void processSpecialKeys(int key, int xx, int yy) {
@@ -187,35 +274,14 @@ void processSpecialKeys(int key, int xx, int yy) {
     glutPostRedisplay();
 }
 
-//obtem um vértice a partir de uma linha do ficheiro .3d
-Vertice toVertice(string s){
-    Vertice v;
 
-    float array[3];
-    int i = 0;
 
-    std::string delimiter = ",";
-    size_t pos = 0;
-    std::string token;
-    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
-        token = s.substr(0, pos);   //obter substring entre virgulas
-        array[i] = stof(token);     //transformar substring em float
-        i++;
-        s.erase(0, pos + delimiter.length());
-    }
-    v.x = array[0];
-    v.y = array[1];
-    v.z = array[2];
-    return v;
-}
-
-/** Parse a um grupo */
 Group parseGroup(XMLElement *group){
 	Group g;
     for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
     	string childName = string(child->Name());
         if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
-        	GeometricTransforms gt;
+        	geometricTransforms gt;
         	gt.x = atof(child->Attribute("X"));
         	gt.y = atof(child->Attribute("Y"));
         	gt.z = atof(child->Attribute("Z"));
@@ -228,7 +294,7 @@ Group parseGroup(XMLElement *group){
         	g.transforms.push_back(gt);
         }
         else if( childName.compare("rotate") == 0) {
-        	GeometricTransforms gt;
+        	geometricTransforms gt;
         	gt.x = atof(child->Attribute("axisX"));
         	gt.y = atof(child->Attribute("axisY"));
         	gt.z = atof(child->Attribute("axisZ"));
@@ -238,9 +304,9 @@ Group parseGroup(XMLElement *group){
         }        
         else if( string(child->Name()).compare("models") == 0) {
         	    for(XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
-		        	Model m;
-		        	m.name = modelXML->Attribute("file");
-		        	g.models.push_back(m);
+		        	string name = modelXML->Attribute("file");
+		        	allModels.addModel(name);
+		        	g.models.push_back(name);
 		        }
         }
 
@@ -251,6 +317,7 @@ Group parseGroup(XMLElement *group){
     return g;
 }
 
+	
 
 /** Parse ao ficheiro XML */
 void parseXML(char* file){
@@ -264,15 +331,15 @@ void parseXML(char* file){
                 Group g = parseGroup(child);
                 groups.push_back(g);
             }
+            
         }
     }
 }
+/*
+Group parse3D(Group group) {
 
-/** Parse aos models do grupo */
-void parse3D(Group *group) {
-
-	for (int i = 0; i < (*group).models.size(); i++) {
-		Model m = (*group).models[i];
+	for (int i = 0; i < group.models.size(); i++) {
+		Model m = group.models[i];
 		ifstream file(m.name);
 	    string s;
 	    while(getline(file, s)){
@@ -280,27 +347,31 @@ void parse3D(Group *group) {
 	        m.vertices.push_back(v);
 	    }
 	    file.close();
-        (*group).models[i] = m;
+	    group.models[i] = m;
     }
 
-	for (int i = 0; i < (*group).subGroups.size(); i++) {
-        parse3D(&(*group).subGroups[i]);
+	for (int i = 0; i < group.subGroups.size(); i++) {
+		group.subGroups[i] = parse3D(group.subGroups[i]);
 	}
+	return group;
+   
+}*/
 
-}
-
-/** Extrai informação do XML e processa os vértices dos modelos */
+/** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
 void lerficheiro(char* fileXML){
-
-    cout << "A inicializar parse ao XML..." << endl;
     parseXML(fileXML);
-    cout << "Parse terminado" << endl;
 
-    for (int i = 0; i < groups.size(); i++) {
-    	parse3D(&groups[i]);
-    }
+
+    /*for (int i = 0; i < groups.size(); i++) {
+
+    	groups[i] = parse3D(groups[i]);
+    	
+    }*/
+
+    allModels.loadModels();
+
+
 }
-
 
 void printHelp(){
     cout << "##################################################" << endl;
@@ -349,7 +420,7 @@ int main(int argc, char **argv) {
         glutReshapeFunc(changeSize);
 
 
-// registration of the keyboard callbacks
+// put here the registration of the keyboard callbacks
         glutKeyboardFunc(processKeys);
         glutSpecialFunc(processSpecialKeys);
 
@@ -358,7 +429,6 @@ int main(int argc, char **argv) {
         glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        cout << "Desenho da imagem" << endl;
 // enter GLUT's main cycle
         glutMainLoop();
 

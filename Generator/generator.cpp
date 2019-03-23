@@ -246,6 +246,66 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
 }
 
 
+void saturnRings(float radius1, float radius2, int slices, string fileName){
+	ofstream file;
+	file.open(fileName);
+
+	float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
+	float bx4, by4, bz4, bx5, by5, bz5, bx6, by6, bz6;
+	float alpha = (2*M_PI)/slices;
+
+	for(int i = 0; i < slices; i++) {
+		bx1 = radius1 * sin((i+1)*alpha);
+		by1 = 0;
+		bz1 = radius1 * cos((i+1)*alpha);
+
+		bx2 = radius2 * sin((i+1)*alpha);
+		by2 = 0;
+		bz2 = radius2 * cos((i+1)*alpha);
+
+		bx3 = radius2 * sin(i*alpha);
+		by3 = 0;
+		bz3 = radius2 * cos(i*alpha);
+
+		file << bx1 << "," << by1 << "," << bz1 << "," << endl;
+    	file << bx2 << "," << by2 << "," << bz2 << "," << endl;
+    	file << bx3 << "," << by3 << "," << bz3 << "," << endl;
+
+    	file << bx3 << "," << by3 << "," << bz3 << "," << endl;
+    	file << bx2 << "," << by2 << "," << bz2 << "," << endl;
+    	file << bx1 << "," << by1 << "," << bz1 << "," << endl;
+
+
+
+    	bx4 = radius1 * sin((i)*alpha);
+		by4 = 0;
+		bz4 = radius1 * cos((i)*alpha);
+
+		bx5 = radius1 * sin((i+1)*alpha);
+		by5 = 0;
+		bz5 = radius1 * cos((i+1)*alpha);
+
+		bx6 = radius2 * sin(i*alpha);
+		by6 = 0;
+		bz6 = radius2 * cos(i*alpha);
+
+		file << bx4 << "," << by4 << "," << bz4 << "," << endl;
+    	file << bx5 << "," << by5 << "," << bz5 << "," << endl;
+    	file << bx6 << "," << by6 << "," << bz6 << "," << endl;
+
+
+    	file << bx6 << "," << by6 << "," << bz6 << "," << endl;
+    	file << bx5 << "," << by5 << "," << bz5 << "," << endl;
+    	file << bx4 << "," << by4 << "," << bz4 << "," << endl;
+    	
+
+
+	}
+
+	file.close();
+
+}
+
 void printHelp(){
     cout << "################################################################" << endl;
     cout << "#                                                              #" << endl;
@@ -258,6 +318,7 @@ void printHelp(){
     cout << "#      -Caixa [Tamanho X] [Tamanho Y] [Tamanho Z] [DIVISÕES]   #" << endl;
     cout << "#      -Esfera [RAIO] [SLICES] [STACKS]                        #" << endl;
     cout << "#      -Cone [RAIO] [ALTURA] [SLICES] [STACKS]                 #" << endl;
+    cout << "#      -SaturnRings [RAIO1] [RAIO2] [SLICES]			        #" << endl;
     cout << "#                                                              #" << endl;
     cout << "################################################################" << endl;
 }
@@ -294,6 +355,10 @@ int main(int argc, char **argv){
 		//raio, altura, slices, stacks,
 		else if(strcmp(argv[1], "Cone") == 0 && argc == 7){
 		    cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), file);
+		}
+		//raio1, raio2, slices
+		else if(strcmp(argv[1], "SaturnRings") == 0 && argc == 6){
+		    saturnRings(atof(argv[2]), atof(argv[3]), atoi(argv[4]), file);
 		}
 
 		else{
