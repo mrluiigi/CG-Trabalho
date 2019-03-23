@@ -39,7 +39,7 @@ class Model{
 //1 -> rotate
 //2 -> scale
 
-class geometricTransforms {
+class GeometricTransforms {
 public:
     int type;
     float x;
@@ -51,7 +51,7 @@ public:
 
 class Group{
 public:
-    vector<geometricTransforms> transforms;
+    vector<GeometricTransforms> transforms;
     vector<Model> models;
     vector<Group> subGroups;
 
@@ -88,10 +88,10 @@ void changeSize(int w, int h) {
 
 void drawGroup(Group group) {
 	glPushMatrix();
-	std::vector<geometricTransforms> gts = group.transforms;
+	std::vector<GeometricTransforms> gts = group.transforms;
 
 	for(int i = 0; i < gts.size(); i++ ){
-        geometricTransforms gt = gts[i];
+        GeometricTransforms gt = gts[i];
 
         if(gt.type == 0) {
         	//cout << gt.x << gt.y <<gt.z;
@@ -107,24 +107,22 @@ void drawGroup(Group group) {
         }
     }
 
-        glBegin(GL_TRIANGLES);
+    glBegin(GL_TRIANGLES);
+		std::vector<Model> models = group.models;
+    	for(int i = 0; i < models.size(); i++ ){
+        	Model m = models[i];
 
-	std::vector<Model> models = group.models;
-    for(int i = 0; i < models.size(); i++ ){
-        Model m = models[i];
-
-        for(int j = 0; j < m.vertices.size(); j++) {
-            Vertice v = m.vertices[j];
-            glVertex3f(v.x, v.y, v.z);
-        }
-    }
+        	for(int j = 0; j < m.vertices.size(); j++) {
+            	Vertice v = m.vertices[j];
+            	glVertex3f(v.x, v.y, v.z);
+        	}
+    	}
     glEnd();
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
     	drawGroup(group.subGroups[i]);
     	cout << group.subGroups[i].models[0].name << "\n"; 
     }
-
 
     glPopMatrix();
 }
@@ -138,14 +136,9 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    // put the geometric transformations here
-
-
-    // put drawing instructions here
-
+    // drawing instructions here
     glColor3f(1, 0, 0);
         	
-
     for(int k = 0; k < groups.size(); k++) {
     	drawGroup(groups[k]);
 	}
@@ -155,8 +148,8 @@ void renderScene(void) {
 }
 
 void processKeys(unsigned char c, int xx, int yy) {
+// code to process regular keys in here
 
-// put code to process regular keys in here
     //rodar horizontalmente
     if (c == 'a') {
         alfa -= M_PI/8;
@@ -183,7 +176,6 @@ void processKeys(unsigned char c, int xx, int yy) {
     }
 
     glutPostRedisplay();
-
 }
 
 void processSpecialKeys(int key, int xx, int yy) {
@@ -229,7 +221,7 @@ Group parseGroup(XMLElement *group){
     for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
     	string childName = string(child->Name());
         if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
-        	geometricTransforms gt;
+        	GeometricTransforms gt;
         	gt.x = atof(child->Attribute("X"));
         	gt.y = atof(child->Attribute("Y"));
         	gt.z = atof(child->Attribute("Z"));
@@ -242,7 +234,7 @@ Group parseGroup(XMLElement *group){
         	g.transforms.push_back(gt);
         }
         else if( childName.compare("rotate") == 0) {
-        	geometricTransforms gt;
+        	GeometricTransforms gt;
         	gt.x = atof(child->Attribute("axisX"));
         	gt.y = atof(child->Attribute("axisY"));
         	gt.z = atof(child->Attribute("axisZ"));
@@ -311,15 +303,11 @@ Group parse3D(Group group) {
 void lerficheiro(char* fileXML){
     groups = parseXML(fileXML);
 
-
     for (int i = 0; i < groups.size(); i++) {
-
     	groups[i] = parse3D(groups[i]);
-    	
     }
-
-
 }
+
 
 void printHelp(){
     cout << "##################################################" << endl;
@@ -368,7 +356,7 @@ int main(int argc, char **argv) {
         glutReshapeFunc(changeSize);
 
 
-// put here the registration of the keyboard callbacks
+// registration of the keyboard callbacks
         glutKeyboardFunc(processKeys);
         glutSpecialFunc(processSpecialKeys);
 
