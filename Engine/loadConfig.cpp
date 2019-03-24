@@ -39,7 +39,7 @@ bool Models::contains(string name) {
     }
     return false;
 }
-
+//Não adiciona repetidos
 void Models::addModel(string name) {
     if(!contains(name)) {
         Model m;
@@ -48,11 +48,14 @@ void Models::addModel(string name) {
     }
 }
 
+//preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
 void Models::loadModels() {
     for (int i = 0; i < vec.size(); i++){   
         Model &m = vec[i];
+        //Abre o ficheiro .3d
         ifstream file(m.name);
         string s;
+        //Para cada linha processa um vértice
         while(getline(file, s)){
             Vertice v = toVertice(s);
             m.vertices.push_back(v);
@@ -67,15 +70,14 @@ vector<Vertice>& Models::getModel(string name) {
             return vec[i].vertices;
         }
     }
-
-    //return NULL;
 }
 
 
-Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Group>& groups){
+Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
     Group g;
     for(tinyxml2::XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         string childName = string(child->Name());
+
         if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
             GeometricTransforms gt;
             gt.x = atof(child->Attribute("X"));
@@ -89,6 +91,7 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Group>& 
             }
             g.transforms.push_back(gt);
         }
+
         else if( childName.compare("rotate") == 0) {
             GeometricTransforms gt;
             gt.x = atof(child->Attribute("axisX"));
@@ -97,17 +100,20 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Group>& 
             gt.angle = atof(child->Attribute("angle"));
             gt.type = 1;
             g.transforms.push_back(gt);
-        }        
+        }  
+
         else if( string(child->Name()).compare("models") == 0) {
                 for(tinyxml2::XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
                     string name = modelXML->Attribute("file");
+                    //Guarda apenas o nome do ficheiro 3d
+                    //O ficheiro será processado quando for invocada a função loadModels()
                     allModels.addModel(name);
                     g.models.push_back(name);
                 }
         }
-
+        //caso o grupo contenha subgrupos
         else if( childName.compare("group") == 0) {
-            g.subGroups.push_back(parseGroup(child, allModels, groups));
+            g.subGroups.push_back(parseGroup(child, allModels));
         }
     }
     return g;
@@ -123,7 +129,7 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups){
         tinyxml2::XMLElement* root = doc.FirstChildElement();
         for(tinyxml2::XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
             if( string(child->Name()).compare("group") == 0) {
-                Group g = parseGroup(child, allModels, groups);
+                Group g = parseGroup(child, allModels);
                 groups.push_back(g);
             }
             

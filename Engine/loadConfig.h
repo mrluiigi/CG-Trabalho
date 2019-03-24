@@ -5,6 +5,8 @@ using namespace std;
 #include <string>
 #include <vector> 
 
+
+
 class Vertice{
     public:
         float x;
@@ -14,7 +16,8 @@ class Vertice{
 
 class Model{
     public:
-        string name;
+    	//nome do ficheiro a partir do qual o modelo foi carregado	
+        string name; 				
         vector<Vertice> vertices;
 };
 
@@ -26,21 +29,23 @@ class Models{
 
 	    void addModel(string name);
 
-	    void loadModels();
+	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
+	    void loadModels();			
+
 
 	    vector<Vertice>& getModel(string name);
 };
 
-//0 -> translate
-//1 -> rotate
-//2 -> scale
+
 
 class GeometricTransforms {
 public:
+	//0 -> translate, 1 -> rotate, 2 -> scale
     int type;
     float x;
     float y;
     float z;
+    //Utilizado caso a transformação seja uma rotação
     float angle;
 };
 
@@ -54,4 +59,9 @@ public:
 
 };
 
+/*Recebe o nome do ficheiro XML onde se encontra a configuração. 
+  Recebe uma referência para um objecto da classe Models para o preencher com a informação dos ficheiros .3d
+  Recebe uma referência para um vetor de objetos Group para o preencher 
+  com a informação dos grupos presente no ficheiro configuração	
+*/
 void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups);
