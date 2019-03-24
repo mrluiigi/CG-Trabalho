@@ -5,13 +5,13 @@
 #endif
 
 #include <math.h>
-#include "tinyxml2.h"
-#include <fstream>
+#include "loadConfig.h"
 #include <iostream>
-#include <string>
-#include <vector>
+using namespace std;
+#include <stdio.h>
+#include <cstring>
+//#include <vector>
 
-using namespace tinyxml2;
 using namespace std;
 
 //ângulo horizontal da câmera
@@ -21,115 +21,18 @@ float beta = 0;
 // raio / distância da câmera à origem
 float r = 400;
 
-class Vertice{
-    public:
-        float x;
-        float y;
-        float z;
-};
-
-class Model{
-    public:
-    	string name;
-        vector<Vertice> vertices;
 
 
 
-};
 
 
-//obtem um vértice a partir de uma linha do ficheiro .3d
-Vertice toVertice(string s){
-    Vertice v;
-
-    float array[3];
-    int i = 0;
-
-    std::string delimiter = ",";
-    size_t pos = 0;
-    std::string token;
-    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
-        token = s.substr(0, pos);   //obter substring entre virgulas
-        array[i] = stof(token);     //transformar substring em float
-        i++;
-        s.erase(0, pos + delimiter.length());
-    }
-    v.x = array[0];
-    v.y = array[1];
-    v.z = array[2];
-    return v;
-}
-
-class Models{
-    public:
-		vector<Model> vec;
-
-	bool contains(string name) {
-		for (int i = 0; i < vec.size(); i++){
-			if(name.compare(vec[i].name) == 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	void addModel(string name) {
-		if(!contains(name)) {
-			Model m;
-			m.name = name;
-			vec.push_back(m);
-		}
-	}
-
-	void loadModels() {
-		for (int i = 0; i < vec.size(); i++){	
-			Model &m = vec[i];
-			ifstream file(m.name);
-		    string s;
-		    while(getline(file, s)){
-		        Vertice v = toVertice(s);
-			    m.vertices.push_back(v);
-			}
-		    file.close();
-	    }
-	}
-
-	vector<Vertice>& getModel(string name) {
-		for (int i = 0; i < vec.size(); i++){
-			if(name.compare(vec[i].name) == 0) {
-				return vec[i].vertices;
-			}
-		}
-
-		//return NULL;
-	}
-};
 
 Models allModels;
 
 
-//0 -> translate
-//1 -> rotate
-//2 -> scale
-
-class geometricTransforms {
-public:
-    int type;
-    float x;
-    float y;
-    float z;
-    float angle;
-};
 
 
-class Group{
-public:
-    vector<geometricTransforms> transforms;
-    vector<string> models;
-    vector<Group> subGroups;
 
-
-};
 
 
 vector<Group> groups;
@@ -160,29 +63,29 @@ void changeSize(int w, int h) {
 }
 
 void drawGroup(Group group) {
-	glPushMatrix();
-	vector<geometricTransforms> &gts = group.transforms;
+    glPushMatrix();
+    vector<GeometricTransforms> &gts = group.transforms;
 
-	for(int i = 0; i < gts.size(); i++ ){
-        geometricTransforms gt = gts[i];
+    for(int i = 0; i < gts.size(); i++ ){
+        GeometricTransforms gt = gts[i];
 
         if(gt.type == 0) {
-        	//cout << gt.x << gt.y <<gt.z;
-        	glTranslatef(gt.x,gt.y,gt.z);
+            //cout << gt.x << gt.y <<gt.z;
+            glTranslatef(gt.x,gt.y,gt.z);
         }
         else if(gt.type == 1) {
-        	//cout << gt.x << gt.y <<gt.z;
-        	glRotatef(gt.angle,gt.x,gt.y,gt.z);
+            //cout << gt.x << gt.y <<gt.z;
+            glRotatef(gt.angle,gt.x,gt.y,gt.z);
         }
         else if(gt.type == 2) {
-        	//cout << gt.x << gt.y <<gt.z;
-        	glScalef(gt.x,gt.y,gt.z);
+            //cout << gt.x << gt.y <<gt.z;
+            glScalef(gt.x,gt.y,gt.z);
         }
     }
 
         glBegin(GL_TRIANGLES);
 
-	std::vector<string> models = group.models;
+    std::vector<string> models = group.models;
     for(int i = 0; i < models.size(); i++ ){
         vector<Vertice> &vertices = allModels.getModel(models[i]);
 
@@ -194,8 +97,8 @@ void drawGroup(Group group) {
     glEnd();
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
-    	drawGroup(group.subGroups[i]);
-    	//cout << group.subGroups[i].models[0].name << "\n"; 
+        drawGroup(group.subGroups[i]);
+        //cout << group.subGroups[i].models[0].name << "\n"; 
     }
 
 
@@ -217,11 +120,11 @@ void renderScene(void) {
     // put drawing instructions here
 
     glColor3f(1, 0, 0);
-        	
+            
 
     for(int k = 0; k < groups.size(); k++) {
-    	drawGroup(groups[k]);
-	}
+        drawGroup(groups[k]);
+    }
 
     // End of frame
     glutSwapBuffers();
@@ -276,102 +179,9 @@ void processSpecialKeys(int key, int xx, int yy) {
 
 
 
-Group parseGroup(XMLElement *group){
-	Group g;
-    for(XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
-    	string childName = string(child->Name());
-        if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
-        	geometricTransforms gt;
-        	gt.x = atof(child->Attribute("X"));
-        	gt.y = atof(child->Attribute("Y"));
-        	gt.z = atof(child->Attribute("Z"));
-        	if ( childName.compare("translate") == 0) {
-	        	gt.type = 0;
-        	}
-        	else if ( childName.compare("scale") == 0) {
-	        	gt.type = 2;
-        	}
-        	g.transforms.push_back(gt);
-        }
-        else if( childName.compare("rotate") == 0) {
-        	geometricTransforms gt;
-        	gt.x = atof(child->Attribute("axisX"));
-        	gt.y = atof(child->Attribute("axisY"));
-        	gt.z = atof(child->Attribute("axisZ"));
-        	gt.angle = atof(child->Attribute("angle"));
-        	gt.type = 1;
-        	g.transforms.push_back(gt);
-        }        
-        else if( string(child->Name()).compare("models") == 0) {
-        	    for(XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
-		        	string name = modelXML->Attribute("file");
-		        	allModels.addModel(name);
-		        	g.models.push_back(name);
-		        }
-        }
-
-    	else if( childName.compare("group") == 0) {
-    		g.subGroups.push_back(parseGroup(child));
-    	}
-    }
-    return g;
-}
-
-	
-
-/** Parse ao ficheiro XML */
-void parseXML(char* file){
-    XMLDocument doc;
-
-    //Se conseguir carregar o ficheiro
-    if(!(doc.LoadFile(file))) {
-        XMLElement* root = doc.FirstChildElement();
-        for(XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
-            if( string(child->Name()).compare("group") == 0) {
-                Group g = parseGroup(child);
-                groups.push_back(g);
-            }
-            
-        }
-    }
-}
-/*
-Group parse3D(Group group) {
-
-	for (int i = 0; i < group.models.size(); i++) {
-		Model m = group.models[i];
-		ifstream file(m.name);
-	    string s;
-	    while(getline(file, s)){
-	        Vertice v = toVertice(s);
-	        m.vertices.push_back(v);
-	    }
-	    file.close();
-	    group.models[i] = m;
-    }
-
-	for (int i = 0; i < group.subGroups.size(); i++) {
-		group.subGroups[i] = parse3D(group.subGroups[i]);
-	}
-	return group;
-   
-}*/
-
-/** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
-void lerficheiro(char* fileXML){
-    parseXML(fileXML);
+    
 
 
-    /*for (int i = 0; i < groups.size(); i++) {
-
-    	groups[i] = parse3D(groups[i]);
-    	
-    }*/
-
-    allModels.loadModels();
-
-
-}
 
 void printHelp(){
     cout << "##################################################" << endl;
@@ -406,30 +216,30 @@ int main(int argc, char **argv) {
         return 0;
     }
     else {
-        lerficheiro(argv[1]);
+        loadConfig(argv[1], allModels, groups);
 
-// init GLUT and the window
+        //init GLUT and the window
         glutInit(&argc, argv);
         glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
         glutInitWindowPosition(100, 100);
         glutInitWindowSize(1920, 1080);
         glutCreateWindow("Projeto_CG");
 
-// Required callback registry
+        //Required callback registry
         glutDisplayFunc(renderScene);
         glutReshapeFunc(changeSize);
 
 
-// put here the registration of the keyboard callbacks
+        //registration of the keyboard callbacks
         glutKeyboardFunc(processKeys);
         glutSpecialFunc(processSpecialKeys);
 
-//  OpenGL settings
+        //OpenGL settings
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-// enter GLUT's main cycle
+        //enter GLUT's main cycle
         glutMainLoop();
 
         return 1;
