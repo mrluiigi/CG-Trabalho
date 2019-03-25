@@ -1,10 +1,7 @@
 using namespace std;
 
-	
-
 #include <string>
-#include <vector> 
-
+#include <vector>
 
 
 class Vertice{
@@ -32,7 +29,6 @@ class Models{
 	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
 	    void loadModels();			
 
-
 	    vector<Vertice>& getModel(string name);
 };
 
@@ -55,11 +51,9 @@ public:
     vector<GeometricTransforms> transforms;
     vector<string> models;
     vector<Group> subGroups;
-
-
 };
 
-/*Recebe o nome do ficheiro XML onde se encontra a configuração. 
+/**Recebe o nome do ficheiro XML onde se encontra a configuração.
   Recebe uma referência para um objecto da classe Models para o preencher com a informação dos ficheiros .3d
   Recebe uma referência para um vetor de objetos Group para o preencher 
   com a informação dos grupos presente no ficheiro configuração	

@@ -7,8 +7,7 @@
 using namespace tinyxml2;
 
 
-
-//obtem um vértice a partir de uma linha do ficheiro .3d
+/** Obtém um vértice a partir de uma linha do ficheiro .3d */
 Vertice toVertice(string s){
     Vertice v;
 
@@ -39,6 +38,8 @@ bool Models::contains(string name) {
     }
     return false;
 }
+
+/** Adiciona o model dado o nome do modelo */
 //Não adiciona repetidos
 void Models::addModel(string name) {
     if(!contains(name)) {
@@ -48,7 +49,7 @@ void Models::addModel(string name) {
     }
 }
 
-//preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
+/** Preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros */
 void Models::loadModels() {
     for (int i = 0; i < vec.size(); i++){   
         Model &m = vec[i];
@@ -64,6 +65,7 @@ void Models::loadModels() {
     }
 }
 
+/** Devolve o model dado o seu nome */
 vector<Vertice>& Models::getModel(string name) {
     for (int i = 0; i < vec.size(); i++){
         if(name.compare(vec[i].name) == 0) {
@@ -132,7 +134,6 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups){
                 Group g = parseGroup(child, allModels);
                 groups.push_back(g);
             }
-            
         }
     }
 }

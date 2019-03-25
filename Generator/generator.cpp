@@ -298,12 +298,9 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
     	file << bx5 << "," << by5 << "," << bz5 << "," << endl;
     	file << bx4 << "," << by4 << "," << bz4 << "," << endl;
     	
-
-
 	}
 
 	file.close();
-
 }
 
 void printHelp(){

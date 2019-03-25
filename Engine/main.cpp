@@ -7,35 +7,25 @@
 #include <math.h>
 #include "loadConfig.h"
 #include <iostream>
-using namespace std;
 #include <stdio.h>
 #include <cstring>
-//#include <vector>
 
 using namespace std;
 
-//ângulo horizontal da câmera
+/** Ângulo horizontal da câmera */
 float alfa = 0;
-//ângulo vertical da câmera
+/** Ângulo vertical da câmera */
 float beta = 0;
-// raio / distância da câmera à origem
+/** Raio/distância da câmera à origem */
 float r = 400;
 
 
-
-
-
-
-
+/** Contém todos os modelos */
 Models allModels;
 
-
-
-
-
-
-
+/** Contém todos os grupos */
 vector<Group> groups;
+
 
 void changeSize(int w, int h) {
 
@@ -64,6 +54,7 @@ void changeSize(int w, int h) {
 
 void drawGroup(Group group) {
     glPushMatrix();
+
     vector<GeometricTransforms> &gts = group.transforms;
 
     for(int i = 0; i < gts.size(); i++ ){
@@ -83,24 +74,24 @@ void drawGroup(Group group) {
         }
     }
 
-        glBegin(GL_TRIANGLES);
 
-    std::vector<string> models = group.models;
-    for(int i = 0; i < models.size(); i++ ){
-        vector<Vertice> &vertices = allModels.getModel(models[i]);
+    glBegin(GL_TRIANGLES);
+    	std::vector<string> models = group.models;
+    	for(int i = 0; i < models.size(); i++ ){
+        	vector<Vertice> &vertices = allModels.getModel(models[i]);
 
-        for(int j = 0; j < vertices.size(); j++) {
-            Vertice v = vertices[j];
-            glVertex3f(v.x, v.y, v.z);
-        }
-    }
+        	for(int j = 0; j < vertices.size(); j++) {
+            	Vertice v = vertices[j];
+            	glVertex3f(v.x, v.y, v.z);
+        	}
+    	}
     glEnd();
+
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
         drawGroup(group.subGroups[i]);
         //cout << group.subGroups[i].models[0].name << "\n"; 
     }
-
 
     glPopMatrix();
 }
@@ -114,14 +105,10 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    // put the geometric transformations here
-
-
-    // put drawing instructions here
+    //drawing instructions here
 
     glColor3f(1, 0, 0);
             
-
     for(int k = 0; k < groups.size(); k++) {
         drawGroup(groups[k]);
     }
@@ -176,11 +163,6 @@ void processSpecialKeys(int key, int xx, int yy) {
 
     glutPostRedisplay();
 }
-
-
-
-    
-
 
 
 void printHelp(){
