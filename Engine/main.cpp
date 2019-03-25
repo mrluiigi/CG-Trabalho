@@ -122,17 +122,17 @@ void processKeys(unsigned char c, int xx, int yy) {
 // put code to process regular keys in here
     //rodar horizontalmente
     if (c == 'a') {
-        alfa -= M_PI/24;
+        alfa -= M_PI/48;
     }
     else if (c == 'd') {
-        alfa += M_PI/24;
+        alfa += M_PI/48;
     }
     //rodar verticalmente
-    else if (c == 'w' && beta + M_PI/24< M_PI/2) {
-        beta += M_PI/24;
+    else if (c == 'w' && beta + M_PI/48< M_PI/2) {
+        beta += M_PI/48;
     }
-    else if (c == 's' && beta - M_PI/24 > -M_PI/2) {
-        beta -= M_PI/24;
+    else if (c == 's' && beta - M_PI/48 > -M_PI/2) {
+        beta -= M_PI/48;
     }
     //mudar tipo de vizualização
     else if(c == '1'){

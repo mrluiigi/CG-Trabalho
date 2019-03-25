@@ -4,12 +4,13 @@
 		Sol
 		<scale X="10.91" Y="10.91" Z="10.91" /> 
 		<models> 
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/sol.3d" />
 		</models>
 	</group>  
 
 	<group>
 		Mercurio
+		<rotate angle="27.61" axisX="0" axisY="1" axisZ="0" />
 		<translate X="80" Y="0" Z="0" /> 
 		<scale X="0.038" Y=".038" Z=".038" />
 		<models>
@@ -19,7 +20,8 @@
 
 	<group>
 		Venus
-		<translate X="100" Y="0" Z="0" /> 
+		<rotate angle="88.98" axisX="0" axisY="1" axisZ="0" />
+		<translate X="90" Y="0" Z="0" /> 
 		<scale X="0.095" Y="0.095" Z="0.095" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -28,15 +30,15 @@
 
 	<group>
 		Terra
-		<translate X="140" Y="0" Z="0" /> 
+		<translate X="100" Y="0" Z="0" /> 
 		<scale X="0.1" Y="0.1" Z="0.1" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
 		<group> 
-			Ĺua
+			Lua
 			<translate X="20" Y="10" Z="15" />
-			<scale X="0.5" Y="0.5" Z="0.5" /> 
+			<scale X="0.37" Y="0.37" Z="0.37" /> 
 			<models> 
 				<model file="../../ModelsSolarSystem/esfera.3d" />
 			</models> 
@@ -45,25 +47,100 @@
 
 	<group>
 		Marte
-		<translate X="180" Y="0" Z="0" /> 
+		<rotate angle="266.25" axisX="0" axisY="1" axisZ="0" />
+		<translate X="110" Y="0" Z="0" /> 
 		<scale X=".053" Y=".053" Z=".053" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
+		<group> 
+			Lua1
+			<translate X="-10" Y="12" Z="10" />
+			<scale X="0.15" Y="0.15" Z="0.15" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua2
+			<translate X="20" Y="10" Z="15" />
+			<scale X="0.10" Y="0.10" Z="0.10" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
 	</group>
-
+	
 	<group>
 		Jupiter
-		<translate X="220" Y="0" Z="0" /> 
+		<rotate angle="72.46" axisX="0" axisY="1" axisZ="0" />
+		<translate X="135" Y="0" Z="0" /> 
 		<scale X="1.12" Y="1.12" Z="1.12" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
+		<group> 
+			Lua1
+			<translate X="18" Y="-7" Z="2" />
+			<scale X="0.05" Y="0.05" Z="0.05" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua2
+			<translate X="-13" Y="5" Z="4" />
+			<scale X="0.037" Y="0.037" Z="0.037" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua3
+			<translate X="8" Y="8" Z="3" />
+			<scale X="0.04" Y="0.04" Z="0.04" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua4
+			<translate X="3" Y="-10" Z="5" />
+			<scale X="0.052" Y="0.052" Z="0.052" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua5
+			<translate X="2" Y="10" Z="-8" />
+			<scale X="0.045" Y="0.045" Z="0.045" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua6
+			<translate X="0" Y="2" Z="-15" />
+			<scale X="0.039" Y="0.039" Z="0.039" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua7
+			<translate X="3" Y="-3" Z="-8" />
+			<scale X="0.051" Y="0.051" Z="0.051" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
 	</group>	
 
 	<group>
 		Saturno
-		<translate X="250" Y="0" Z="0" /> 
+		<rotate angle="103.17" axisX="0" axisY="1" axisZ="0" />
+		<translate X="160" Y="0" Z="0" /> 
 		<scale X=".945" Y=".945" Z=".945" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -72,27 +149,118 @@
 			Aneis
 			<rotate angle="25" axisX="1" axisY="0" axisZ="0" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/aneis.3d" />
+				<model file="../../ModelsSolarSystem/saturnRings1.3d" />
+				<model file="../../ModelsSolarSystem/saturnRings2.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua1
+			<translate X="3" Y="-8" Z="5" />
+			<scale X="0.08" Y="0.08" Z="0.08" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua2
+			<translate X="-7" Y="9" Z="2" />
+			<scale X="0.075" Y="0.075" Z="0.075" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua3
+			<translate X="4" Y="-6" Z="-7" />
+			<scale X="0.07" Y="0.07" Z="0.07" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua4
+			<translate X="8" Y="10" Z="5" />
+			<scale X="0.037" Y="0.037" Z="0.037" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua5
+			<translate X="0" Y="3" Z="-15" />
+			<scale X="0.09" Y="0.09" Z="0.09" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua6
+			<translate X="2" Y="-7" Z="8" />
+			<scale X="0.083" Y="0.083" Z="0.083" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
 			</models> 
 		</group>
 	</group>
 
 	<group>
 		Urano
-		<translate X="280" Y="0" Z="0" /> 
+		<rotate angle="212.55" axisX="0" axisY="1" axisZ="0" />
+		<translate X="185" Y="0" Z="0" /> 
 		<scale X=".4" Y=".4" Z=".4" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
+		<group> 
+			Lua1
+			<translate X="-8" Y="6" Z="3" />
+			<scale X="0.07" Y="0.07" Z="0.07" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua2
+			<translate X="6" Y="3" Z="-8" />
+			<scale X="0.06" Y="0.06" Z="0.06" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua3
+			<translate X="10" Y="-5" Z="3" />
+			<scale X="0.075" Y="0.075" Z="0.075" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
 	</group>
 
 	<group>
 		Neptuno
-		<translate X="310" Y="0" Z="0" /> 
+		<rotate angle="165.75" axisX="0" axisY="1" axisZ="0" />
+		<translate X="200" Y="0" Z="0" /> 
 		<scale X=".388" Y=".388" Z=".388" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
+		<group> 
+			Lua1
+			<translate X="6" Y="-4" Z="-4" />
+			<scale X="0.1" Y="0.1" Z="0.1" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
+		<group> 
+			Lua2
+			<translate X="-5" Y="7" Z="2" />
+			<scale X="0.13" Y="0.13" Z="0.13" /> 
+			<models> 
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models> 
+		</group>
 	</group>
 
 </scene>
