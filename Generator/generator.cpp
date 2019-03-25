@@ -315,7 +315,7 @@ void printHelp(){
     cout << "#      -Caixa [Tamanho X] [Tamanho Y] [Tamanho Z] [DIVISÕES]   #" << endl;
     cout << "#      -Esfera [RAIO] [SLICES] [STACKS]                        #" << endl;
     cout << "#      -Cone [RAIO] [ALTURA] [SLICES] [STACKS]                 #" << endl;
-    cout << "#      -SaturnRings [RAIO1] [RAIO2] [SLICES]			        #" << endl;
+    cout << "#      -SaturnRings [RAIO1] [RAIO2] [SLICES]                   #" << endl;
     cout << "#                                                              #" << endl;
     cout << "################################################################" << endl;
 }
