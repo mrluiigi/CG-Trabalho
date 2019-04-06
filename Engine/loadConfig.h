@@ -16,6 +16,8 @@ class Model{
     	//nome do ficheiro a partir do qual o modelo foi carregado	
         string name; 				
         vector<Vertice> vertices;
+        int numberOfVertices;
+        float * verticesBuffer;
 };
 
 class Models{

@@ -202,6 +202,9 @@ int main(int argc, char **argv) {
 
         //init GLUT and the window
         glutInit(&argc, argv);
+        //aqui?
+        glEnableClientState(GL_VERTEX_ARRAY);
+
         glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
         glutInitWindowPosition(100, 100);
         glutInitWindowSize(1920, 1080);

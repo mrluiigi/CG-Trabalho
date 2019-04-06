@@ -12,6 +12,9 @@ void plano(float lado, string fileName){
     x = lado/2;
     z = lado/2;
 
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << 6 << endl;
+
     //Escreve os vértices de um triangulo no ficheiro
 	file << -x << "," << y << "," << z << "," << endl; 
 	file << x << "," << y << "," << z << "," << endl; 
@@ -38,6 +41,9 @@ void caixa(float x, float y, float z, int divisions, string fileName){
 	x = x/2;
 	y = y/2;
 	z = z/2;
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << 36 * divisions * divisions << endl;
 
 	for(int i = 0; i < divisions; i++){
 		for(int j = 0; j < divisions; j++){
@@ -107,6 +113,10 @@ void esfera(float radius, int slices, int stacks, string fileName){
 
 	float alpha = (2*M_PI)/slices;
 	float beta = (M_PI)/stacks;
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << stacks* slices * 6 << endl;
+
 
 	//cada iteração desenha uma camada horizontal (do topo para baixo)
 	for(int j = 0; j < stacks; j++) {
@@ -181,6 +191,10 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
 	//difenença entra a altura de cada camada 
 	float qtdAddY = sin(beta) * segment;
 
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << 3 * slices + stacks * slices * 6 << endl;
+
 	//base do cone
 	for(int i = 0; i < slices; i++) {
 		bx1 = 0;
@@ -253,6 +267,9 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 	float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
 	float bx4, by4, bz4, bx5, by5, bz5, bx6, by6, bz6;
 	float alpha = (2*M_PI)/slices;
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << slices * 12 << endl;
 
 	for(int i = 0; i < slices; i++) {
 		bx1 = radius1 * sin((i+1)*alpha);

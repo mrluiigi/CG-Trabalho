@@ -56,10 +56,18 @@ void Models::loadModels() {
         //Abre o ficheiro .3d
         ifstream file(m.name);
         string s;
+        //Lê o número de vértices presenta na 1º linha 
+        getline(file,s);
+        m.numberOfVertices = stoi(s);
+        m.verticesBuffer = (float *)malloc(sizeof(float) * m.numberOfVertices * 3);
+        int c = 0;
         //Para cada linha processa um vértice
         while(getline(file, s)){
             Vertice v = toVertice(s);
             m.vertices.push_back(v);
+            m.verticesBuffer[c++] = v.x;
+            m.verticesBuffer[c++] = v.y;
+            m.verticesBuffer[c++] = v.z;
         }
         file.close();
     }
