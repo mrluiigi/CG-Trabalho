@@ -1,6 +1,7 @@
-#ifdef __APPLE__
+#ifdef APPLE
 #include <GLUT/glut.h>
 #else
+#include <GL/glew.h>
 #include <GL/glut.h>
 #endif
 
@@ -9,6 +10,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <cstring>
+
+
 
 using namespace std;
 
@@ -25,6 +28,10 @@ Models allModels;
 
 /** Contém todos os grupos */
 vector<Group> groups;
+
+
+/** Buffer para de desenhar (1?) */
+GLuint buffers[1];
 
 
 void changeSize(int w, int h) {
@@ -55,6 +62,9 @@ void changeSize(int w, int h) {
 void drawGroup(Group group) {
     glPushMatrix();
 
+
+
+
     vector<GeometricTransforms> &gts = group.transforms;
 
     for(int i = 0; i < gts.size(); i++ ){
@@ -74,17 +84,29 @@ void drawGroup(Group group) {
         }
     }
 
+    // Iniciar os buffers
+    glGenBuffers(1, buffers);
+
+    glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
+
+    glVertexPointer(3,GL_FLOAT,0,0);
+
 
     glBegin(GL_TRIANGLES);
-    	std::vector<string> models = group.models;
-    	for(int i = 0; i < models.size(); i++ ){
-        	vector<Vertice> &vertices = allModels.getModel(models[i]);
+    int inteiro = 0;
+    std::vector<string> models = group.models;
+    for(int i = 0; i < models.size(); i++ ){
+        Model m = allModels.getModel(models[i]);
 
-        	for(int j = 0; j < vertices.size(); j++) {
-            	Vertice v = vertices[j];
-            	glVertex3f(v.x, v.y, v.z);
-        	}
-    	}
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
+
+        for(; inteiro < m.numberOfVertices * 3; inteiro++){
+            cout << m.verticesBuffer[inteiro] << " ";
+        }
+        cout << m.numberOfVertices << "\n";
+
+        glDrawArrays(GL_TRIANGLES, 0, m.numberOfVertices);
+    }
     glEnd();
 
 
@@ -223,6 +245,9 @@ int main(int argc, char **argv) {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        //Para poder usar o glGenBuffer
+        glewInit();
 
         //enter GLUT's main cycle
         glutMainLoop();

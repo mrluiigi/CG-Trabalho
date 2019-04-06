@@ -74,10 +74,10 @@ void Models::loadModels() {
 }
 
 /** Devolve o model dado o seu nome */
-vector<Vertice>& Models::getModel(string name) {
+Model Models::getModel(string name) {
     for (int i = 0; i < vec.size(); i++){
         if(name.compare(vec[i].name) == 0) {
-            return vec[i].vertices;
+            return vec[i];
         }
     }
 }

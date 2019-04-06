@@ -31,7 +31,7 @@ class Models{
 	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
 	    void loadModels();			
 
-	    vector<Vertice>& getModel(string name);
+	    Model getModel(string name);
 };
 
 
