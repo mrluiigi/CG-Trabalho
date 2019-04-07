@@ -92,7 +92,6 @@ void drawGroup(Group group) {
     glVertexPointer(3,GL_FLOAT,0,0);
 
 
-    glBegin(GL_TRIANGLES);
     int inteiro = 0;
     std::vector<string> models = group.models;
     for(int i = 0; i < models.size(); i++ ){
@@ -121,6 +120,7 @@ void drawGroup(Group group) {
 void renderScene(void) {
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnableClientState(GL_VERTEX_ARRAY);
     // set the camera
     glLoadIdentity();
     gluLookAt(r*cos(beta)*sin(alfa), r*sin(beta),r*cos(beta)*cos(alfa),
