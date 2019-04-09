@@ -1,4 +1,5 @@
 #include "generator.h"
+#include "loadBezierPatches.h"
 #include <string>
 #include <math.h>
 
@@ -338,7 +339,11 @@ void printHelp(){
 }
 
 int main(int argc, char **argv){
-	
+
+	 loadBezierPatches("teapot.patch");
+
+
+	/*
 	if (argc < 2){
 		cout << "Parâmetros insuficientes" << endl;
 		cout << "Faça ./generator -h para ajuda." << endl;
@@ -380,5 +385,5 @@ int main(int argc, char **argv){
 			cout << "Faça ./generator -h para ajuda." << endl;
 		}
 		return 1;
-	}
+	}*/
 }

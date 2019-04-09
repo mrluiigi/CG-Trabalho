@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
-using namespace std; //com isto posso escrever string e o compilador vai perceber
+using namespace std; 
 
 void plano(float lado, string fileName);
 
