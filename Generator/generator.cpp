@@ -340,9 +340,32 @@ void printHelp(){
 
 int main(int argc, char **argv){
 
-	 loadBezierPatches("teapot.patch");
+	 BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
 
+	//imprime para testar - APAGAR
+	/*for (int i = 0; i < bezierPatches.numberOfPatches; i++) {
+		for (int j = 0; j < 16; j++) {
+			printf(" %d,", bezierPatches.patches[i][j]);
+		}
+		printf("\n");
+	}*/
 
+ 	/*for (int i = 132; i < bezierPatches->numberOfPoints; i++) {
+		for (int j = 0; j < 3; j++) {
+			printf(" i:%d,j:%d,%f,",i+1,j+1, bezierPatches->points[i][j]);
+		}
+		printf("\n");
+	}*/
+
+	/*//imprime para testar - APAGAR
+	for (int i = 0; i < bezierPatches.numberOfPoints; i++) {
+		for (int j = 0; j < 3; j++) {
+			printf(" %f,", bezierPatches.points[i][j]);
+		}
+		printf("\n");
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+*/
 	/*
 	if (argc < 2){
 		cout << "Parâmetros insuficientes" << endl;

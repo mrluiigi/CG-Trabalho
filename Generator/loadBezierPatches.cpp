@@ -2,15 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-
-BezierPatches::BezierPatches(int numberOfPatches, int**patches, int numberOfPoints, float** points) {
-	this.numberOfPatches = numberOfPatches;
-	this.patches = patches;
-	this.numberOfPoints = numberOfPoints;
-	this.points = points;
-}
-
-
 int* lineToPatch(string line) {
 	int* patch = new int[16];
     int i = 0;
@@ -46,40 +37,36 @@ float* lineToPoint(string line) {
     return point;
 }
 
-void loadBezierPatches(string filename) {
-	BezierPatches bp;
+BezierPatches* loadBezierPatches(string filename) {
 	ifstream file(filename);
 	string line;
 	//ler número de patches
 	getline(file, line);
 	int numberOfPatches = stoi(line);
-	int* patches[numberOfPatches];
+	int** patches = new int*[numberOfPatches];
 	//ler patches
 	for (int i = 0; i < numberOfPatches; i++) {
 		getline(file, line);
 		patches[i] = lineToPatch(line);
 	}
-	//imprime para testar - APAGAR
-	for (int i = 0; i < numberOfPatches; i++) {
-		for (int j = 0; j < 16; j++) {
-			printf(" %d,", patches[i][j]);
-		}
-		printf("\n");
-	}
 	//lê número de pontos de controlo
 	getline(file, line);
 	int numberOfPoints = stoi(line);
-	float* points[numberOfPoints];
+	float** points = new float*[numberOfPoints];
 	//lê pontos de controlo
 	for (int i = 0; i < numberOfPoints; i++) {
 		getline(file, line);
 		points[i] = lineToPoint(line);
 	}
-	//imprime para testar - APAGAR
-	for (int i = 0; i < numberOfPoints; i++) {
-		for (int j = 0; j < 3; j++) {
-			printf(" %f,", points[i][j]);
-		}
-		printf("\n");
-	}
+
+	BezierPatches* bezierPatches = new BezierPatches();
+	bezierPatches->numberOfPatches = numberOfPatches;
+	bezierPatches->patches = patches;
+	bezierPatches->numberOfPoints = numberOfPoints;
+	bezierPatches->points = points;
+
+
+
+	return bezierPatches;
+
 }

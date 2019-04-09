@@ -9,10 +9,6 @@ class BezierPatches {
 		int numberOfPoints;
 		//points[numberOfPoints][3]
 		float** points;
-
-		//BezierPatches(int numberOfPatches, int**patches, int numberOfPoints, float** points) {
-
-
 };
 
-void loadBezierPatches(string filename);
+BezierPatches* loadBezierPatches(string filename);
