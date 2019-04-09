@@ -321,6 +321,54 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 	file.close();
 }
 
+// a matriz M é igual à transposta
+float matrizM [16] = {-1,  3, -3, 1,   
+					   3, -6,  3, 0,
+ 					  -3,  3,  0, 0, 
+ 					   1,  0,  0, 0};
+
+
+void multVectorMatrix(float *v, float *m, float *res){
+	//percorre vetor
+	for(int i = 0; i < 4; ++i){
+		res[i] = 0;
+		//percorre coluna matriz
+		for (int j = 0; j < 4; ++j){
+			res[i] += v[i] * m[i * 4 + j];
+		}
+	}
+}
+
+float multVectorVector(float *v1, float *v2){
+	float res = 0;
+	for (int i = 0; i < 4; ++i){
+		res += v1[i] * v2[i];
+	}
+	return res;
+}
+
+
+void calculaPonto(float u, float v, float *matrizPC){
+	float uu[4] = {u*u*u, u*u, u, 1}; //(float) pow(u,3) _________________________________________
+	float vv[4] = {v*v*v, v*v, v, 1};
+
+	float res[4];
+	float teste = 0;
+
+	multVectorMatrix(uu, matrizM, res);
+	multVectorMatrix(res, matrizPC, res);
+	multVectorMatrix(res, matrizM, res);
+	teste = multVectorVector(res, vv);
+}
+
+
+
+
+
+
+
+
+
 void printHelp(){
     cout << "################################################################" << endl;
     cout << "#                                                              #" << endl;
