@@ -330,36 +330,101 @@ float matrizM [16] = {-1,  3, -3, 1,
 
 void multVectorMatrix(float *v, float *m, float *res){
 	//percorre vetor
-	for(int i = 0; i < 4; ++i){
+	for(int i = 0; i < 4; i++){
 		res[i] = 0;
 		//percorre coluna matriz
-		for (int j = 0; j < 4; ++j){
-			res[i] += v[i] * m[i * 4 + j];
+		for (int j = 0; j < 4; j++){
+							//verificar se está a percorrer bem a matriz
+			res[i] += v[j] * m[j * 4 + i];
+
+
+			//printf("Iteração %d--%d: %f\n", i, j, res[i]);
+			//printf("%f\n", v[i] * m[j * 4 + i]);
 		}
 	}
 }
 
+
 float multVectorVector(float *v1, float *v2){
 	float res = 0;
-	for (int i = 0; i < 4; ++i){
+	for (int i = 0; i < 4; i++){
 		res += v1[i] * v2[i];
 	}
 	return res;
 }
 
 
-void calculaPonto(float u, float v, float *matrizPC){
+float calculaCoordenada(float u, float v, float *matrizPC){
 	float uu[4] = {u*u*u, u*u, u, 1}; //(float) pow(u,3) _________________________________________
 	float vv[4] = {v*v*v, v*v, v, 1};
 
 	float res[4];
-	float teste = 0;
+	float res2[4];
+	float ponto = 0;
 
 	multVectorMatrix(uu, matrizM, res);
-	multVectorMatrix(res, matrizPC, res);
-	multVectorMatrix(res, matrizM, res);
-	teste = multVectorVector(res, vv);
+
+	/*
+	for (int i = 0; i < 4; ++i){
+		printf("res1: %f\n", res[i]);
+	}
+	for (int i = 0; i < 16; ++i){
+		printf("matrizPC: %f\n", matrizPC[i]);
+	}*/
+
+
+	multVectorMatrix(res, matrizPC, res2);
+
+	/*
+	for (int i = 0; i < 4; ++i){
+		printf("res2: %f\n", res2[i]);
+	}*/
+
+
+	multVectorMatrix(res2, matrizM, res);
+	ponto = multVectorVector(res, vv);
+
+	return ponto;
 }
+
+
+float* constroiMatrizPC(BezierPatches bp, int nPatch, int coordenada){
+	int* patch = bp.patches[nPatch];
+	float* matrizRes = new float[16];
+	int indice;
+
+	for (int i = 0; i < 16; ++i){
+		indice = patch[i];
+		matrizRes[i] = bp.points[indice][coordenada];
+	}
+
+	return matrizRes;
+}
+
+
+float* calculaPontos(BezierPatches* bezierPatches, int nPatch, int tess, string fileName){
+	ofstream file;
+	file.open(fileName);
+
+	float* matrizPCx = constroiMatrizPC(*bezierPatches, nPatch, 0);
+	float* matrizPCy = constroiMatrizPC(*bezierPatches, nPatch, 1);
+	float* matrizPCz = constroiMatrizPC(*bezierPatches, nPatch, 2);
+	float* temp = new float(3);
+
+	float step = 1.0/tess;
+	for(float u = 0; u <= 1; u += step){
+		for(float v = 0; v <= 1; v += step){
+			temp[0] = calculaCoordenada(u, v, matrizPCx);
+			temp[1] = calculaCoordenada(u, v, matrizPCy);
+			temp[2] = calculaCoordenada(u, v, matrizPCz);
+		}
+
+		file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+	}
+
+	file.close();
+}
+
 
 
 
@@ -387,8 +452,16 @@ void printHelp(){
 }
 
 int main(int argc, char **argv){
+	BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
 
-	 BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
+	float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
+
+	for (int i = 0; i < 16; ++i){
+		printf("%f\n", teste[i]);
+	}
+
+	calculaPontos(bezierPatches, 0, 200, "teapot.3d");
+
 
 	//imprime para testar - APAGAR
 	/*for (int i = 0; i < bezierPatches.numberOfPatches; i++) {
