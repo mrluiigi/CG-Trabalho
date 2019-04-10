@@ -405,22 +405,29 @@ float* constroiMatrizPC(BezierPatches bp, int nPatch, int coordenada){
 float* calculaPontos(BezierPatches* bezierPatches, int nPatch, int tess, string fileName){
 	ofstream file;
 	file.open(fileName);
-
-	float* matrizPCx = constroiMatrizPC(*bezierPatches, nPatch, 0);
-	float* matrizPCy = constroiMatrizPC(*bezierPatches, nPatch, 1);
-	float* matrizPCz = constroiMatrizPC(*bezierPatches, nPatch, 2);
 	float* temp = new float(3);
-
+	float* matrizPCx ;
+	float* matrizPCy;
+	float* matrizPCz;
 	float step = 1.0/tess;
-	for(float u = 0; u <= 1; u += step){
-		for(float v = 0; v <= 1; v += step){
-			temp[0] = calculaCoordenada(u, v, matrizPCx);
-			temp[1] = calculaCoordenada(u, v, matrizPCy);
-			temp[2] = calculaCoordenada(u, v, matrizPCz);
-		}
 
-		file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+	file << tess*tess*bezierPatches->numberOfPatches << endl;
+	for(int i = 0; i < bezierPatches->numberOfPatches; i++) {
+		matrizPCx = constroiMatrizPC(*bezierPatches, i, 0);
+		matrizPCy = constroiMatrizPC(*bezierPatches, i, 1);
+		matrizPCz = constroiMatrizPC(*bezierPatches, i, 2);
+		for(float u = 0; u <= 1; u += step){
+			for(float v = 0; v <= 1; v += step){
+				temp[0] = calculaCoordenada(u, v, matrizPCx);
+				temp[1] = calculaCoordenada(u, v, matrizPCy);
+				temp[2] = calculaCoordenada(u, v, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+			}
+
+		}
+		
 	}
+
 
 	file.close();
 }
@@ -456,11 +463,8 @@ int main(int argc, char **argv){
 
 	float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
 
-	for (int i = 0; i < 16; ++i){
-		printf("%f\n", teste[i]);
-	}
 
-	calculaPontos(bezierPatches, 0, 200, "teapot.3d");
+	calculaPontos(bezierPatches, 0, 18, "teapot.3d");
 
 
 	//imprime para testar - APAGAR
