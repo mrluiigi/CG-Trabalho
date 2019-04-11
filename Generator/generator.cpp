@@ -444,10 +444,8 @@ float* calculaPontos(BezierPatches* bezierPatches, int nPatch, int tess, string 
 				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
 			}
 		}
-
-		
+	
 	}
-
 
 	file.close();
 }
@@ -491,7 +489,67 @@ void planoIndices(float lado, string fileName){
 
 
 
+void esferaIndices(float radius, int slices, int stacks, string fileName){
+	ofstream file;
+	file.open(fileName);
 
+	float alpha = (2*M_PI)/slices;
+	float beta = (M_PI)/stacks;
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << stacks * slices + 2 << endl;
+    
+
+    //desenhar o topo da esfera
+	for (int i = 0; i < slices-1; i++){
+		file << 0 << "," << i+1 << "," << i+2 << ",";
+	}
+	file << 0 << "," << slices << "," << 1 << ",";
+
+	for(int i = 0; i < stacks-1; i++){
+		for(int j = 0; j < slices-1; j++){
+			file << i * slices + j << "," << (i+1) * slices + j << "," << (i+1) * slices + j + 1 << ",";
+			file << (i+1) * slices + j + 1 << "," << i * slices + j + 1 << "," << i * slices + j << ",";
+		}
+		file << (i+1)*slices+slices-2 << "," << (i+1)*slices << "," << i*slices+slices-2 << ",";
+		file << (i+1)*slices << "," << i*slices << "," << i*slices+slices-2 << ",";
+	}
+
+
+	//desenhar a última stack
+	//for (int i = 0; i < count; ++i){
+		/* code */
+	//}
+
+
+    for(int i = 11; i < stacks * slices + 2; i++){
+    	file << i << ",";
+    }
+    file << endl;
+    file << stacks * slices + 2 << endl;
+
+
+    //vértice no topo
+	file << 0 << "," << radius << "," << 0 << "," << endl;
+
+	for(int j = 1; j <= stacks; j++) {
+
+		float y = radius * sin(M_PI/2 - beta * j);
+
+		for(int i = 0; i < slices; i++) {
+			
+			float x = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);		
+			float z = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
+
+	        file << x << "," << y << "," << z << "," << endl;
+		}
+	}
+
+	//vértice no fundo
+	file << 0 << "," << -radius << "," << 0 << "," << endl;
+
+    file.close();
+}
 
 
 
@@ -533,9 +591,11 @@ int main(int argc, char **argv){
 	float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
 
 
-	calculaPontos(bezierPatches, 0, 3, "teapot.3d");
+	calculaPontos(bezierPatches, 0, 20, "teapot.3d");
 
 	planoIndices(4, "plano.3d");
+
+	esferaIndices(4, 10, 10, "esfera.3d");
 
 
 	//imprime para testar - APAGAR
