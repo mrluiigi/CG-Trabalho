@@ -1,0 +1,8 @@
+<scene> 
+	<group> 
+		<scale X="10" Y="10" Z="10" /> 
+		<models> 
+			<model file="../../Generator/plano.3d" />
+		</models>
+	</group>  
+</scene>

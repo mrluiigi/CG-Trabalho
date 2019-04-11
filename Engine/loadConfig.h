@@ -14,10 +14,12 @@ class Vertice{
 class Model{
     public:
     	//nome do ficheiro a partir do qual o modelo foi carregado	
-        string name; 				
-        vector<Vertice> vertices;
-        int numberOfVertices;
-        float * verticesBuffer;
+        string name;
+		int numberOfIndices;
+		int* indicesBuffer;
+		int numberOfVertices;
+		vector<Vertice> vertices;
+        float* verticesBuffer;
 };
 
 class Models{

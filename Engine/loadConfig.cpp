@@ -29,6 +29,20 @@ Vertice toVertice(string s){
     return v;
 }
 
+void toIndice(string s, int* array){
+    int i = 0;
+
+    std::string delimiter = ",";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
+        token = s.substr(0, pos);   //obter substring entre virgulas
+        array[i] = stoi(token);     //transformar substring em float
+        i++;
+        s.erase(0, pos + delimiter.length());
+    }
+}
+
 
 bool Models::contains(string name) {
     for (int i = 0; i < vec.size(); i++){
@@ -51,16 +65,28 @@ void Models::addModel(string name) {
 
 /** Preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros */
 void Models::loadModels() {
-    for (int i = 0; i < vec.size(); i++){   
+    for (int i = 0; i < vec.size(); i++){
         Model &m = vec[i];
+
         //Abre o ficheiro .3d
         ifstream file(m.name);
         string s;
-        //Lê o número de vértices presenta na 1º linha 
+
+        //Lê o número de índices presente na 1º linha
+        getline(file,s);
+        m.numberOfIndices = stoi(s);
+        m.indicesBuffer = (int *)malloc(sizeof(int) * m.numberOfIndices);
+
+        //Lê os índices
+        getline(file,s);
+        toIndice(s, m.indicesBuffer);
+
+        //Lê o número de vértices presenta na 3º linha
         getline(file,s);
         m.numberOfVertices = stoi(s);
         m.verticesBuffer = (float *)malloc(sizeof(float) * m.numberOfVertices * 3);
         int c = 0;
+
         //Para cada linha processa um vértice
         while(getline(file, s)){
             Vertice v = toVertice(s);
@@ -69,6 +95,7 @@ void Models::loadModels() {
             m.verticesBuffer[c++] = v.y;
             m.verticesBuffer[c++] = v.z;
         }
+
         file.close();
     }
 }

@@ -33,6 +33,10 @@ vector<Group> groups;
 /** Buffer para de desenhar (1?) */
 GLuint buffers[1];
 
+/** Buffer para os índices */
+GLuint indexes[1];
+
+
 
 void changeSize(int w, int h) {
 
@@ -64,7 +68,6 @@ void drawGroup(Group group) {
 
 
 
-
     vector<GeometricTransforms> &gts = group.transforms;
 
     for(int i = 0; i < gts.size(); i++ ){
@@ -86,10 +89,13 @@ void drawGroup(Group group) {
 
     // Iniciar os buffers
     glGenBuffers(1, buffers);
-
     glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
-
     glVertexPointer(3,GL_FLOAT,0,0);
+
+    // Iniciar os indices
+    glGenBuffers(1, indexes);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[0]);
+
 
 
     int inteiro = 0;
@@ -99,12 +105,16 @@ void drawGroup(Group group) {
 
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
 
-        for(; inteiro < m.numberOfVertices * 3; inteiro++){
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
+
+       /* for(; inteiro < m.numberOfVertices * 3; inteiro++){
             cout << m.verticesBuffer[inteiro] << " ";
         }
-        cout << m.numberOfVertices << "\n";
+        cout << m.numberOfVertices << "\n";*/
 
-        glDrawArrays(GL_TRIANGLES, 0, m.numberOfVertices);
+        //glDrawArrays(GL_TRIANGLES, 0, m.numberOfVertices);
+
+        glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
     glEnd();
 
@@ -243,7 +253,7 @@ int main(int argc, char **argv) {
 
         //OpenGL settings
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
+        //glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         //Para poder usar o glGenBuffer

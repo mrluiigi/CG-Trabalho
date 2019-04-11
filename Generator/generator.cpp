@@ -411,26 +411,106 @@ float* calculaPontos(BezierPatches* bezierPatches, int nPatch, int tess, string 
 	float* matrizPCz;
 	float step = 1.0/tess;
 
-	file << tess*tess*bezierPatches->numberOfPatches << endl;
+	file << tess*tess*bezierPatches->numberOfPatches*6 << endl;
 	for(int i = 0; i < bezierPatches->numberOfPatches; i++) {
+
 		matrizPCx = constroiMatrizPC(*bezierPatches, i, 0);
 		matrizPCy = constroiMatrizPC(*bezierPatches, i, 1);
 		matrizPCz = constroiMatrizPC(*bezierPatches, i, 2);
-		for(float u = 0; u <= 1; u += step){
-			for(float v = 0; v <= 1; v += step){
+
+		for(float u = 0; u <= 1-step; u += step){
+			for(float v = 0; v <= 1-step; v += step){
+
 				temp[0] = calculaCoordenada(u, v, matrizPCx);
 				temp[1] = calculaCoordenada(u, v, matrizPCy);
 				temp[2] = calculaCoordenada(u, v, matrizPCz);
 				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
-			}
 
+				temp[0] = calculaCoordenada(u+step, v, matrizPCx);
+				temp[1] = calculaCoordenada(u+step, v, matrizPCy);
+				temp[2] = calculaCoordenada(u+step, v, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+
+				temp[0] = calculaCoordenada(u, v+step, matrizPCx);
+				temp[1] = calculaCoordenada(u, v+step, matrizPCy);
+				temp[2] = calculaCoordenada(u, v+step, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+
+
+
+
+				temp[0] = calculaCoordenada(u+step, v+step, matrizPCx);
+				temp[1] = calculaCoordenada(u+step, v+step, matrizPCy);
+				temp[2] = calculaCoordenada(u+step, v+step, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+
+				temp[0] = calculaCoordenada(u+step, v, matrizPCx);
+				temp[1] = calculaCoordenada(u+step, v, matrizPCy);
+				temp[2] = calculaCoordenada(u+step, v, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+
+				temp[0] = calculaCoordenada(u, v+step, matrizPCx);
+				temp[1] = calculaCoordenada(u, v+step, matrizPCy);
+				temp[2] = calculaCoordenada(u, v+step, matrizPCz);
+				file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+			}
 		}
+
 		
 	}
 
 
 	file.close();
 }
+
+
+
+
+
+
+//VIRGULAS?
+void planoIndices(float lado, string fileName){
+    ofstream file;
+    file.open(fileName);
+
+    float x, y, z;
+    y = 0;
+    x = lado/2;
+    z = lado/2;
+
+	//Número de índices
+    file << 6 << ", " << endl; 
+    //Índices
+    file << 0 << ", " << 2 << ", " << 1 << ", " << 1 << ", " << 2 << ", " << 3 <<  ", " << endl; 
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << 4 << ", " << endl;
+
+    //Escreve os vértices de um triangulo no ficheiro
+	file << -x << "," << y << "," << -z << "," << endl; // 0
+	file << x << "," << y << "," << -z << "," << endl;  // 1
+	file << -x << "," << y << "," << z << "," << endl;  // 2
+	file << x << "," << y << "," << z << "," << endl;   // 3
+	
+
+
+    file.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -464,7 +544,9 @@ int main(int argc, char **argv){
 	float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
 
 
-	calculaPontos(bezierPatches, 0, 18, "teapot.3d");
+	calculaPontos(bezierPatches, 0, 19, "teapot.3d");
+
+	planoIndices(4, "plano.3d");
 
 
 	//imprime para testar - APAGAR
