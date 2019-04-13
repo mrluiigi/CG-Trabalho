@@ -496,43 +496,62 @@ void esferaIndices(float radius, int slices, int stacks, string fileName){
 	float alpha = (2*M_PI)/slices;
 	float beta = (M_PI)/stacks;
 
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << stacks * slices + 2 << endl;
-    
+	//-------------------------------------------------------INDICES---------------------------------------------------------------
 
-    //desenhar o topo da esfera
+	//Escreve o número de indices 
+    file << slices * 3 + slices*3*2*(stacks-2) + slices * 3 << endl;
+
+    //indices do topo da esfera
 	for (int i = 0; i < slices-1; i++){
 		file << 0 << "," << i+1 << "," << i+2 << ",";
 	}
+	//indices para "fechar" o stack do topo da esfera
 	file << 0 << "," << slices << "," << 1 << ",";
 
-	for(int i = 0; i < stacks-1; i++){
-		for(int j = 0; j < slices-1; j++){
-			file << i * slices + j << "," << (i+1) * slices + j << "," << (i+1) * slices + j + 1 << ",";
-			file << (i+1) * slices + j + 1 << "," << i * slices + j + 1 << "," << i * slices + j << ",";
+	int stackAtual;
+	int stackSeguinte;
+	int j = 0;
+	//"corpo" da esfera
+	for (int i = 0; i < stacks-2; i++) {
+		for (j = 0; j < slices-1; j++){
+			stackAtual = i * slices + 1;
+			stackSeguinte = (i+1) * slices + 1;
+			//cima esquerda -> baixo esquerda -> baixo direita
+			file << stackAtual + j << "," << stackSeguinte + j << "," << stackSeguinte + j + 1 << ",";
+			//cima esquerda -> baixo direita -> cima direita
+			file << stackAtual + j  << "," << stackSeguinte + j + 1 << "," << stackAtual + j + 1 << ",";
 		}
-		file << (i+1)*slices+slices-2 << "," << (i+1)*slices << "," << i*slices+slices-2 << ",";
-		file << (i+1)*slices << "," << i*slices << "," << i*slices+slices-2 << ",";
+		//"fechar" stack
+		//cima esquerda -> baixo esquerda -> baixo direita
+		file << stackAtual + j << "," << stackSeguinte + j << "," << stackSeguinte << ",";
+		//cima esquerda -> baixo direita -> cima direita
+		file << stackAtual + j  << "," << stackSeguinte << "," << stackAtual << ",";
 	}
 
+	//indices do fundo da esfera
+	stackAtual = (stacks-2)*slices + 1;
+	int indiceUltimoVertice = 1 + slices * (stacks-1);
+	for (j = 0; j < slices-1; j++){
+		file << stackAtual + j << "," << indiceUltimoVertice << "," << stackAtual + j + 1 << ",";
+	}
+	//indices para "fechar" o  último stack
+	file << stackAtual + j << "," << indiceUltimoVertice << "," << stackAtual << ",";
 
-	//desenhar a última stack
-	//for (int i = 0; i < count; ++i){
-		/* code */
-	//}
+	// \n para terminar os indices
+	file << endl;
 
 
-    for(int i = 11; i < stacks * slices + 2; i++){
-    	file << i << ",";
-    }
-    file << endl;
-    file << stacks * slices + 2 << endl;
+	//-------------------------------------------------------VÉRTICES---------------------------------------------------------------
 
 
-    //vértice no topo
-	file << 0 << "," << radius << "," << 0 << "," << endl;
+    //Escreve o número de vértices no ficheiro
+    file << 1 + slices * (stacks-1) + 1 << endl;
 
-	for(int j = 1; j <= stacks; j++) {
+    //Vértice do topo da esfera
+    file << 0 << "," << radius << "," << 0 << "," << endl;
+
+    // Vértices dos stacks da esfera
+    for(int j = 1; j < stacks; j++) {
 
 		float y = radius * sin(M_PI/2 - beta * j);
 
@@ -545,8 +564,9 @@ void esferaIndices(float radius, int slices, int stacks, string fileName){
 		}
 	}
 
-	//vértice no fundo
-	file << 0 << "," << -radius << "," << 0 << "," << endl;
+	//Vértice do fundo da esfera
+    file << 0 << "," << -radius << "," << 0 << "," << endl;
+
 
     file.close();
 }
@@ -591,11 +611,11 @@ int main(int argc, char **argv){
 	float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
 
 
-	calculaPontos(bezierPatches, 0, 20, "teapot.3d");
+	//calculaPontos(bezierPatches, 0, 20, "teapot.3d");
 
-	planoIndices(4, "plano.3d");
+	//planoIndices(4, "plano.3d");
 
-	esferaIndices(4, 10, 10, "esfera.3d");
+	esferaIndices(8, 100, 100, "esfera.3d");
 
 
 	//imprime para testar - APAGAR
