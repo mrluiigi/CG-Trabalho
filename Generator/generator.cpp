@@ -573,6 +573,126 @@ void esferaIndices(float radius, int slices, int stacks, string fileName){
 
 
 
+void coneIndices(float radius, float height, int slices, int stacks, string fileName){
+	ofstream file;
+	file.open(fileName);
+
+
+
+	//-------------------------------------------------------INDICES---------------------------------------------------------------
+
+	//Escreve o número de indices 
+    file << slices * 3 + slices * (stacks -1) * 3 * 2 + slices * 3<< endl;
+
+    //indices da base do cone
+	for (int i = 0; i < slices-1; i++){
+		file << i+1 << "," << 0 << "," << i+2 << ",";
+	}
+	//indices para "fechar" a base do cone
+	file << slices << "," << 0 << "," << 1 << ",";
+
+
+	int stackAtual;
+	int stackSeguinte;
+	int j = 0;
+	int i = 0;
+	//resto do cone
+	for (i = 0; i < stacks -1; i++) {
+		for (j = 0; j < slices-1; j++){
+			stackAtual = i * slices + 1;
+			stackSeguinte = (i+1) * slices + 1;
+			//baixo esquerda -> baixo direita -> cima esquerda
+			file << stackAtual + j  << "," << stackAtual + j + 1 << "," << stackSeguinte + j << ",";
+			//cima esquerda -> baixo direita -> cima direita
+			file << stackSeguinte + j << "," << stackAtual + j + 1 << "," << stackSeguinte + j + 1 << ",";
+		}
+		//"fechar" stack
+		//baixo esquerda -> baixo direita -> cima esquerda
+		file << stackAtual + j  << "," << stackAtual << "," << stackSeguinte + j << ",";
+		//cima esquerda -> baixo direita -> cima direita
+		file << stackSeguinte + j << "," << stackAtual << "," << stackSeguinte << ",";
+
+	}
+	stackAtual = i * slices + 1;
+	int indiceUltimoVertice = 1 + slices + slices * (stacks -1);
+	//indices do topo do cone
+	for (j = 0; j < slices-1; j++){
+		file << stackAtual + j + 1 << "," << indiceUltimoVertice << "," << stackAtual + j  << ",";
+	}
+	//indices para "fechar" o topo do cone
+	file << stackAtual << "," << indiceUltimoVertice << "," << stackAtual + j << ",";
+
+
+	// \n para terminar os indices
+	file << endl;
+
+
+	//-------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
+
+
+	float alpha = (2*M_PI)/slices;
+	float coneSlant = sqrt(height*height+radius*radius);
+	float segment = (coneSlant/stacks);
+	//ângulo entre a base e a superficie lateral do cone
+	float beta = atan(height/radius);
+
+	float y = 0;
+	float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
+	float xDownLeft, yDownLeft, zDownLeft;
+	float xDownRight, yDownRight, zDownRight;
+	float xUpLeft, yUpLeft, zUpLeft;
+	float xUpRight, yUpRight, zUpRight;
+	//diferença entre 
+	float qtdSubRadius = cos(beta) * segment;
+	//difenença entra a altura de cada camada 
+	float qtdAddY = sin(beta) * segment;
+
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << 1 + slices + slices * (stacks -1) + 1<< endl;
+
+    //Vértice no centro da base
+	file << 0 << "," << 0 << "," << 0 << "," << endl;
+
+
+	//base do cone
+	for(int i = 0; i < slices; i++) {
+
+		bx3 = radius * sin(i*alpha);
+		by3 = 0;
+		bz3 = radius * cos(i*alpha);
+
+
+    	file << bx3 << "," << by3 << "," << bz3 << "," << endl;
+	}
+	
+
+	for(int j = 1; j < stacks ; j++) {
+		//distância entre um dos vértices superiores e o eixo dos yy's
+		float newRadius = radius - qtdSubRadius;
+		//distância entre um dos vértices superiores e o plano xOz
+		float newY = y + qtdAddY;
+		//cada iteração desenha uma fatia da camada horizontal
+		for(int i = 0; i < slices; i++) {
+
+			xUpLeft = newRadius*sin(alpha*i);
+			yUpLeft = newY;
+			zUpLeft = newRadius*cos(alpha*i);
+
+    		file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
+		}
+
+		y = newY;
+		radius = newRadius;
+	}
+
+	//vértice no topo	
+	file << 0 << "," << height << "," << 0 << "," << endl;
+
+
+    file.close();
+}
 
 
 
@@ -615,7 +735,7 @@ int main(int argc, char **argv){
 
 	//planoIndices(4, "plano.3d");
 
-	esferaIndices(8, 100, 100, "esfera.3d");
+	coneIndices(8, 8, 4, 4, "esfera.3d");
 
 
 	//imprime para testar - APAGAR
