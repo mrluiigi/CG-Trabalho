@@ -694,6 +694,85 @@ void coneIndices(float radius, float height, int slices, int stacks, string file
 
 
 
+void saturnRingsIndice(float radius1, float radius2, int slices, string fileName){
+    ofstream file;
+    file.open(fileName);
+
+    float alpha = (2*M_PI)/slices;
+
+    float bx1, by1, bz1, bx2, by2, bz2;
+
+    
+    //Escreve os índices
+    file <<  (slices-1)*6*2+4*6<< endl;
+
+    int j;
+    for (j = 0; j < slices-1; j++){   
+        //baixo esquerda -> baixo direita -> cima esquerda
+        file <<  j  << "," << j + 1 << "," << slices + j << ",";
+        file <<  slices + j  << "," << j + 1 << "," << j << ",";
+        //cima esquerda -> baixo direita -> cima direita
+        file << slices + j << "," <<  j + 1 << "," << slices + j + 1 << ",";
+        file << slices + j + 1 << "," <<  j + 1 << "," << slices + j << ",";
+    }
+
+    file <<  j  << "," << 0 << "," << slices + j << ",";
+	file << slices + j << "," <<  0 << "," << slices << ",";
+	file <<  slices + j  << "," << 0 << "," << j << ",";
+	file << slices << "," <<  0 << "," << slices + j << "," << endl;
+
+
+    //Escreve o número de vértices no ficheiro
+    file << slices*2 << endl;
+
+    //Vértices para cima
+    for(int i = 0; i < slices; i++) {
+        bx1 = radius1 * sin((i+1)*alpha);
+        by1 = 0;
+        bz1 = radius1 * cos((i+1)*alpha);
+
+        file << bx1 << "," << by1 << "," << bz1 << "," << endl;
+    }
+
+    //Vértices para baixo
+    for(int i = 0; i < slices; i++) {
+	    bx2 = radius2 * sin((i+1)*alpha);
+	    by2 = 0;
+	    bz2 = radius2 * cos((i+1)*alpha);
+
+	    file << bx2 << "," << by2 << "," << bz2 << "," << endl;
+	}
+        
+
+    file.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -730,7 +809,9 @@ int main(int argc, char **argv){
 
     //planoIndices(4, "plano.3d");
 
-    esferaIndices(8, 50, 50, "esfera.3d");
+//    esferaIndices(8, 50, 50, "esfera.3d");
+
+    saturnRingsIndice(15, 13, 30, "aneis.3d");
 
 
     //imprime para testar - APAGAR
