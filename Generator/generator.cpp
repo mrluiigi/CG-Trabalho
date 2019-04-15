@@ -715,7 +715,6 @@ void saturnRingsIndice(float radius1, float radius2, int slices, string fileName
         file << slices + j << "," <<  j + 1 << "," << slices + j + 1 << ",";
         file << slices + j + 1 << "," <<  j + 1 << "," << slices + j << ",";
     }
-
     file <<  j  << "," << 0 << "," << slices + j << ",";
 	file << slices + j << "," <<  0 << "," << slices << ",";
 	file <<  slices + j  << "," << 0 << "," << j << ",";
@@ -746,6 +745,105 @@ void saturnRingsIndice(float radius1, float radius2, int slices, string fileName
 
     file.close();
 }
+
+
+
+
+
+
+
+
+
+
+void caixaIndices(float x, float y, float z, int divisions, string fileName){
+    ofstream file;
+    file.open(fileName);
+
+    float divX = x/divisions;
+    float divY = y/divisions;
+    float divZ = z/divisions;
+
+
+    ///Número de índicesdivisions
+    file <<  3 * divisions * divisions * 2 * 6<< endl;
+
+
+    int currentLine, nextLine, currentFace;
+    //Escreve os índices
+    for(int q = 0; q < 6; q++){
+	    currentFace = q * (divisions+1) * (divisions+1);
+	    for(int h = 0; h < divisions; h++){
+	        currentLine = (divisions+1)*h + currentFace;
+	        nextLine = (divisions+1)*(h+1) + currentFace;
+
+	        for(int g = 0;  g < divisions ; g++){
+	            file << currentLine + g << "," << nextLine + g + 1 <<  "," << currentLine + g + 1 << ",";
+	            file << nextLine + g << "," << nextLine + g + 1 << "," << currentLine + g << ",";
+	        }
+	    }
+	}
+
+    file << endl;
+
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << (divisions+1) * (divisions+1) * 6 << endl;
+
+    //Vértices face de baixo
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << -x/2 + divX*j << "," << -y/2 << "," << -z/2 + divZ*i << "," << endl;
+    	}
+    }
+
+    //Vértices face de cima
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << -x/2 + divX*j << "," << y/2 << "," << -z/2 + divZ*i << "," << endl;
+    	}
+    }
+
+
+    //Vértices face de trás
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << -z/2 << "," << endl;
+    	}
+    }
+
+    //Vértices face da frente
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << z/2 << "," << endl;
+    	}
+    }
+
+
+    //Vértices face lateral esquerda
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << -x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+    	}
+    }
+
+    //Vértices face lateral direita
+    for(int i = 0; i <= divisions; i++){
+    	for(int j = 0; j <= divisions; j++){
+    		file << x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+    	}
+    }
+
+    file.close();
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -811,8 +909,9 @@ int main(int argc, char **argv){
 
 //    esferaIndices(8, 50, 50, "esfera.3d");
 
-    saturnRingsIndice(15, 13, 30, "aneis.3d");
+    //saturnRingsIndice(15, 13, 30, "aneis.3d");
 
+    caixaIndices(6, 6, 6, 16, "caixa.3d");
 
     //imprime para testar - APAGAR
     /*for (int i = 0; i < bezierPatches.numberOfPatches; i++) {
