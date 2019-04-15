@@ -4,6 +4,14 @@
 #include <math.h>
 
 
+
+// a matriz M é igual à transposta
+float mMatrix [16] = {-1,  3, -3, 1,   
+                       3, -6,  3, 0,
+                      -3,  3,  0, 0, 
+                       1,  0,  0, 0};
+
+
 void plano(float lado, string fileName){
     ofstream file;
     file.open(fileName);
@@ -321,11 +329,6 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
     file.close();
 }
 
-// a matriz M é igual à transposta
-float matrizM [16] = {-1,  3, -3, 1,   
-                       3, -6,  3, 0,
-                      -3,  3,  0, 0, 
-                       1,  0,  0, 0};
 
 
 void multVectorMatrix(float *v, float *m, float *res){
@@ -334,12 +337,7 @@ void multVectorMatrix(float *v, float *m, float *res){
         res[i] = 0;
         //percorre coluna matriz
         for (int j = 0; j < 4; j++){
-                            //verificar se está a percorrer bem a matriz
             res[i] += v[j] * m[j * 4 + i];
-
-
-            //printf("Iteração %d--%d: %f\n", i, j, res[i]);
-            //printf("%f\n", v[i] * m[j * 4 + i]);
         }
     }
 }
@@ -353,96 +351,108 @@ float multVectorVector(float *v1, float *v2){
     return res;
 }
 
+/*
+Recebe uma matriz composta por uma determinada coordenada dos pontos de controlo
+Devolve a coordenada do ponto a desenhar
+*/
+float calculaCoordenada(float u, float v, float *controlPointsMatrix){
+    float uMatrix[4] = {u*u*u, u*u, u, 1}; 
+    float vMatrix[4] = {v*v*v, v*v, v, 1};
 
-float calculaCoordenada(float u, float v, float *matrizPC){
-    float uu[4] = {u*u*u, u*u, u, 1}; //(float) pow(u,3) _________________________________________
-    float vv[4] = {v*v*v, v*v, v, 1};
+    float u_m[4];
+    float u_m_p[4];
+    float u_m_p_m[4];
 
-    float res[4];
-    float res2[4];
-    float ponto = 0;
+    //B(u,v) = U * M * P * MT * V
 
-    multVectorMatrix(uu, matrizM, res);
-
-    /*
-    for (int i = 0; i < 4; ++i){
-        printf("res1: %f\n", res[i]);
-    }
-    for (int i = 0; i < 16; ++i){
-        printf("matrizPC: %f\n", matrizPC[i]);
-    }*/
-
-
-    multVectorMatrix(res, matrizPC, res2);
-
-    /*
-    for (int i = 0; i < 4; ++i){
-        printf("res2: %f\n", res2[i]);
-    }*/
-
-
-    multVectorMatrix(res2, matrizM, res);
-    ponto = multVectorVector(res, vv);
-
-    return ponto;
+    //U * M
+    multVectorMatrix(uMatrix, mMatrix, u_m);
+    //U * M * P
+    multVectorMatrix(u_m, controlPointsMatrix, u_m_p);
+    //U * M * P * MT
+    multVectorMatrix(u_m_p, mMatrix, u_m_p_m);
+    //U * M * P * MT * V
+    return multVectorVector(u_m_p_m, vMatrix);
 }
 
-
-float* constroiMatrizPC(BezierPatches bp, int nPatch, int coordenada){
-    int* patch = bp.patches[nPatch];
-    float* matrizRes = new float[16];
+/*
+controlPointsMatrix corresponde a um array de 16 floats
+coordenada: 
+    0 -> x
+    1 -> y
+    2 -> z  
+*/
+void buildControlPointsMatrix(BezierPatches bp, int patchNumber, int coordenada, float* controlPointsMatrix){
+    //obtem a localização dos índices dos pontos de controlo
+    int* patch = bp.patches[patchNumber];
     int indice;
 
     for (int i = 0; i < 16; ++i){
+        //obtem o indice de um ponto de controlo
         indice = patch[i];
-        matrizRes[i] = bp.points[indice][coordenada];
+        //guarda a coordenada necessária do ponto de controlo
+        controlPointsMatrix[i] = bp.points[indice][coordenada];
     }
 
-    return matrizRes;
 }
 
 
-float* calculaPontos(BezierPatches* bezierPatches, int nPatch, int tess, string fileName){
+float* bezierPatchesGenerator(BezierPatches* bezierPatches, int nPatch, int tess, string fileName){
     ofstream file;
     file.open(fileName);
     float* temp = new float(3);
-    float* matrizPCx ;
-    float* matrizPCy;
-    float* matrizPCz;
+
     float step = 1.0/tess;
     int nVerticesPatch = (tess+1)*(tess+1);
+    int numberOfPatches = bezierPatches->numberOfPatches;
+    //-------------------------------------------------------INDICES---------------------------------------------------------------
+    //Número de índices de cada patch * número de patches
+    int indicesNumber = (tess * tess * 3 * 2) * numberOfPatches;
+    file << indicesNumber << endl;
 
-    // Número de índices
-    file << tess*tess*3*2*bezierPatches->numberOfPatches << endl;
-    // Índices
-    for(int z = 0; z < bezierPatches->numberOfPatches; z++){
+    for(int z = 0; z < numberOfPatches; z++){
+        int patchOffset = nVerticesPatch*z;
         for (int i = 0; i < tess; i++){
+            int currentV = patchOffset + i*(tess+1);
+            int nextV = currentV + tess + 1;
             for(int j = 0; j < tess; j++){
-                file << nVerticesPatch*z+i*(tess+1)+j << "," << nVerticesPatch*z+i*(tess+1)+j+(tess+1) << "," << nVerticesPatch*z+i*(tess+1)+j+1 << ",";
-                file << nVerticesPatch*z+i*(tess+1)+j+(tess+1) << "," << nVerticesPatch*z+i*(tess+1)+j+(tess+1)+1 << "," << nVerticesPatch*z+i*(tess+1)+j+1 << ",";
+                file << currentV + j << "," << nextV + j << "," << currentV + j + 1 << ",";
+                file << nextV + j << "," << nextV + j + 1 << "," << currentV + j + 1 << ",";
             }
         }
     }
         file << endl;
 
-    // Número de vértices
+    //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
+    // Número de vértices de cada patch * 
     file << (tess+1)*(tess+1)*bezierPatches->numberOfPatches << endl;
 
-    for(int i = 0; i < bezierPatches->numberOfPatches; i++) {
+    
+    float u,v;
 
-        matrizPCx = constroiMatrizPC(*bezierPatches, i, 0);
-        matrizPCy = constroiMatrizPC(*bezierPatches, i, 1);
-        matrizPCz = constroiMatrizPC(*bezierPatches, i, 2);
+    float* controlPointsMatrixX = new float[16];
+    float* controlPointsMatrixY = new float[16];
+    float* controlPointsMatrixZ = new float[16];
 
+    //Para cada patch
+    for(int i = 0; i < numberOfPatches; i++) {
+        buildControlPointsMatrix(*bezierPatches, i, 0, controlPointsMatrixX);
+        buildControlPointsMatrix(*bezierPatches, i, 1, controlPointsMatrixY);
+        buildControlPointsMatrix(*bezierPatches, i, 2, controlPointsMatrixZ);
 
-
-        for(float v = 0; v <= 1; v += step){
-            for(float u = 0; u <= 1; u += step){
-                temp[0] = calculaCoordenada(u, v, matrizPCx);
-                temp[1] = calculaCoordenada(u, v, matrizPCy);
-                temp[2] = calculaCoordenada(u, v, matrizPCz);
+        //
+        v = 0;
+        for(int j = 0; j <= tess; j++){
+            u = 0;
+            for(int k = 0; k <= tess; k++){
+                temp[0] = calculaCoordenada(u, v, controlPointsMatrixX);
+                temp[1] = calculaCoordenada(u, v, controlPointsMatrixY);
+                temp[2] = calculaCoordenada(u, v, controlPointsMatrixZ);
                 file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+                u += step;
             }
+            v += step;
         }
     
     }
@@ -477,8 +487,6 @@ void planoIndices(float lado, string fileName){
     file << x << "," << y << "," << -z << "," << endl;  // 1
     file << -x << "," << y << "," << z << "," << endl;  // 2
     file << x << "," << y << "," << z << "," << endl;   // 3
-    
-
 
     file.close();
 }
@@ -900,10 +908,9 @@ void printHelp(){
 int main(int argc, char **argv){
     BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
 
-    float* teste = constroiMatrizPC(*bezierPatches, 0, 0);
 
 
-    //calculaPontos(bezierPatches, 0, 20, "teapot.3d");
+    bezierPatchesGenerator(bezierPatches, 0, 20, "teapot.3d");
 
     //planoIndices(4, "plano.3d");
 
@@ -911,7 +918,7 @@ int main(int argc, char **argv){
 
     //saturnRingsIndice(15, 13, 30, "aneis.3d");
 
-    caixaIndices(6, 6, 6, 16, "caixa.3d");
+   // caixaIndices(6, 6, 6, 16, "caixa.3d");
 
     //imprime para testar - APAGAR
     /*for (int i = 0; i < bezierPatches.numberOfPatches; i++) {
