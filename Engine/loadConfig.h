@@ -20,6 +20,7 @@ class Model{
 		int numberOfVertices;
 		vector<Vertice> vertices;
         float* verticesBuffer;
+
 };
 
 class Models{
@@ -49,6 +50,13 @@ public:
     float angle;
 };
 
+
+class TimedTranslate {
+public:
+    float time;
+    int controlPointsNumber;
+    float* controlPoints;
+};
 
 class Group{
 public:

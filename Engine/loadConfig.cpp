@@ -109,11 +109,30 @@ Model Models::getModel(string name) {
     }
 }
 
+TimedTranslate parseTimedTranslate(tinyxml2::XMLElement * element) {
+    TimedTranslate tt;
+    tt.time = atof(element->Attribute("time"));
+    int c = 0;
+    vector<float> points;
+    for(tinyxml2::XMLElement *child = element->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
+        points.push_back(atof(child->Attribute("X")));
+        points.push_back(atof(child->Attribute("Y")));
+        points.push_back(atof(child->Attribute("Z")));
+    }
+    tt.controlPointsNumber = points.size();
+    tt.controlPoints = points.data();
+    return tt;
+}
 
 Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
     Group g;
     for(tinyxml2::XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         string childName = string(child->Name());
+
+        if( childName.compare("translate") == 0 &&  child->Attribute("time") != NULL) {
+            TimedTranslate tt = parseTimedTranslate(child);
+        }
+
 
         if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
             GeometricTransforms gt;
