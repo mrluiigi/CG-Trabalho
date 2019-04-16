@@ -2,7 +2,8 @@
 	
 	<group>
 		Sol
-		<scale X="10.91" Y="10.91" Z="10.91" /> 
+		<scale X="10.91" Y="10.91" Z="10.91" />
+		<rotate time="60" axisX="0" axisY="1" axisZ="0" />
 		<models> 
 			<model file="../../ModelsSolarSystem/sol.3d" />
 		</models>
@@ -11,7 +12,16 @@
 	<group>
 		Mercurio
 		<rotate angle="27.61" axisX="0" axisY="1" axisZ="0" />
-		<translate X="80" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="80" Y="0" Z="0" />
+			<point X="56.56854" Y="0" Z="-56.568547" /> 
+			<point X="0" Y="0" Z="-80" />
+			<point X="-56.56854" Y="0" Z="-56.56854" /> 
+			<point X="-80" Y="0" Z="0" />
+			<point X="-56.56854" Y="0" Z="56.568547" /> 
+			<point X="0" Y="0" Z="80"/>
+			<point X="56.56854" Y="0" Z="56.56854"/> 
+		</translate>
 		<scale X="0.038" Y=".038" Z=".038" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -21,7 +31,16 @@
 	<group>
 		Venus
 		<rotate angle="88.98" axisX="0" axisY="1" axisZ="0" />
-		<translate X="90" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="90" Y="0" Z="0" />
+			<point X="63.63961" Y="0" Z="-63.63961" /> 
+			<point X="0" Y="0" Z="-90" />
+			<point X="-63.63961" Y="0" Z="-63.63961" /> 
+			<point X="-90" Y="0" Z="0" />
+			<point X="-63.63961" Y="0" Z="63.63961" /> 
+			<point X="0" Y="0" Z="90"/>
+			<point X="63.63961" Y="0" Z="63.63961"/> 
+		</translate> 
 		<scale X="0.095" Y="0.095" Z="0.095" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -30,7 +49,17 @@
 
 	<group>
 		Terra
-		<translate X="100" Y="0" Z="0" /> 
+		 
+		<translate time="10" >
+			<point X="100" Y="0" Z="0" />
+			<point X="70.71067" Y="0" Z="-70.71067" /> 
+			<point X="0" Y="0" Z="-100" />
+			<point X="-70.71067" Y="0" Z="-70.71067" /> 
+			<point X="-100" Y="0" Z="0" />
+			<point X="-70.71067" Y="0" Z="70.71067" /> 
+			<point X="0" Y="0" Z="100"/>
+			<point X="70.71067" Y="0" Z="70.71067"/> 
+		</translate>
 		<scale X="0.1" Y="0.1" Z="0.1" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -48,7 +77,16 @@
 	<group>
 		Marte
 		<rotate angle="266.25" axisX="0" axisY="1" axisZ="0" />
-		<translate X="110" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="110" Y="0" Z="0" />
+			<point X="77.78174" Y="0" Z="-77.78174" /> 
+			<point X="0" Y="0" Z="-110" />
+			<point X="-77.78174" Y="0" Z="-77.78174" /> 
+			<point X="-110" Y="0" Z="0" />
+			<point X="-77.78174" Y="0" Z="77.78174" /> 
+			<point X="0" Y="0" Z="110"/>
+			<point X="77.78174" Y="0" Z="77.78174"/> 
+		</translate>
 		<scale X=".053" Y=".053" Z=".053" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -74,7 +112,16 @@
 	<group>
 		Jupiter
 		<rotate angle="72.46" axisX="0" axisY="1" axisZ="0" />
-		<translate X="135" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="135" Y="0" Z="0" />
+			<point X="95.45941" Y="0" Z="-95.45941" /> 
+			<point X="0" Y="0" Z="-135" />
+			<point X="-95.45941" Y="0" Z="-95.45941" /> 
+			<point X="-135" Y="0" Z="0" />
+			<point X="-95.45941" Y="0" Z="95.45941" /> 
+			<point X="0" Y="0" Z="135"/>
+			<point X="95.45941" Y="0" Z="95.45941"/> 
+		</translate> 
 		<scale X="1.12" Y="1.12" Z="1.12" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -140,7 +187,16 @@
 	<group>
 		Saturno
 		<rotate angle="103.17" axisX="0" axisY="1" axisZ="0" />
-		<translate X="160" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="170" Y="0" Z="0" />
+			<point X="120.20815" Y="0" Z="-120.20815" /> 
+			<point X="0" Y="0" Z="-170" />
+			<point X="-120.20815" Y="0" Z="-120.20815" /> 
+			<point X="-170" Y="0" Z="0" />
+			<point X="-120.20815" Y="0" Z="120.20815" /> 
+			<point X="0" Y="0" Z="170"/>
+			<point X="120.20815" Y="0" Z="120.20815"/> 
+		</translate>  
 		<scale X=".945" Y=".945" Z=".945" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -206,7 +262,16 @@
 	<group>
 		Urano
 		<rotate angle="212.55" axisX="0" axisY="1" axisZ="0" />
-		<translate X="185" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="190" Y="0" Z="0" />
+			<point X="134.35028" Y="0" Z="-134.35028" /> 
+			<point X="0" Y="0" Z="-190" />
+			<point X="-134.35028" Y="0" Z="-134.35028" /> 
+			<point X="-190" Y="0" Z="0" />
+			<point X="-134.35028" Y="0" Z="134.35028" /> 
+			<point X="0" Y="0" Z="190"/>
+			<point X="134.35028" Y="0" Z="134.35028"/> 
+		</translate> 
 		<scale X=".4" Y=".4" Z=".4" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -240,7 +305,16 @@
 	<group>
 		Neptuno
 		<rotate angle="165.75" axisX="0" axisY="1" axisZ="0" />
-		<translate X="200" Y="0" Z="0" /> 
+		<translate time="10" >
+			<point X="205" Y="0" Z="0" />
+			<point X="144.95689" Y="0" Z="-144.95689" /> 
+			<point X="0" Y="0" Z="-205" />
+			<point X="-144.95689" Y="0" Z="-144.95689" /> 
+			<point X="-205" Y="0" Z="0" />
+			<point X="-144.95689" Y="0" Z="144.95689" /> 
+			<point X="0" Y="0" Z="205"/>
+			<point X="144.95689" Y="0" Z="144.95689"/> 
+		</translate> 
 		<scale X=".388" Y=".388" Z=".388" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />

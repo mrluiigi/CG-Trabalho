@@ -908,9 +908,12 @@ void printHelp(){
 int main(int argc, char **argv){
     BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
 
+    saturnRingsIndice(7, 11, 20, "saturnRings1.3d");
+    saturnRingsIndice(12, 14, 20, "saturnRings2.3d");
+    esferaIndices(5, 10, 20, "esfera.3d");
+    esferaIndices(5, 20, 30, "sol.3d");
 
-
-    bezierPatchesGenerator(bezierPatches, 0, 20, "teapot.3d");
+    //bezierPatchesGenerator(bezierPatches, 0, 20, "teapot.3d");
 
     //planoIndices(4, "plano.3d");
 

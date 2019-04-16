@@ -20,7 +20,7 @@ float alfa = 0;
 /** Ângulo vertical da câmera */
 float beta = 0;
 /** Raio/distância da câmera à origem */
-float r = 20;
+float r = 400;
 
 
 /** Contém todos os modelos */
