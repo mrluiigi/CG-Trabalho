@@ -207,16 +207,14 @@ void drawTimedTranslate(TimedTranslate tt) {
     glEnd();
 }
 
+
+
 void drawGroup(Group group) {
 
-        static float t = 0;
 
-            t+=0.1;
-
+    int  t = glutGet(GLUT_ELAPSED_TIME);
 
     glPushMatrix();
-
-
 
     vector<GeometricTransforms> &gts = group.transforms;
 
@@ -233,10 +231,23 @@ void drawGroup(Group group) {
             glScalef(gt.x,gt.y,gt.z);
         }
         else if(gt.type == 3) {
+            //desenha a linha que a translação segue
+            drawTimedTranslate(*gt.tt);
+
+            int time = gt.tt->time * 1000;
+            float ct = t % time;
+            ct = ct / time;
             float pos[3];
             float deriv[3];
-                getGlobalCatmullRomPoint(t, gt.tt->controlPoints, gt.tt->controlPointsNumber, pos, deriv);
-                glTranslatef(pos[0],pos[1],pos[2]);
+            getGlobalCatmullRomPoint(ct, gt.tt->controlPoints, gt.tt->controlPointsNumber, pos, deriv);
+            glTranslatef(pos[0],pos[1],pos[2]);
+        }
+        else if(gt.type == 4){
+            int time = gt.rotateTime * 1000;
+            float angle = t % time;
+            angle = angle / time * 360;
+
+            glRotatef(angle,gt.x,gt.y,gt.z);
         }
     }
 
