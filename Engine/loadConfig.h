@@ -39,10 +39,19 @@ class Models{
 
 
 
+
+class TimedTranslate{
+public:
+    float time;
+    int controlPointsNumber;
+    float** controlPoints;
+};
+
 class GeometricTransforms {
 public:
-	//0 -> translate, 1 -> rotate, 2 -> scale
+    //0 -> translate, 1 -> rotate, 2 -> scale, 3 -> timed translate
     int type;
+    TimedTranslate * tt;
     float x;
     float y;
     float z;
@@ -50,19 +59,13 @@ public:
     float angle;
 };
 
-
-class TimedTranslate {
-public:
-    float time;
-    int controlPointsNumber;
-    float* controlPoints;
-};
-
 class Group{
 public:
     vector<GeometricTransforms> transforms;
     vector<string> models;
     vector<Group> subGroups;
+    vector<TimedTranslate> timedTranslates;
+
 };
 
 /**Recebe o nome do ficheiro XML onde se encontra a configuração.

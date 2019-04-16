@@ -109,19 +109,34 @@ Model Models::getModel(string name) {
     }
 }
 
-TimedTranslate parseTimedTranslate(tinyxml2::XMLElement * element) {
-    TimedTranslate tt;
-    tt.time = atof(element->Attribute("time"));
+void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
+    tt->time = atof(element->Attribute("time"));
     int c = 0;
     vector<float> points;
     for(tinyxml2::XMLElement *child = element->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         points.push_back(atof(child->Attribute("X")));
         points.push_back(atof(child->Attribute("Y")));
         points.push_back(atof(child->Attribute("Z")));
+        c++;
     }
-    tt.controlPointsNumber = points.size();
-    tt.controlPoints = points.data();
-    return tt;
+
+    tt->controlPoints = new float*[c];    
+
+
+    for (int i = 0; i < c; i++) {
+        tt->controlPoints[i] = new float[3];
+    }
+
+
+
+
+    for (int i = 0; i < c; i++) {
+        tt->controlPoints[i][0] = points[i*3+0];
+        tt->controlPoints[i][1] = points[i*3+1];
+        tt->controlPoints[i][2] = points[i*3+2];
+    }
+
+    tt->controlPointsNumber = c;
 }
 
 Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
@@ -130,11 +145,15 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
         string childName = string(child->Name());
 
         if( childName.compare("translate") == 0 &&  child->Attribute("time") != NULL) {
-            TimedTranslate tt = parseTimedTranslate(child);
+            GeometricTransforms gt;
+            gt.type = 3;
+            gt.tt = new TimedTranslate;
+            parseTimedTranslate(child,gt.tt);
+            g.transforms.push_back(gt);
         }
 
 
-        if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
+        else if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
             GeometricTransforms gt;
             gt.x = atof(child->Attribute("X"));
             gt.y = atof(child->Attribute("Y"));
