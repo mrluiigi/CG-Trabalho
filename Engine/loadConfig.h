@@ -42,7 +42,7 @@ class Models{
 
 class TimedTranslate{
 public:
-    float time;
+    int time;
     int controlPointsNumber;
     float** controlPoints;
 };
@@ -57,6 +57,8 @@ public:
     float z;
     //Utilizado caso a transformação seja uma rotação
     float angle;
+    //Utilizado caso a transformação seja uma rotação temporal
+    int rotateTime;
 };
 
 class Group{
@@ -64,7 +66,6 @@ public:
     vector<GeometricTransforms> transforms;
     vector<string> models;
     vector<Group> subGroups;
-    vector<TimedTranslate> timedTranslates;
 
 };
 

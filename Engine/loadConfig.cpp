@@ -110,7 +110,7 @@ Model Models::getModel(string name) {
 }
 
 void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
-    tt->time = atof(element->Attribute("time"));
+    tt->time = atoi(element->Attribute("time"));
     int c = 0;
     vector<float> points;
     for(tinyxml2::XMLElement *child = element->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
@@ -172,8 +172,14 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
             gt.x = atof(child->Attribute("axisX"));
             gt.y = atof(child->Attribute("axisY"));
             gt.z = atof(child->Attribute("axisZ"));
-            gt.angle = atof(child->Attribute("angle"));
-            gt.type = 1;
+            if(child->Attribute("angle") != NULL){
+                gt.angle = atof(child->Attribute("angle"));
+            	gt.type = 1;
+            }
+            else{
+            	gt.rotateTime = atoi(child->Attribute("time"));
+            	gt.type = 4;
+            }
             g.transforms.push_back(gt);
         }  
 
