@@ -104,6 +104,7 @@ Model Models::getModel(int id) {
 void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
     tt->time = atoi(element->Attribute("time"));
     int c = 0;
+    //Vetor temporário para armazenar os pontos de controlo
     vector<float> points;
     for(tinyxml2::XMLElement *child = element->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         points.push_back(atof(child->Attribute("X")));
@@ -111,22 +112,21 @@ void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
         points.push_back(atof(child->Attribute("Z")));
         c++;
     }
+    //Alocar 
 
     tt->controlPoints = new float*[c];    
-
-
     for (int i = 0; i < c; i++) {
         tt->controlPoints[i] = new float[3];
     }
 
 
-
-
+    printf("..\n");
     for (int i = 0; i < c; i++) {
         tt->controlPoints[i][0] = points[i*3+0];
         tt->controlPoints[i][1] = points[i*3+1];
         tt->controlPoints[i][2] = points[i*3+2];
     }
+    printf("deu\n");
 
     tt->controlPointsNumber = c;
 }
@@ -135,7 +135,7 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
     Group g;
     for(tinyxml2::XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         string childName = string(child->Name());
-
+        //Se for uma translação dependente do tempo
         if( childName.compare("translate") == 0 &&  child->Attribute("time") != NULL) {
             GeometricTransforms gt;
             gt.type = 3;
@@ -164,10 +164,12 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
             gt.x = atof(child->Attribute("axisX"));
             gt.y = atof(child->Attribute("axisY"));
             gt.z = atof(child->Attribute("axisZ"));
+            //Se não for uma rotação dependente do tempo
             if(child->Attribute("angle") != NULL){
                 gt.angle = atof(child->Attribute("angle"));
             	gt.type = 1;
             }
+            //Se for uma rotação dependente do tempo
             else{
             	gt.rotateTime = atoi(child->Attribute("time"));
             	gt.type = 4;

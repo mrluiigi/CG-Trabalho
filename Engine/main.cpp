@@ -5,25 +5,25 @@
 #include <GL/glut.h>
 #endif
 
-#include <math.h>
 #include "loadConfig.h"
+#include "catmull-Rom.h"
 #include <iostream>
 #include <stdio.h>
 #include <cstring>
+#include <math.h>
 
 
 
 using namespace std;
 
 
-int frame=0; int timebase=0; char  s[1000];
 
 /** Ângulo horizontal da câmera */
 float alfa = 0;
 /** Ângulo vertical da câmera */
 float beta = 0;
 /** Raio/distância da câmera à origem */
-float r = 40;
+float r = 400;
 
 
 /** Contém todos os modelos */
@@ -32,134 +32,18 @@ Models allModels;
 /** Contém todos os grupos */
 vector<Group> groups;
 
-
-/** Buffer para de desenhar (1?) */
+/** Buffers de vértices */
 GLuint* buffers;
 
-/** Buffer para os índices */
+/** Buffers de índices */
 GLuint* indexes;
 
-
+//Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
 
+//Variáveis globais para o cálculo da framerate
+int frame=0; int timebase=0; char  s[20];
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define POINT_COUNT 5
-// Points that make up the loop for catmull-rom interpolation
-float p[POINT_COUNT][3] = {{-1,-1,0},{-1,1,0},{1,1,0},{0,0,0},{1,-1,0}};
-
-void buildRotMatrix(float *x, float *y, float *z, float *m) {
-
-    m[0] = x[0]; m[1] = x[1]; m[2] = x[2]; m[3] = 0;
-    m[4] = y[0]; m[5] = y[1]; m[6] = y[2]; m[7] = 0;
-    m[8] = z[0]; m[9] = z[1]; m[10] = z[2]; m[11] = 0;
-    m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
-}
-
-
-void cross(float *a, float *b, float *res) {
-
-    res[0] = a[1]*b[2] - a[2]*b[1];
-    res[1] = a[2]*b[0] - a[0]*b[2];
-    res[2] = a[0]*b[1] - a[1]*b[0];
-}
-
-
-void normalize(float *a) {
-
-    float l = sqrt(a[0]*a[0] + a[1] * a[1] + a[2] * a[2]);
-    a[0] = a[0]/l;
-    a[1] = a[1]/l;
-    a[2] = a[2]/l;
-}
-
-
-float length(float *v) {
-
-    float res = sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
-    return res;
-
-}
-
-void multMatrixVector(float *m, float *v, float *res) {
-
-    for (int j = 0; j < 4; ++j) {
-        res[j] = 0;
-        for (int k = 0; k < 4; ++k) {
-            res[j] += v[k] * m[j * 4 + k];
-        }
-    }
-
-}
-
-
-float multVectorVector(float *v1, float*v2){
-    float res = 0;
-    for (int k = 0; k < 4; ++k) {
-            res += v1[k] * v2[k];
-        }
-}
-
-void getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, float *pos, float *deriv) {
-    // catmull-rom matrix
-    float m[4][4] = {   {-0.5f,  1.5f, -1.5f,  0.5f},
-                        { 1.0f, -2.5f,  2.0f, -0.5f},
-                        {-0.5f,  0.0f,  0.5f,  0.0f},
-                        { 0.0f,  1.0f,  0.0f,  0.0f}};
-            
-    float px[4] = {p0[0], p1[0], p2[0], p3[0]};
-    float py[4] = {p0[1], p1[1], p2[1], p3[1]};
-    float pz[4] = {p0[2], p1[2], p2[2], p3[2]};
-    // Compute A = M * P
-
-    float ax[4];
-    multMatrixVector(*m,px,ax);
-    float ay[4];
-    multMatrixVector(*m,py,ay);
-    float az[4];
-    multMatrixVector(*m,pz,az);
-
-    // Compute pos = T * A
-    float mt[4] = {t*t*t, t*t, t,1};
-    pos[0] = multVectorVector(mt,ax);
-    pos[1] = multVectorVector(mt,ay);
-    pos[2] = multVectorVector(mt,az);
-    // compute deriv = T' * A
-    float mtd[4] = {3*t*t, 2*t, 1,0};
-    deriv[0] = multVectorVector(mtd,ax);
-    deriv[1] = multVectorVector(mtd,ay);
-    deriv[2] = multVectorVector(mtd,az);
- 
-
-    // ...
-}
-
-
-
-
-
-// given  global t, returns the point in the curve
-void getGlobalCatmullRomPoint(float gt, float ** controlPoints, int controlPointsNumber,float *pos, float *deriv) {
-
-    float t = gt * controlPointsNumber; // this is the real global t
-    int index = floor(t);  // which segment
-    t = t - index; // where within  the segment
-
-
-
-    int indices[4]; 
-    indices[0] = (index + controlPointsNumber-1)%controlPointsNumber;   
-    indices[1] = (indices[0]+1)%controlPointsNumber;
-    indices[2] = (indices[1]+1)%controlPointsNumber; 
-    indices[3] = (indices[2]+1)%controlPointsNumber;
-
-    getCatmullRomPoint(t, controlPoints[indices[0]], controlPoints[indices[1]], controlPoints[indices[2]], controlPoints[indices[3]], pos, deriv);
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void changeSize(int w, int h) {
 
@@ -186,31 +70,26 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-
+//desenha a curva que a translação segue
 void drawTimedTranslate(TimedTranslate tt) {
-    // draw curve using line segments with GL_LINE_LOOP
-
+    //Desenhar uma linha
     glBegin(GL_LINE_LOOP);
     float pos[3];
     float deriv[3];
-
+    //gt controlo a posição na curva
     for (float gt = 0; gt < 1; gt += 0.01) {
         getGlobalCatmullRomPoint(gt, tt.controlPoints, tt.controlPointsNumber, pos, deriv);
         glVertex3f(pos[0],pos[1],pos[2]);
     }
-
     glEnd();
 }
 
 
 
 void drawGroup(Group group) {
-
-
     int  t = glutGet(GLUT_ELAPSED_TIME);
-
     glPushMatrix();
-
+    //Transformações a aplicar ao grupo
     vector<GeometricTransforms> &gts = group.transforms;
 
     for(int i = 0; i < gts.size(); i++ ){
@@ -226,45 +105,43 @@ void drawGroup(Group group) {
             glScalef(gt.x,gt.y,gt.z);
         }
         else if(gt.type == 3) {
-            //desenha a linha que a translação segue
+            //Desenha a curva que a translação segue
             drawTimedTranslate(*gt.tt);
-
+            //Passar tempo para milissegundos
             int time = gt.tt->time * 1000;
+            //Tempo desde o inicio da volta atual
             float ct = t % time;
+            //Transformar num valor entre 0 e 1
             ct = ct / time;
             float pos[3];
             float deriv[3];
+            //Calcular ponto da curva
             getGlobalCatmullRomPoint(ct, gt.tt->controlPoints, gt.tt->controlPointsNumber, pos, deriv);
             glTranslatef(pos[0],pos[1],pos[2]);
         }
         else if(gt.type == 4){
+            //Passar tempo para milissegundos
             int time = gt.rotateTime * 1000;
+            //Tempo desde o inicio da volta atual
             float angle = t % time;
+            //Transformar num valor em graus
             angle = angle / time * 360;
-
             glRotatef(angle,gt.x,gt.y,gt.z);
         }
     }
-
-
-    int inteiro = 0;
-
+    //Modelos do grupo
     std::vector<int> models = group.models;
 
     for(int i = 0; i < models.size(); i++ ){
         Model m = allModels.getModel(models[i]);
         int id = models[i];
-
-
-
-
+        //Ativar os buffers correspondentes ao modelo
         glBindBuffer(GL_ARRAY_BUFFER,buffers[id]);
-         glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[id]);
-
+        //Desenhar os buffers
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
-    glEnd();
 
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
@@ -274,64 +151,56 @@ void drawGroup(Group group) {
     glPopMatrix();
 }
 
+//Carrega todos os modelo para buffers de vértice e índices
 void loadBuffers() {
     int n = allModels.vec.size();
     buffers = new GLuint[n];
     indexes = new GLuint[n];
-
     glGenBuffers(n, buffers);
-
-    // Iniciar os indices
     glGenBuffers(n, indexes);
-
-
-
+    //Preencher os buffers para cada modelo
     for( int i = 0; i < n; i++) {
-        glEnableVertexAttribArray(i);
         Model m = allModels.vec[i];
+        //Tornar o buffer de vértices ativo
+        glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER,buffers[i]);
-        glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-       // glVertexPointer(3,GL_FLOAT,0,0);
-
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        //Preencher o buffer de vértices
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
-
+        //Tornar o buffer de índices ativo
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[i]);
-
+        //Preencher o buffer de índices
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(i);
-
-
     }
 }
 
-void renderScene(void) {
-
+void showFps() {
     frame++;
-     int time=glutGet(GLUT_ELAPSED_TIME); 
+    int time=glutGet(GLUT_ELAPSED_TIME); 
     if (time - timebase > 1000) { 
         sprintf(s,"FPS:%4.2f",
             frame*1000.0/(time-timebase)); 
         timebase = time; frame = 0; 
     }
-     glutSetWindowTitle(s);
+     glutSetWindowTitle(s);  
+}
+
+void renderScene(void) {
+    showFps();
     if(firstRenderSceneCall) {
         loadBuffers();
         firstRenderSceneCall = false;
     }
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnableClientState(GL_VERTEX_ARRAY);
     // set the camera
     glLoadIdentity();
     gluLookAt(r*cos(beta)*sin(alfa), r*sin(beta),r*cos(beta)*cos(alfa),
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    //drawing instructions here
-
     glColor3f(1, 0, 0);
-            
+        
     for(int k = 0; k < groups.size(); k++) {
         drawGroup(groups[k]);
     }
@@ -425,15 +294,13 @@ int main(int argc, char **argv) {
 
         //init GLUT and the window
         glutInit(&argc, argv);
-        //aqui?
+
         glEnableClientState(GL_VERTEX_ARRAY);
 
         glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
         glutInitWindowPosition(100, 100);
         glutInitWindowSize(1920, 1080);
         glutCreateWindow("Projeto_CG");
-
-        glutSetWindowTitle(s);
 
         //Required callback registry
         glutDisplayFunc(renderScene);
