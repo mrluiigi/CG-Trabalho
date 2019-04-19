@@ -12,325 +12,6 @@ float mMatrix [16] = {-1,  3, -3, 1,
                        1,  0,  0, 0};
 
 
-void plano(float lado, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float x, y, z;
-    y = 0;
-    x = lado/2;
-    z = lado/2;
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << 6 << endl;
-
-    //Escreve os vértices de um triangulo no ficheiro
-    file << -x << "," << y << "," << z << "," << endl; 
-    file << x << "," << y << "," << z << "," << endl; 
-    file << x << "," << y << "," << -z << "," << endl; 
-
-    //Vértices do outro triângulo
-    file << -x << "," << y << "," << z << "," << endl; 
-    file << x << "," << y << "," << -z << "," << endl; 
-    file << -x << "," << y << "," << -z << "," << endl; 
-
-
-    file.close();
-}
-
-
-void caixa(float x, float y, float z, int divisions, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float divX = x/divisions;
-    float divY = y/divisions;
-    float divZ = z/divisions;
-
-    x = x/2;
-    y = y/2;
-    z = z/2;
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << 36 * divisions * divisions << endl;
-
-    for(int i = 0; i < divisions; i++){
-        for(int j = 0; j < divisions; j++){
-            //Base de baixo
-            file << -x + i*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
-            file << -x + i*divX << "," << -y << "," << -z + j*divZ << "," << endl;
-            file << -x + (i+1)*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
-
-            file << -x + (i+1)*divX << "," << -y << "," << -z + j*divZ << "," << endl;
-            file << -x + (i+1)*divX << "," << -y << "," << -z + (j+1)*divZ << "," << endl;
-            file << -x + i*divX << "," << -y << "," << -z + j*divZ << "," << endl;
-
-            //Base de Cima
-            file << -x + i*divX << "," << y << "," << -z + j*divZ << "," << endl;
-            file << -x + i*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
-            file << -x + (i+1)*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
-
-            file << -x + (i+1)*divX << "," << y << "," << -z + (j+1)*divZ << "," << endl;
-            file << -x + (i+1)*divX << "," << y << "," << -z + j*divZ << "," << endl;
-            file << -x + i*divX << "," << y << "," << -z + j*divZ << "," << endl;
-        
-            //Face da frente
-            file << -x + (i+1)*divX << "," << - y + (j+1)*divY << "," << z << "," << endl;
-            file << -x + i*divX << "," << - y  + (j+1)*divY << "," << z << "," << endl;
-            file << -x + (i+1)*divX << "," << -y + j*divY << "," << z << "," << endl;
-
-            file << -x + (i+1)*divX  << "," << -y + j*divY << "," << z << "," << endl;
-            file << -x + i*divX << "," << -y + (j+1)*divY << "," << z << "," << endl;
-            file << -x + i*divX << "," << -y + j*divY  << "," << z << "," << endl;
-
-            //Face de trás
-            file << -x + i*divX << "," << - y  + (j+1)*divY << "," << -z << "," << endl;
-            file << -x + (i+1)*divX << "," << - y + (j+1)*divY << "," << -z << "," << endl;
-            file << -x + (i+1)*divX << "," << -y + j*divY << "," << -z << "," << endl;
-
-            file << -x + i*divX << "," << -y + (j+1)*divY << "," << -z << "," << endl;
-            file << -x + (i+1)*divX  << "," << -y + j*divY << "," << -z << "," << endl;
-            file << -x + i*divX << "," << -y + j*divY  << "," << -z << "," << endl;
-
-            //Face do lado esquerdo
-            file << -x << "," << -y + j*divY << "," << -z + (i+1)*divZ << "," << endl;
-            file << -x << "," << -y + (j+1)*divY << "," << -z + (i+1)*divZ << "," << endl;
-            file << -x << "," << -y + j*divY << "," << -z + i*divZ<< "," << endl;
-
-            file << -x << "," << -y +j*divY << "," << -z + i*divZ << "," << endl;
-            file << -x << "," << -y + (j+1)*divY<< "," << -z + (i+1)*divZ << "," << endl;
-            file << -x << "," << -y + (j+1)*divY<< "," << -z + i*divZ << "," << endl;
-
-            //Face do lado direito
-            file << x << "," << -y + (j+1)*divY << "," << -z + (i+1)*divZ << "," << endl;
-            file << x << "," << -y + j*divY << "," << -z + (i+1)*divZ << "," << endl;
-            file << x << "," << -y + j*divY << "," << -z + i*divZ<< "," << endl;
-
-            file << x << "," << -y + (j+1)*divY<< "," << -z + (i+1)*divZ << "," << endl;
-            file << x << "," << -y +j*divY << "," << -z + i*divZ << "," << endl;
-            file << x << "," << -y + (j+1)*divY<< "," << -z + i*divZ << "," << endl;
-        }
-    }
-    
-    file.close();
-}
-
-
-void esfera(float radius, int slices, int stacks, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float alpha = (2*M_PI)/slices;
-    float beta = (M_PI)/stacks;
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << stacks* slices * 6 << endl;
-
-
-    //cada iteração desenha uma camada horizontal (do topo para baixo)
-    for(int j = 0; j < stacks; j++) {
-
-        //valores no eixo do y são constantes para cada stack
-        float yUpLeft = radius * sin(M_PI/2 - beta * j);
-        float yUpRight = yUpLeft;
-        float yDownLeft = radius * sin(M_PI/2 - beta * (j+1));
-        float yDownRight = yDownLeft;
-
-        //Vértice no canto superior esquerdo
-        float xUpLeft = radius * cos(M_PI/2 - beta * j) * sin(0 * alpha);
-        float zUpLeft = radius * cos(M_PI/2 - beta * j) * cos(0 * alpha);
-
-        //Vértice no canto inferior esquerdo
-        float xDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * sin(0 * alpha);     
-        float zDownLeft = radius * cos(M_PI/2 - beta * (j+1)) * cos(0 * alpha);
-
-
-        //cada iteração desenha uma fatia da camada horizontal
-        for(int i = 0; i < slices; i++) {
-            
-            
-            //Vértice no canto superior direito
-            float xUpRight = radius * cos(M_PI/2 - beta * j) * sin((i + 1) * alpha);        
-            float zUpRight = radius * cos(M_PI/2 - beta * j) * cos((i + 1) * alpha);
-
-            
-            //Vértice no canto inferior direito
-            float xDownRight = radius * cos(M_PI/2 - beta * (j+1)) * sin((i + 1) * alpha);
-            float zDownRight = radius * cos(M_PI/2 - beta * (j+1)) * cos((i + 1) * alpha);
-
-            //triângulo com 2 vértices em baixo e um em cima
-            file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
-            file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-            file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-
-            //triângulo com 2 vértices em cima e um em baixo
-            file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
-            file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-            file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-
-            //vértices da direita passam a ser os da esquerda na próxima iteração
-            xUpLeft = xUpRight;
-            zUpLeft = zUpRight;
-            xDownLeft = xDownRight;
-            zDownLeft = zDownRight; 
-        }
-    }
-    file.close();
-}
-
-
-void cone(float radius, float height, int slices, int stacks, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float alpha = (2*M_PI)/slices;
-    float coneSlant = sqrt(height*height+radius*radius);
-    float segment = (coneSlant/stacks);
-    //ângulo entre a base e a superficie lateral do cone
-    float beta = atan(height/radius);
-
-    float y = 0;
-    float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
-    float xDownLeft, yDownLeft, zDownLeft;
-    float xDownRight, yDownRight, zDownRight;
-    float xUpLeft, yUpLeft, zUpLeft;
-    float xUpRight, yUpRight, zUpRight;
-    //diferença entre 
-    float qtdSubRadius = cos(beta) * segment;
-    //difenença entra a altura de cada camada 
-    float qtdAddY = sin(beta) * segment;
-
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << 3 * slices + stacks * slices * 6 << endl;
-
-    //base do cone
-    for(int i = 0; i < slices; i++) {
-        bx1 = 0;
-        by1 = 0;
-        bz1 = 0;
-
-        bx2 = radius * sin((i+1)*alpha);
-        by2 = 0;
-        bz2 = radius * cos((i+1)*alpha);
-
-        bx3 = radius * sin(i*alpha);
-        by3 = 0;
-        bz3 = radius * cos(i*alpha);
-
-        file << bx1 << "," << by1 << "," << bz1 << "," << endl;
-        file << bx2 << "," << by2 << "," << bz2 << "," << endl;
-        file << bx3 << "," << by3 << "," << bz3 << "," << endl;
-    }
-    //cada iteração desenha uma camada horizontal (da base até ao topo)
-    for(int j = 0; j < stacks; j++) {
-        //distância entre um dos vértices superiores e o eixo dos yy's
-        float newRadius = radius - qtdSubRadius;
-        //distância entre um dos vértices superiores e o plano xOz
-        float newY = y + qtdAddY;
-        //cada iteração desenha uma fatia da camada horizontal
-        for(int i = 0; i < slices; i++) {
-
-            //Vértice no canto inferior esquerdo
-            xDownLeft = radius*sin(alpha*i);
-            yDownLeft = y;
-            zDownLeft = radius*cos(alpha*i);
-
-            //Vértice no canto inferior direito
-            xDownRight = radius*sin(alpha*(i+1));
-            yDownRight = y;
-            zDownRight = radius*cos(alpha*(i+1));
-
-            //Vértice no canto superior esquerdo
-            xUpLeft = newRadius*sin(alpha*i);
-            yUpLeft = newY;
-            zUpLeft = newRadius*cos(alpha*i);
-
-            //Vértice no canto superior direito
-            xUpRight = newRadius*sin(alpha*(i+1));
-            yUpRight = newY;
-            zUpRight = newRadius*cos(alpha*(i+1));
-
-            //triângulo com 2 vértices em baixo e um em cima
-            file << xDownLeft << "," << yDownLeft << "," << zDownLeft << "," << endl;
-            file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-            file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-            //triângulo com 2 vértices em cima e um em baixo
-            file << xUpRight << "," << yUpRight << "," << zUpRight << "," << endl;
-            file << xUpLeft << "," << yUpLeft << "," << zUpLeft << "," << endl;
-            file << xDownRight << "," << yDownRight << "," << zDownRight << "," << endl;
-        }
-
-        y = newY;
-        radius = newRadius;
-    }
-
-    file.close();
-}
-
-
-void saturnRings(float radius1, float radius2, int slices, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float bx1, by1, bz1, bx2, by2, bz2, bx3, by3, bz3;
-    float bx4, by4, bz4, bx5, by5, bz5, bx6, by6, bz6;
-    float alpha = (2*M_PI)/slices;
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << slices * 12 << endl;
-
-    for(int i = 0; i < slices; i++) {
-        bx1 = radius1 * sin((i+1)*alpha);
-        by1 = 0;
-        bz1 = radius1 * cos((i+1)*alpha);
-
-        bx2 = radius2 * sin((i+1)*alpha);
-        by2 = 0;
-        bz2 = radius2 * cos((i+1)*alpha);
-
-        bx3 = radius2 * sin(i*alpha);
-        by3 = 0;
-        bz3 = radius2 * cos(i*alpha);
-
-        file << bx1 << "," << by1 << "," << bz1 << "," << endl;
-        file << bx2 << "," << by2 << "," << bz2 << "," << endl;
-        file << bx3 << "," << by3 << "," << bz3 << "," << endl;
-
-        file << bx3 << "," << by3 << "," << bz3 << "," << endl;
-        file << bx2 << "," << by2 << "," << bz2 << "," << endl;
-        file << bx1 << "," << by1 << "," << bz1 << "," << endl;
-
-
-
-        bx4 = radius1 * sin((i)*alpha);
-        by4 = 0;
-        bz4 = radius1 * cos((i)*alpha);
-
-        bx5 = radius1 * sin((i+1)*alpha);
-        by5 = 0;
-        bz5 = radius1 * cos((i+1)*alpha);
-
-        bx6 = radius2 * sin(i*alpha);
-        by6 = 0;
-        bz6 = radius2 * cos(i*alpha);
-
-        file << bx4 << "," << by4 << "," << bz4 << "," << endl;
-        file << bx5 << "," << by5 << "," << bz5 << "," << endl;
-        file << bx6 << "," << by6 << "," << bz6 << "," << endl;
-
-
-        file << bx6 << "," << by6 << "," << bz6 << "," << endl;
-        file << bx5 << "," << by5 << "," << bz5 << "," << endl;
-        file << bx4 << "," << by4 << "," << bz4 << "," << endl;
-        
-    }
-
-    file.close();
-}
-
-
-
 void multVectorMatrix(float *v, float *m, float *res){
     //percorre vetor
     for(int i = 0; i < 4; i++){
@@ -397,7 +78,7 @@ void buildControlPointsMatrix(BezierPatches bp, int patchNumber, int coordenada,
 }
 
 
-float* bezierPatchesGenerator(BezierPatches* bezierPatches, int nPatch, int tess, string fileName){
+float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fileName){
     ofstream file;
     file.open(fileName);
     float* temp = new float(3);
@@ -461,12 +142,7 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int nPatch, int tess
 }
 
 
-
-
-
-
-//VIRGULAS?
-void planoIndices(float lado, string fileName){
+void plano(float lado, string fileName){
     ofstream file;
     file.open(fileName);
 
@@ -492,12 +168,100 @@ void planoIndices(float lado, string fileName){
 }
 
 
+void caixa(float x, float y, float z, int divisions, string fileName){
+    ofstream file;
+    file.open(fileName);
+
+    float divX = x/divisions;
+    float divY = y/divisions;
+    float divZ = z/divisions;
 
 
+    ///Número de índicesdivisions
+    file <<  3 * divisions * divisions * 2 * 6<< endl;
 
 
+    int currentLine, nextLine, currentFace;
+    //Escreve os índices
+    for(int q = 0; q < 3; q++){
+        currentFace = q * (divisions+1) * (divisions+1);
+        for(int h = 0; h < divisions; h++){
+            currentLine = (divisions+1)*h + currentFace;
+            nextLine = (divisions+1)*(h+1) + currentFace;
 
-void esferaIndices(float radius, int slices, int stacks, string fileName){
+            for(int g = 0;  g < divisions ; g++){
+                file << currentLine + g << "," << nextLine + g + 1 <<  "," << currentLine + g + 1 << ",";
+                file << nextLine + g << "," << nextLine + g + 1 << "," << currentLine + g << ",";
+            }
+        }
+    }
+
+    for(int q = 3; q < 6; q++){
+        currentFace = q * (divisions+1) * (divisions+1);
+        for(int h = 0; h < divisions; h++){
+            currentLine = (divisions+1)*h + currentFace;
+            nextLine = (divisions+1)*(h+1) + currentFace;
+
+            for(int g = 0;  g < divisions ; g++){
+                file << nextLine + g + 1 << "," << currentLine + g <<  "," << currentLine + g + 1 << ",";
+                file << nextLine + g + 1 << "," << nextLine + g << "," << currentLine + g << ",";
+            }
+        }
+    }
+
+    file << endl;
+
+
+    //Escreve o número de vértices na primeira linha do ficheiro
+    file << (divisions+1) * (divisions+1) * 6 << endl;
+
+    //Vértices face de cima
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -x/2 + divX*j << "," << y/2 << "," << -z/2 + divZ*i << "," << endl;
+        }
+    }
+
+    //Vértices face lateral direita
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+        }
+    }
+
+    //Vértices face de trás
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << -z/2 << "," << endl;
+        }
+    }
+
+    //Vértices face de baixo
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -x/2 + divX*j << "," << -y/2 << "," << -z/2 + divZ*i << "," << endl;
+        }
+    }
+
+    //Vértices face lateral esquerda
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+        }
+    }
+
+    //Vértices face da frente
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << z/2 << "," << endl;
+        }
+    }
+
+    file.close();
+}
+
+
+void esfera(float radius, int slices, int stacks, string fileName){
     ofstream file;
     file.open(fileName);
 
@@ -591,8 +355,7 @@ void esferaIndices(float radius, int slices, int stacks, string fileName){
 }
 
 
-
-void coneIndices(float radius, float height, int slices, int stacks, string fileName){
+void cone(float radius, float height, int slices, int stacks, string fileName){
     ofstream file;
     file.open(fileName);
 
@@ -698,11 +461,7 @@ void coneIndices(float radius, float height, int slices, int stacks, string file
 }
 
 
-
-
-
-
-void saturnRingsIndice(float radius1, float radius2, int slices, string fileName){
+void saturnRings(float radius1, float radius2, int slices, string fileName){
     ofstream file;
     file.open(fileName);
 
@@ -755,139 +514,6 @@ void saturnRingsIndice(float radius1, float radius2, int slices, string fileName
 }
 
 
-
-
-
-
-
-
-
-
-void caixaIndices(float x, float y, float z, int divisions, string fileName){
-    ofstream file;
-    file.open(fileName);
-
-    float divX = x/divisions;
-    float divY = y/divisions;
-    float divZ = z/divisions;
-
-
-    ///Número de índicesdivisions
-    file <<  3 * divisions * divisions * 2 * 6<< endl;
-
-
-    int currentLine, nextLine, currentFace;
-    //Escreve os índices
-    for(int q = 0; q < 6; q++){
-	    currentFace = q * (divisions+1) * (divisions+1);
-	    for(int h = 0; h < divisions; h++){
-	        currentLine = (divisions+1)*h + currentFace;
-	        nextLine = (divisions+1)*(h+1) + currentFace;
-
-	        for(int g = 0;  g < divisions ; g++){
-	            file << currentLine + g << "," << nextLine + g + 1 <<  "," << currentLine + g + 1 << ",";
-	            file << nextLine + g << "," << nextLine + g + 1 << "," << currentLine + g << ",";
-	        }
-	    }
-	}
-
-    file << endl;
-
-
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << (divisions+1) * (divisions+1) * 6 << endl;
-
-    //Vértices face de baixo
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << -x/2 + divX*j << "," << -y/2 << "," << -z/2 + divZ*i << "," << endl;
-    	}
-    }
-
-    //Vértices face de cima
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << -x/2 + divX*j << "," << y/2 << "," << -z/2 + divZ*i << "," << endl;
-    	}
-    }
-
-
-    //Vértices face de trás
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << -z/2 << "," << endl;
-    	}
-    }
-
-    //Vértices face da frente
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << z/2 << "," << endl;
-    	}
-    }
-
-
-    //Vértices face lateral esquerda
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << -x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
-    	}
-    }
-
-    //Vértices face lateral direita
-    for(int i = 0; i <= divisions; i++){
-    	for(int j = 0; j <= divisions; j++){
-    		file << x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
-    	}
-    }
-
-    file.close();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void printHelp(){
     cout << "################################################################" << endl;
     cout << "#                                                              #" << endl;
@@ -901,53 +527,29 @@ void printHelp(){
     cout << "#      -Esfera [RAIO] [SLICES] [STACKS]                        #" << endl;
     cout << "#      -Cone [RAIO] [ALTURA] [SLICES] [STACKS]                 #" << endl;
     cout << "#      -SaturnRings [RAIO1] [RAIO2] [SLICES]                   #" << endl;
+    cout << "#      -BezierPatch [PATCH] [TESSELACAO]                       #" << endl;
     cout << "#                                                              #" << endl;
     cout << "################################################################" << endl;
 }
 
 int main(int argc, char **argv){
-    BezierPatches* bezierPatches = loadBezierPatches("teapot.patch");
 
-    saturnRingsIndice(7, 11, 20, "saturnRings1.3d");
-    saturnRingsIndice(12, 14, 20, "saturnRings2.3d");
-    esferaIndices(5, 10, 20, "esfera.3d");
-    esferaIndices(5, 20, 30, "sol.3d");
+    //saturnRingsIndice(7, 11, 20, "saturnRings1.3d");
+    //saturnRingsIndice(12, 14, 20, "saturnRings2.3d");
+    //esferaIndices(5, 10, 20, "esfera.3d");
+    //esferaIndices(5, 20, 30, "sol.3d");
 
     //bezierPatchesGenerator(bezierPatches, 0, 20, "teapot.3d");
 
     //planoIndices(4, "plano.3d");
 
-//    esferaIndices(8, 50, 50, "esfera.3d");
+    //esferaIndices(8, 50, 50, "esfera.3d");
 
     //saturnRingsIndice(15, 13, 30, "aneis.3d");
 
-   // caixaIndices(6, 6, 6, 16, "caixa.3d");
+    //caixaIndices(6, 6, 6, 16, "caixa.3d");
 
-    //imprime para testar - APAGAR
-    /*for (int i = 0; i < bezierPatches.numberOfPatches; i++) {
-        for (int j = 0; j < 16; j++) {
-            printf(" %d,", bezierPatches.patches[i][j]);
-        }
-        printf("\n");
-    }*/
-
-    /*for (int i = 132; i < bezierPatches->numberOfPoints; i++) {
-        for (int j = 0; j < 3; j++) {
-            printf(" i:%d,j:%d,%f,",i+1,j+1, bezierPatches->points[i][j]);
-        }
-        printf("\n");
-    }*/
-
-    /*//imprime para testar - APAGAR
-    for (int i = 0; i < bezierPatches.numberOfPoints; i++) {
-        for (int j = 0; j < 3; j++) {
-            printf(" %f,", bezierPatches.points[i][j]);
-        }
-        printf("\n");
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-*/
-    /*
+    
     if (argc < 2){
         cout << "Parâmetros insuficientes" << endl;
         cout << "Faça ./generator -h para ajuda." << endl;
@@ -983,11 +585,16 @@ int main(int argc, char **argv){
         else if(strcmp(argv[1], "SaturnRings") == 0 && argc == 6){
             saturnRings(atof(argv[2]), atof(argv[3]), atoi(argv[4]), file);
         }
+        else if(strcmp(argv[1], "BezierPatch") == 0 && argc == 5){
+            BezierPatches* bezierPatches = loadBezierPatches(argv[2]);
+            bezierPatchesGenerator(bezierPatches, atof(argv[3]), file);
+        }
+
 
         else{
             cout << "Introduza os parâmetros corretamente" << endl;
             cout << "Faça ./generator -h para ajuda." << endl;
         }
         return 1;
-    }*/
+    }
 }

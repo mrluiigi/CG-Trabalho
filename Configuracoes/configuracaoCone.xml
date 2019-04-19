@@ -2,7 +2,7 @@
 	<group> 
 		<scale X="10" Y="10" Z="10" /> 
 		<models> 
-			<model file="../../Models/plano.3d" />
+			<model file="../../Models/cone.3d" />
 		</models>
 	</group>  
 </scene>

@@ -1,9 +1,0 @@
-<scene> 
-	<group> 
-		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
-		<scale X=".053" Y=".053" Z=".053" />
-		<models> 
-			<model file="../../Generator/teapot.3d" />
-		</models> 
-	</group>  
-</scene>

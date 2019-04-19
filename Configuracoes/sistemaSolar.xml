@@ -12,7 +12,7 @@
 	<group>
 		Mercurio
 		<rotate angle="27.61" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="7.5" >
 			<point X="80" Y="0" Z="0" />
 			<point X="56.56854" Y="0" Z="-56.568547" /> 
 			<point X="0" Y="0" Z="-80" />
@@ -22,6 +22,7 @@
 			<point X="0" Y="0" Z="80"/>
 			<point X="56.56854" Y="0" Z="56.56854"/> 
 		</translate>
+		<rotate time="1160" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.038" Y=".038" Z=".038" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -31,7 +32,7 @@
 	<group>
 		Venus
 		<rotate angle="88.98" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="17.499" >
 			<point X="90" Y="0" Z="0" />
 			<point X="63.63961" Y="0" Z="-63.63961" /> 
 			<point X="0" Y="0" Z="-90" />
@@ -41,6 +42,7 @@
 			<point X="0" Y="0" Z="90"/>
 			<point X="63.63961" Y="0" Z="63.63961"/> 
 		</translate> 
+		<rotate time="580" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.095" Y="0.095" Z="0.095" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -49,8 +51,7 @@
 
 	<group>
 		Terra
-		 
-		<translate time="10" >
+		<translate time="30" >
 			<point X="100" Y="0" Z="0" />
 			<point X="70.71067" Y="0" Z="-70.71067" /> 
 			<point X="0" Y="0" Z="-100" />
@@ -60,13 +61,23 @@
 			<point X="0" Y="0" Z="100"/>
 			<point X="70.71067" Y="0" Z="70.71067"/> 
 		</translate>
+		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.1" Y="0.1" Z="0.1" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
 		<group> 
 			Lua
-			<translate X="20" Y="10" Z="15" />
+			<translate time="10" >
+				<point X="27" Y="0" Z="0" />
+				<point X="19.09188" Y="0" Z="-19.09188" />
+				<point X="0" Y="0" Z="-27" />
+				<point X="-19.09188" Y="0" Z="-19.09188" />
+				<point X="-27" Y="0" Z="0" />
+				<point X="-19.09188" Y="0" Z="19.09188" />
+				<point X="0" Y="0" Z="27"/>
+				<point X="19.09188" Y="0" Z="19.09188"/>
+			</translate>
 			<scale X="0.37" Y="0.37" Z="0.37" /> 
 			<models> 
 				<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -77,7 +88,7 @@
 	<group>
 		Marte
 		<rotate angle="266.25" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="60" >
 			<point X="110" Y="0" Z="0" />
 			<point X="77.78174" Y="0" Z="-77.78174" /> 
 			<point X="0" Y="0" Z="-110" />
@@ -87,6 +98,7 @@
 			<point X="0" Y="0" Z="110"/>
 			<point X="77.78174" Y="0" Z="77.78174"/> 
 		</translate>
+		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".053" Y=".053" Z=".053" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -112,7 +124,7 @@
 	<group>
 		Jupiter
 		<rotate angle="72.46" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="354.9" >
 			<point X="135" Y="0" Z="0" />
 			<point X="95.45941" Y="0" Z="-95.45941" /> 
 			<point X="0" Y="0" Z="-135" />
@@ -122,6 +134,7 @@
 			<point X="0" Y="0" Z="135"/>
 			<point X="95.45941" Y="0" Z="95.45941"/> 
 		</translate> 
+		<rotate time="3.75" axisX="0" axisY="1" axisZ="0" />
 		<scale X="1.12" Y="1.12" Z="1.12" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -187,7 +200,8 @@
 	<group>
 		Saturno
 		<rotate angle="103.17" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+
+		<translate time="885" >
 			<point X="170" Y="0" Z="0" />
 			<point X="120.20815" Y="0" Z="-120.20815" /> 
 			<point X="0" Y="0" Z="-170" />
@@ -197,17 +211,23 @@
 			<point X="0" Y="0" Z="170"/>
 			<point X="120.20815" Y="0" Z="120.20815"/> 
 		</translate>  
+
 		<scale X=".945" Y=".945" Z=".945" />
-		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+		<rotate angle="25" axisX="1" axisY="0" axisZ="0" /> 
+		<rotate time="25" axisX="0" axisY="1" axisZ="0" /> 
+		Aneis
+		<models> 
+			<model file="../../ModelsSolarSystem/saturnRings1.3d" />
+			<model file="../../ModelsSolarSystem/saturnRings2.3d" />
 		</models>
+
+		
 		<group> 
-			Aneis
-			<rotate angle="25" axisX="1" axisY="0" axisZ="0" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/saturnRings1.3d" />
-				<model file="../../ModelsSolarSystem/saturnRings2.3d" />
-			</models> 
+			<rotate angle="0" axisX="1" axisY="0" axisZ="0" /> 
+			<rotate time="4.16" axisX="0" axisY="1" axisZ="0" />
+			<models>
+				<model file="../../ModelsSolarSystem/esfera.3d" />
+			</models>
 		</group>
 		<group> 
 			Lua1
@@ -262,7 +282,7 @@
 	<group>
 		Urano
 		<rotate angle="212.55" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="2520" >
 			<point X="190" Y="0" Z="0" />
 			<point X="134.35028" Y="0" Z="-134.35028" /> 
 			<point X="0" Y="0" Z="-190" />
@@ -272,6 +292,7 @@
 			<point X="0" Y="0" Z="190"/>
 			<point X="134.35028" Y="0" Z="134.35028"/> 
 		</translate> 
+		<rotate time="7.08" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".4" Y=".4" Z=".4" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -305,7 +326,7 @@
 	<group>
 		Neptuno
 		<rotate angle="165.75" axisX="0" axisY="1" axisZ="0" />
-		<translate time="10" >
+		<translate time="4950" >
 			<point X="205" Y="0" Z="0" />
 			<point X="144.95689" Y="0" Z="-144.95689" /> 
 			<point X="0" Y="0" Z="-205" />
@@ -315,6 +336,7 @@
 			<point X="0" Y="0" Z="205"/>
 			<point X="144.95689" Y="0" Z="144.95689"/> 
 		</translate> 
+		<rotate time="6.66" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".388" Y=".388" Z=".388" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
@@ -335,6 +357,25 @@
 				<model file="../../ModelsSolarSystem/esfera.3d" />
 			</models> 
 		</group>
+	</group>
+
+	<group>
+		Cometa
+		<rotate angle="165.75" axisX="0" axisY="1" axisZ="0" />
+		<translate time="30" >
+			<point X="110" Y="-25" Z="10" />
+			<point X="0" Y="15" Z="-100" />
+			<point X="-210" Y="90" Z="0" />
+			<point X="0" Y="15" Z="100"/>
+		</translate> 
+
+
+		<scale X=".388" Y=".388" Z=".388" />
+
+		<models>
+			<model file="../../ModelsSolarSystem/teapot.3d" />
+		</models>
+		
 	</group>
 
 </scene>
