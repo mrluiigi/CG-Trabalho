@@ -112,22 +112,17 @@ void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
         points.push_back(atof(child->Attribute("Z")));
         c++;
     }
-    //Alocar 
-
+    //Alocar matriz 2D dos pontos de controlo
     tt->controlPoints = new float*[c];    
     for (int i = 0; i < c; i++) {
         tt->controlPoints[i] = new float[3];
     }
-
-
-    printf("..\n");
+    //Colocar pontos de controlo na matriz
     for (int i = 0; i < c; i++) {
         tt->controlPoints[i][0] = points[i*3+0];
         tt->controlPoints[i][1] = points[i*3+1];
         tt->controlPoints[i][2] = points[i*3+2];
     }
-    printf("deu\n");
-
     tt->controlPointsNumber = c;
 }
 
@@ -143,8 +138,6 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
             parseTimedTranslate(child,gt.tt);
             g.transforms.push_back(gt);
         }
-
-
         else if( childName.compare("translate") == 0 || childName.compare("scale") == 0) {
             GeometricTransforms gt;
             gt.x = atof(child->Attribute("X"));
@@ -158,7 +151,6 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
             }
             g.transforms.push_back(gt);
         }
-
         else if( childName.compare("rotate") == 0) {
             GeometricTransforms gt;
             gt.x = atof(child->Attribute("axisX"));
@@ -176,7 +168,6 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
             }
             g.transforms.push_back(gt);
         }  
-
         else if( string(child->Name()).compare("models") == 0) {
                 for(tinyxml2::XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
                     string name = modelXML->Attribute("file");

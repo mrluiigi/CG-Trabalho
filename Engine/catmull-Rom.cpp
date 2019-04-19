@@ -89,10 +89,6 @@ void getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, flo
     deriv[2] = multVectorVector(mtd,az);
 }
 
-
-
-
-
 void getGlobalCatmullRomPoint(float gt, float ** controlPoints, int controlPointsNumber,float *pos, float *deriv) {
     // Posição na curva
     float t = gt * controlPointsNumber;

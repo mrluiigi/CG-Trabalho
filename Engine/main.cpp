@@ -12,11 +12,7 @@
 #include <cstring>
 #include <math.h>
 
-
-
 using namespace std;
-
-
 
 /** Ângulo horizontal da câmera */
 float alfa = 0;
@@ -24,7 +20,6 @@ float alfa = 0;
 float beta = 0;
 /** Raio/distância da câmera à origem */
 float r = 400;
-
 
 /** Contém todos os modelos */
 Models allModels;
@@ -142,12 +137,10 @@ void drawGroup(Group group) {
         //Desenhar os buffers
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
-
-
+    //Desenhar subgrupos
     for(int i = 0; i < group.subGroups.size(); i++ ){
         drawGroup(group.subGroups[i]);
     }
-
     glPopMatrix();
 }
 
