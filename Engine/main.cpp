@@ -15,12 +15,15 @@
 
 using namespace std;
 
+
+int frame=0; int timebase=0; char  s[1000];
+
 /** Ângulo horizontal da câmera */
 float alfa = 0;
 /** Ângulo vertical da câmera */
 float beta = 0;
 /** Raio/distância da câmera à origem */
-float r = 400;
+float r = 40;
 
 
 /** Contém todos os modelos */
@@ -31,12 +34,13 @@ vector<Group> groups;
 
 
 /** Buffer para de desenhar (1?) */
-GLuint buffers[1];
+GLuint* buffers;
 
 /** Buffer para os índices */
-GLuint indexes[1];
+GLuint* indexes;
 
 
+bool firstRenderSceneCall = true;
 
 
 
@@ -143,15 +147,6 @@ void getGlobalCatmullRomPoint(float gt, float ** controlPoints, int controlPoint
     int index = floor(t);  // which segment
     t = t - index; // where within  the segment
 
-    // indices store the points
-    printf("%d\n", controlPointsNumber);
-    for (int i = 0; i < controlPointsNumber; i++)
-    {
-        printf("%f\n", controlPoints[i][0]);
-        printf("%f\n", controlPoints[i][1]);
-        printf("%f\n", controlPoints[i][2]);
-        printf("\n");
-    }
 
 
     int indices[4]; 
@@ -252,32 +247,20 @@ void drawGroup(Group group) {
     }
 
 
-    // Iniciar os buffers
-    glGenBuffers(1, buffers);
-    glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
-    glVertexPointer(3,GL_FLOAT,0,0);
-
-    // Iniciar os indices
-    glGenBuffers(1, indexes);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[0]);
-
-
-
     int inteiro = 0;
-    std::vector<string> models = group.models;
+
+    std::vector<int> models = group.models;
+
     for(int i = 0; i < models.size(); i++ ){
         Model m = allModels.getModel(models[i]);
+        int id = models[i];
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
 
-       /* for(; inteiro < m.numberOfVertices * 3; inteiro++){
-            cout << m.verticesBuffer[inteiro] << " ";
-        }
-        cout << m.numberOfVertices << "\n";*/
 
-        //glDrawArrays(GL_TRIANGLES, 0, m.numberOfVertices);
+        glBindBuffer(GL_ARRAY_BUFFER,buffers[id]);
+         glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[id]);
 
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
@@ -286,13 +269,56 @@ void drawGroup(Group group) {
 
     for(int i = 0; i < group.subGroups.size(); i++ ){
         drawGroup(group.subGroups[i]);
-        //cout << group.subGroups[i].models[0].name << "\n"; 
     }
 
     glPopMatrix();
 }
 
+void loadBuffers() {
+    int n = allModels.vec.size();
+    buffers = new GLuint[n];
+    indexes = new GLuint[n];
+
+    glGenBuffers(n, buffers);
+
+    // Iniciar os indices
+    glGenBuffers(n, indexes);
+
+
+
+    for( int i = 0; i < n; i++) {
+        glEnableVertexAttribArray(i);
+        Model m = allModels.vec[i];
+        glBindBuffer(GL_ARRAY_BUFFER,buffers[i]);
+        glVertexAttribPointer(i, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+       // glVertexPointer(3,GL_FLOAT,0,0);
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[i]);
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(i);
+
+
+    }
+}
+
 void renderScene(void) {
+
+    frame++;
+     int time=glutGet(GLUT_ELAPSED_TIME); 
+    if (time - timebase > 1000) { 
+        sprintf(s,"FPS:%4.2f",
+            frame*1000.0/(time-timebase)); 
+        timebase = time; frame = 0; 
+    }
+     glutSetWindowTitle(s);
+    if(firstRenderSceneCall) {
+        loadBuffers();
+        firstRenderSceneCall = false;
+    }
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -406,6 +432,8 @@ int main(int argc, char **argv) {
         glutInitWindowPosition(100, 100);
         glutInitWindowSize(1920, 1080);
         glutCreateWindow("Projeto_CG");
+
+        glutSetWindowTitle(s);
 
         //Required callback registry
         glutDisplayFunc(renderScene);

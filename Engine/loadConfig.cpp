@@ -8,10 +8,8 @@ using namespace tinyxml2;
 
 
 /** Obtém um vértice a partir de uma linha do ficheiro .3d */
-Vertice toVertice(string s){
-    Vertice v;
+void toVertice(string s, float* res){
 
-    float array[3];
     int i = 0;
 
     std::string delimiter = ",";
@@ -19,14 +17,10 @@ Vertice toVertice(string s){
     std::string token;
     while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
         token = s.substr(0, pos);   //obter substring entre virgulas
-        array[i] = stof(token);     //transformar substring em float
+        res[i] = stof(token);     //transformar substring em float
         i++;
         s.erase(0, pos + delimiter.length());
     }
-    v.x = array[0];
-    v.y = array[1];
-    v.z = array[2];
-    return v;
 }
 
 void toIndice(string s, int* array){
@@ -43,24 +37,27 @@ void toIndice(string s, int* array){
     }
 }
 
-
-bool Models::contains(string name) {
+//Se contem retorna o índice do modelo, caso contrário retorna -1
+int Models::contains(string name) {
     for (int i = 0; i < vec.size(); i++){
         if(name.compare(vec[i].name) == 0) {
-            return true;
+            return i;
         }
     }
-    return false;
+    return -1;
 }
 
 /** Adiciona o model dado o nome do modelo */
-//Não adiciona repetidos
-void Models::addModel(string name) {
-    if(!contains(name)) {
+//Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
+int Models::addModel(string name) {
+    int id = contains(name);
+    if(id == -1) {
         Model m;
         m.name = name;
         vec.push_back(m);
+        return vec.size()-1;
     }
+    else return id;
 }
 
 /** Preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros */
@@ -85,28 +82,23 @@ void Models::loadModels() {
         getline(file,s);
         m.numberOfVertices = stoi(s);
         m.verticesBuffer = (float *)malloc(sizeof(float) * m.numberOfVertices * 3);
-        int c = 0;
+
+        int offset = 0;
 
         //Para cada linha processa um vértice
         while(getline(file, s)){
-            Vertice v = toVertice(s);
-            m.vertices.push_back(v);
-            m.verticesBuffer[c++] = v.x;
-            m.verticesBuffer[c++] = v.y;
-            m.verticesBuffer[c++] = v.z;
+            toVertice(s, m.verticesBuffer + offset);
+            //Cada vértice é constituido por 3 floats
+            offset += 3;
         }
 
         file.close();
     }
 }
 
-/** Devolve o model dado o seu nome */
-Model Models::getModel(string name) {
-    for (int i = 0; i < vec.size(); i++){
-        if(name.compare(vec[i].name) == 0) {
-            return vec[i];
-        }
-    }
+// Devolve o model dado o seu identificador 
+Model Models::getModel(int id) {
+    return vec[id];
 }
 
 void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
@@ -188,8 +180,8 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
                     string name = modelXML->Attribute("file");
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
-                    allModels.addModel(name);
-                    g.models.push_back(name);
+                    int id = allModels.addModel(name);
+                    g.models.push_back(id);
                 }
         }
         //caso o grupo contenha subgrupos

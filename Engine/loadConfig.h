@@ -4,12 +4,6 @@ using namespace std;
 #include <vector>
 
 
-class Vertice{
-    public:
-        float x;
-        float y;
-        float z;
-};
 
 class Model{
     public:
@@ -18,7 +12,6 @@ class Model{
 		int numberOfIndices;
 		int* indicesBuffer;
 		int numberOfVertices;
-		vector<Vertice> vertices;
         float* verticesBuffer;
 
 };
@@ -27,14 +20,14 @@ class Models{
     public:
         vector<Model> vec;
 
-	    bool contains(string name);
-
-	    void addModel(string name);
+	    int contains(string name);
+        //Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
+	    int addModel(string name);
 
 	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
 	    void loadModels();			
-
-	    Model getModel(string name);
+        // Devolve o model dado o seu identificador 
+	    Model getModel(int id);
 };
 
 
@@ -64,7 +57,8 @@ public:
 class Group{
 public:
     vector<GeometricTransforms> transforms;
-    vector<string> models;
+    //Vetor com os Ids(posição no vetor do objeto Models) dos modelos 
+    vector<int> models;
     vector<Group> subGroups;
 
 };
