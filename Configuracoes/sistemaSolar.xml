@@ -62,7 +62,7 @@
 			<point X="70.71067" Y="0" Z="70.71067"/> 
 		</translate>
 		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
-		<scale X="0.1" Y="0.1" Z="0.1" />
+		<scale X="0.3" Y="0.3" Z="0.3" />
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
@@ -139,62 +139,6 @@
 		<models>
 			<model file="../../ModelsSolarSystem/esfera.3d" />
 		</models>
-		<group> 
-			Lua1
-			<translate X="18" Y="-7" Z="2" />
-			<scale X="0.05" Y="0.05" Z="0.05" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua2
-			<translate X="-13" Y="5" Z="4" />
-			<scale X="0.037" Y="0.037" Z="0.037" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua3
-			<translate X="8" Y="8" Z="3" />
-			<scale X="0.04" Y="0.04" Z="0.04" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua4
-			<translate X="3" Y="-10" Z="5" />
-			<scale X="0.052" Y="0.052" Z="0.052" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua5
-			<translate X="2" Y="10" Z="-8" />
-			<scale X="0.045" Y="0.045" Z="0.045" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua6
-			<translate X="0" Y="2" Z="-15" />
-			<scale X="0.039" Y="0.039" Z="0.039" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
-		<group> 
-			Lua7
-			<translate X="3" Y="-3" Z="-8" />
-			<scale X="0.051" Y="0.051" Z="0.051" /> 
-			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
-			</models> 
-		</group>
 	</group>	
 
 	<group>
