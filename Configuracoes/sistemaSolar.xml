@@ -314,7 +314,7 @@
 		</translate> 
 
 
-		<scale X=".388" Y=".388" Z=".388" />
+		<scale X=".5" Y=".5" Z=".5" />
 
 		<models>
 			<model file="../../ModelsSolarSystem/teapot.3d" />
