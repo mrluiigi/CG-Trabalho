@@ -36,8 +36,7 @@ GLuint* indexes;
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
 
-//Variáveis globais para o cálculo da framerate
-int frame=0; int timebase=0; char  s[20];
+
 
 
 void changeSize(int w, int h) {
@@ -167,19 +166,8 @@ void loadBuffers() {
     }
 }
 
-void showFps() {
-    frame++;
-    int time=glutGet(GLUT_ELAPSED_TIME); 
-    if (time - timebase > 1000) { 
-        sprintf(s,"FPS:%4.2f",
-            frame*1000.0/(time-timebase)); 
-        timebase = time; frame = 0; 
-    }
-     glutSetWindowTitle(s);  
-}
 
 void renderScene(void) {
-    showFps();
     if(firstRenderSceneCall) {
         loadBuffers();
         firstRenderSceneCall = false;
