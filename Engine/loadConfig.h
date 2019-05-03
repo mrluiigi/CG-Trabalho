@@ -13,6 +13,8 @@ class Model{
 		int* indicesBuffer;
 		int numberOfVertices;
         float* verticesBuffer;
+        int numberOfNormals;
+        float* normalsBuffer;
 
 };
 

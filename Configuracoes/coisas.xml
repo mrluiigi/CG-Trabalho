@@ -1,0 +1,7 @@
+<scene> 
+	<group> 
+		<models> 
+			<model file="../../Models/teapotComNormals.3d" />
+		</models> 
+	</group>  
+</scene>

@@ -32,6 +32,23 @@ float multVectorVector(float *v1, float *v2){
     return res;
 }
 
+
+void cross(float *a, float *b, float *res) {
+
+    res[0] = a[1]*b[2] - a[2]*b[1];
+    res[1] = a[2]*b[0] - a[0]*b[2];
+    res[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+
+void normalize(float *a) {
+
+    float l = sqrt(a[0]*a[0] + a[1] * a[1] + a[2] * a[2]);
+    a[0] = a[0]/l;
+    a[1] = a[1]/l;
+    a[2] = a[2]/l;
+}
+
 /*
 Recebe uma matriz composta por uma determinada coordenada dos pontos de controlo
 Devolve a coordenada do ponto a desenhar
@@ -55,6 +72,48 @@ float calculaCoordenada(float u, float v, float *controlPointsMatrix){
     //U * M * P * MT * V
     return multVectorVector(u_m_p_m, vMatrix);
 }
+
+
+float calculaCoordenadaTangentesU(float u, float v, float *controlPointsMatrix){
+    float vMatrix[4] = {v*v*v, v*v, v, 1};
+    float uuMatrix[4] = {3*u*u, 2*u, 1, 0}; 
+
+    float uu_m[4];
+    float uu_m_p[4];
+    float uu_m_p_m[4];
+    float uu_m_p_m_v[4];
+
+    //UU * M
+    multVectorMatrix(uuMatrix, mMatrix, uu_m);
+    //UU * M * P
+    multVectorMatrix(uu_m, controlPointsMatrix, uu_m_p);
+    //UU * M * P * MT
+    multVectorMatrix(uu_m_p, mMatrix, uu_m_p_m);
+    //UU * M * P * MT * VT
+    return multVectorVector(uu_m_p_m, vMatrix);
+}
+
+
+float calculaCoordenadaTangentesV(float u, float v, float *controlPointsMatrix){
+    float uMatrix[4] = {u*u*u, u*u, u, 1}; 
+    float vvMatrix[4] = {3*v*v, 2*v, 1, 0};
+
+    float u_m[4];
+    float u_m_p[4];
+    float u_m_p_m[4];
+    float u_m_p_m_vv[4];
+
+    //UU * M
+    multVectorMatrix(uMatrix, mMatrix, u_m);
+    //UU * M * P
+    multVectorMatrix(u_m, controlPointsMatrix, u_m_p);
+    //UU * M * P * MT
+    multVectorMatrix(u_m_p, mMatrix, u_m_p_m);
+    //UU * M * P * MT * VT
+    return multVectorVector(u_m_p_m, vvMatrix);
+}
+
+
 
 /*
 controlPointsMatrix corresponde a um array de 16 floats
@@ -138,6 +197,52 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
     
     }
 
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
+    //The normal vector at any point of the surface is defined as the normalized result of the cross product of the tangent vectors.
+
+    // Número de normais de cada patch * 
+    file << (tess+1)*(tess+1)*bezierPatches->numberOfPatches << endl;
+
+    
+    float m,n;
+
+    float* tangentVectorU = new float[3];
+    float* tangentVectorV = new float[3];
+
+    //Para cada patch
+    for(int i = 0; i < numberOfPatches; i++) {
+        buildControlPointsMatrix(*bezierPatches, i, 0, controlPointsMatrixX);
+        buildControlPointsMatrix(*bezierPatches, i, 1, controlPointsMatrixY);
+        buildControlPointsMatrix(*bezierPatches, i, 2, controlPointsMatrixZ);
+
+        //
+        m = 0;
+        for(int j = 0; j <= tess; j++){
+            n = 0;
+            for(int k = 0; k <= tess; k++){
+                tangentVectorU[0] = calculaCoordenadaTangentesU(m, n, controlPointsMatrixX);
+                tangentVectorU[1] = calculaCoordenadaTangentesU(m, n, controlPointsMatrixY);
+                tangentVectorU[2] = calculaCoordenadaTangentesU(m, n, controlPointsMatrixZ);
+
+                tangentVectorV[0] = calculaCoordenadaTangentesV(m, n, controlPointsMatrixX);
+                tangentVectorV[1] = calculaCoordenadaTangentesV(m, n, controlPointsMatrixY);
+                tangentVectorV[2] = calculaCoordenadaTangentesV(m, n, controlPointsMatrixZ);
+
+                cross(tangentVectorU, tangentVectorV, temp);
+                normalize(temp);
+                
+
+                file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
+                n += step;
+            }
+            m += step;
+        }
+    
+    }
+
+
+
     file.close();
 }
 
@@ -163,6 +268,14 @@ void plano(float lado, string fileName){
     file << x << "," << y << "," << -z << "," << endl;  // 1
     file << -x << "," << y << "," << z << "," << endl;  // 2
     file << x << "," << y << "," << z << "," << endl;   // 3
+
+
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+    
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
 
     file.close();
 }
@@ -254,6 +367,53 @@ void caixa(float x, float y, float z, int divisions, string fileName){
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
             file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << z/2 << "," << endl;
+        }
+    }
+
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
+    //Escreve o número de normias no ficheiro
+    file << (divisions+1) * (divisions+1) * 6 << endl;
+
+    //Normais face de cima
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 0 << "," << 1 << "," << 0 << "," << endl;
+        }
+    }
+
+    //Normais face lateral direita
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 1 << "," << 0 << "," << 0 << "," << endl;            
+        }
+    }
+
+    //Normais face de trás
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 0 << "," << 0 << "," << -1 << "," << endl;
+        }
+    }
+
+    //Normais face de baixo
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 0 << "," << -1 << "," << 0 << "," << endl;
+        }
+    }
+
+    //Normais face lateral esquerda
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << -1 << "," << 0 << "," << 0 << "," << endl;
+        }
+    }
+
+    //Normais face da frente
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 0 << "," << 0 << "," << 1 << "," << endl;
         }
     }
 
@@ -350,6 +510,23 @@ void esfera(float radius, int slices, int stacks, string fileName){
 
     //Vértice do fundo da esfera
     file << 0 << "," << -radius << "," << 0 << "," << endl;
+
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
+    //Vetor normal para topo da esfera
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
+
+    for(int j = 1; j < stacks; j++) {
+        float y = sin(M_PI/2 - beta * j);
+        for(int i = 0; i < slices; i++) {         
+            float x = cos(M_PI/2 - beta * j) * sin(i * alpha);     
+            float z = cos(M_PI/2 - beta * j) * cos(i * alpha);
+            file << x << "," << y << "," << z << "," << endl;
+        }
+    }
+
+    //Vetor normal para fundo da esfera da esfera
+    file << 0 << "," << -1 << "," << 0 << "," << endl;
 
     file.close();
 }
@@ -457,6 +634,25 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     //Vértice no topo do cone
     file << 0 << "," << height << "," << 0 << "," << endl;
 
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
+    //Normal no fundo
+    for(int z = 0; z < (slices+1); z++){
+        file << 0 << "," << -1 << "," << 0 << "," << endl;
+    }
+
+    for(int jj = 1; jj < stacks ; jj++) {
+        for(int ii = 0; ii < slices; ii++){
+            file << 0 << "," << -1 << "," << 0 << "," << endl;
+        }
+    }
+
+
+
+    //Normal no topo
+    file << 0 << "," << 1 << "," << 0 << "," << endl;
+
+
     file.close();
 }
 
@@ -508,7 +704,28 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 
 	    file << bx2 << "," << by2 << "," << bz2 << "," << endl;
 	}
-        
+
+    //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    //Normais para cima
+    for(int z = 0; z < (slices*2); z++) {
+        file << 0 << "," << 1 << "," << 0 << "," << endl;
+    }
+
+    //Normais para baixo
+    for(int h = 0; h < (slices*2); h++) {
+        file << 0 << "," << -1 << "," << 0 << "," << endl;
+    }
 
     file.close();
 }

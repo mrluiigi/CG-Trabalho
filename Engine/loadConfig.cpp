@@ -23,6 +23,22 @@ void toVertice(string s, float* res){
     }
 }
 
+/** Obtém uma normal a partir de uma linha do ficheiro .3d */
+void toNormal(string s, float* res){
+
+    int i = 0;
+
+    std::string delimiter = ",";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos) { //encontrar posição da vírgula
+        token = s.substr(0, pos);   //obter substring entre virgulas
+        res[i] = stof(token);     //transformar substring em float
+        i++;
+        s.erase(0, pos + delimiter.length());
+    }
+}
+
 void toIndice(string s, int* array){
     int i = 0;
 
@@ -86,9 +102,25 @@ void Models::loadModels() {
         int offset = 0;
 
         //Para cada linha processa um vértice
-        while(getline(file, s)){
+        for(int i = 0; i < m.numberOfVertices; i++){
+            getline(file, s);
             toVertice(s, m.verticesBuffer + offset);
             //Cada vértice é constituido por 3 floats
+            offset += 3;
+        }
+
+        //Lê o número de normais
+        getline(file,s);
+        m.numberOfNormals = stoi(s);
+        m.normalsBuffer = (float *)malloc(sizeof(float) * m.numberOfNormals * 3);
+
+        offset = 0;
+
+        //Para cada linha processa uma normal
+        for(int i = 0; i < m.numberOfNormals; i++){
+            getline(file, s);
+            toNormal(s, m.normalsBuffer + offset);
+            //Cada normal é constituida por 3 floats
             offset += 3;
         }
 
