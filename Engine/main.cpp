@@ -28,13 +28,13 @@ Models allModels;
 vector<Group> groups;
 
 /** Buffers de vértices */
-GLuint* buffers;
+GLuint buffers[1];
 
 /** Buffers de índices */
-GLuint* indexes;
+GLuint indexes[1];
 
 /** Buffers de normais */
-GLuint* normals;
+GLuint normals[1];
 
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
@@ -129,25 +129,48 @@ void drawGroup(Group group) {
     //Modelos do grupo
     std::vector<int> models = group.models;
 
+
+
+
+
+
+
+
     for(int i = 0; i < models.size(); i++ ){
         Model m = allModels.getModel(models[i]);
-        int id = models[i];
 
-        //Ativar os buffers correspondentes ao modelo
-        glBindBuffer(GL_ARRAY_BUFFER,buffers[id]);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glBindBuffer(GL_ARRAY_BUFFER,normals[id]);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        // Iniciar os vértices
+        glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
+        glVertexPointer(3,GL_FLOAT,0,0);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[id]);
+        // Iniciar os indices
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[0]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
+
+        // Iniciar as normais
+        glBindBuffer(GL_ARRAY_BUFFER,normals[0]);
+        glNormalPointer(GL_FLOAT,0,0);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfNormals * 3, m.normalsBuffer, GL_STATIC_DRAW);
+
+
+
+
+
+
+
 
         //Desenhar os buffers
         float red[4] = {0.8f, 0.2f, 0.2f, 1.0f};
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
         glMaterialf(GL_FRONT,GL_SHININESS,128);
+
+
+
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
+
     //Desenhar subgrupos
     for(int i = 0; i < group.subGroups.size(); i++ ){
         drawGroup(group.subGroups[i]);
@@ -157,51 +180,25 @@ void drawGroup(Group group) {
 
 //Carrega todos os modelo para buffers de vértice e índices
 void loadBuffers() {
-    int n = allModels.vec.size();
+    glGenBuffers(1, buffers);
+    glGenBuffers(1, indexes);
+    glGenBuffers(1, normals);
 
-    buffers = new GLuint[n];
-    indexes = new GLuint[n];
-    normals = new GLuint[n];
-
-    glGenBuffers(n, buffers);
-    glGenBuffers(n, indexes);
-    glGenBuffers(n, normals);
-
-    //Preencher os buffers para cada modelo
-    for( int i = 0; i < n; i++) {
-        Model m = allModels.vec[i];
-
-        //Tornar o buffer de vértices ativo
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER,buffers[i]);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-        //Preencher o buffer de vértices
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
-
-        //Tornar o buffer de índices ativo
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[i]);
-
-        //Preencher o buffer de índices
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
-
-        //Preencher o buffer de normais
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER,normals[i]);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfNormals * 3, m.normalsBuffer, GL_STATIC_DRAW);
-    }
 }
 
 
 void renderScene(void) {
+
     if(firstRenderSceneCall) {
         loadBuffers();
         firstRenderSceneCall = false;
     }
     glClearColor(0.0f,0.0f,0.0f,0.0f);
+
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     // set the camera
     glLoadIdentity();
 
@@ -209,8 +206,10 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    GLfloat dir[4] = {0.0, 1.0 ,1.0, 0.0};
+    GLfloat dir[4] = {0.0, 1.0 , 0.0, 0.0};
     glLightfv(GL_LIGHT0, GL_POSITION, dir);
+
+    glColor3f(1,0,0);
 
 
         
@@ -328,7 +327,7 @@ int main(int argc, char **argv) {
 
         //OpenGL settings
         glEnable(GL_DEPTH_TEST);
-       // glEnable(GL_CULL_FACE);
+        glEnable(GL_CULL_FACE);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         //Light Settings
