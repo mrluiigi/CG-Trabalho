@@ -110,8 +110,7 @@ void Models::loadModels() {
         }
 
         //Lê o número de normais
-        getline(file,s);
-        m.numberOfNormals = stoi(s);
+        m.numberOfNormals = m.numberOfVertices;
         m.normalsBuffer = (float *)malloc(sizeof(float) * m.numberOfNormals * 3);
 
         offset = 0;
