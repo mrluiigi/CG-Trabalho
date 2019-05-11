@@ -438,23 +438,23 @@ void esfera(float radius, int slices, int stacks, string fileName){
     indicesNumber += slices * 3;
 
     //Vértice no topo da esfera
-    int verticesNumber = 1;
+    int verticesNumber = slices;
     //Número de vértices das camadas das esferas 
-    verticesNumber += slices * (stacks-1);
+    verticesNumber += (slices+1) * (stacks-1);
     //Vértice no fundo da esfera
-    verticesNumber += 1;
+    verticesNumber += slices;
 
     //-------------------------------------------------------INDICES---------------------------------------------------------------
 
     //Escreve o número de indices 
     file << indicesNumber << endl;
-
+    int topVertexOffset = slices;
     //Índices da camada superior da esfera
-    for (int i = 0; i < slices-1; i++){
-        file << 0 << "," << i+1 << "," << i+2 << ",";
+    for (int i = 0; i < slices; i++){
+        file << i << "," << i+topVertexOffset << "," << (i+1)+topVertexOffset << ",";
     }
     //Índices para a última slice da camada superior da esfera
-    file << 0 << "," << slices << "," << 1 << ",";
+    //file << 0 << "," << slices << "," << 1 << ",";
 
     //Índice onde começam os vértices da base da stack atual
     int stackBase;
@@ -463,9 +463,9 @@ void esfera(float radius, int slices, int stacks, string fileName){
     int j = 0;
     //Índices das camadas da esfera (excepto as das extremidades)
     for (int i = 0; i < stacks-2; i++) {
-        for (j = 0; j < slices-1; j++){
-            stackTop = i * slices + 1;
-            stackBase = (i+1) * slices + 1;
+        for (j = 0; j < slices; j++){
+            stackTop = i * slices + topVertexOffset;
+            stackBase = (i+1) * slices + topVertexOffset;
             //cima esquerda -> baixo esquerda -> baixo direita
             file << stackTop + j << "," << stackBase + j << "," << stackBase + j + 1 << ",";
             //cima esquerda -> baixo direita -> cima direita
@@ -473,77 +473,103 @@ void esfera(float radius, int slices, int stacks, string fileName){
         }
         //Última slice de cada camada
         //cima esquerda -> baixo esquerda -> baixo direita
-        file << stackTop + j << "," << stackBase + j << "," << stackBase << ",";
+        //file << stackTop + j << "," << stackBase + j << "," << stackBase << ",";
+
         //cima esquerda -> baixo direita -> cima direita
-        file << stackTop + j  << "," << stackBase << "," << stackTop << ",";
+        //file << stackTop + j  << "," << stackBase << "," << stackTop << ",";
     }
 
+
     //Índices da camada inferior da esfera 
-    stackTop = (stacks-2) * slices + 1;
-    int lastVertexIndex =  verticesNumber - 1;
-    for (j = 0; j < slices-1; j++){
-        file << stackTop + j << "," << lastVertexIndex << "," << stackTop + j + 1 << ",";
+    stackTop = (stacks-2) * slices + topVertexOffset;
+    int bottomStackOffset =  verticesNumber - slices;
+    for (int j = 0; j < slices; j++){
+        file << stackTop + j << "," << bottomStackOffset + j << "," << stackTop + j + 1 << ",";
     }
     //Índices para a última slice da camada inferior da esfera
-    file << stackTop + j << "," << lastVertexIndex << "," << stackTop << ",";
+    //file << stackTop + j << "," << lastVertexIndex << "," << stackTop << ",";
+
+
+
+
+
 
     // \n para terminar os indices
     file << endl;
 
 
     //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
-
+    float x = 0;
+    float z = 0;
 
     //Escreve o número de vértices no ficheiro
-    file << 1 + slices * (stacks-1) + 1 << endl;
+    file << verticesNumber << endl;
 
     //Vértice do topo da esfera
-    file << 0 << "," << radius << "," << 0 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        file << 0 << "," << radius << "," << 0 << "," << endl;
+    }
 
     // Vértices das camadas da esfera
     for(int j = 1; j < stacks; j++) {
         float y = radius * sin(M_PI/2 - beta * j);
-        for(int i = 0; i < slices; i++) {         
-            float x = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);     
-            float z = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
+        for(int i = 0; i < slices+1; i++) {         
+            x = radius * cos(M_PI/2 - beta * j) * sin(i * alpha);     
+            z = radius * cos(M_PI/2 - beta * j) * cos(i * alpha);
             file << x << "," << y << "," << z << "," << endl;
         }
     }
 
     //Vértice do fundo da esfera
-    file << 0 << "," << -radius << "," << 0 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        file << 0 << "," << -radius << "," << 0 << "," << endl;
+    }
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
 
     //Vetor normal para topo da esfera
-    file << 0 << "," << 1 << "," << 0 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        file << 0 << "," << 1 << "," << 0 << "," << endl;
+    }
 
     for(int j = 1; j < stacks; j++) {
         float y = sin(M_PI/2 - beta * j);
-        for(int i = 0; i < slices; i++) {         
-            float x = cos(M_PI/2 - beta * j) * sin(i * alpha);     
-            float z = cos(M_PI/2 - beta * j) * cos(i * alpha);
+        for(int i = 0; i < slices+1; i++) {         
+            x = cos(M_PI/2 - beta * j) * sin(i * alpha);     
+            z = cos(M_PI/2 - beta * j) * cos(i * alpha);
             file << x << "," << y << "," << z << "," << endl;
         }
     }
 
     //Vetor normal para fundo da esfera da esfera
-    file << 0 << "," << -1 << "," << 0 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        file << 0 << "," << -1 << "," << 0 << "," << endl;
+    }
 
     //--------------------------------------------------------TEXTURA---------------------------------------------------------------
 
     //número de coordenadas da textura igual a número de vértices e normais?
-    file << 0 << "," << 0 << "," << endl;
+    float offset = (1.0f/slices)/2.0f;
+
+    for(int i = 0; i < slices; i++){
+        s = (float)(i+offset) / slices;
+        t = 0;
+        file << s << "," << t << "," << endl;
+    }
 
     for(int j = 1; j < stacks; j++) {
-        for(int i = 0; i < slices; i++) { 
+        for(int i = 0; i < slices+1; i++) { 
             s = (float)i / slices;
             t = (float)j / stacks;
             file << s << "," << t << "," << endl;
         }
     }
 
-    file << 1 << "," << 1 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        s = (float)(i+offset) / slices;
+        t = 1;
+        file << s << "," << t << "," << endl;
+    }
 
     file.close();
 }
