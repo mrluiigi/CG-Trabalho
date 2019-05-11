@@ -43,6 +43,10 @@ else (WIN32) #Linux and Mac
         find_package(GLEW REQUIRED)
         include_directories(${GLEW_INCLUDE_DIRS})
         link_libraries(${GLEW_LIBRARIES})
+        
+        find_package(DevIL REQUIRED)
+        include_directories(ยง{IL_INCLUDE_DIR})
+        link_libraries(${IL_LIBRARIES} )
     endif(NOT APPLE)
 
     target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARY} ${IL_LIBRARIES})

@@ -15,6 +15,8 @@ class Model{
         float* verticesBuffer;
         int numberOfNormals;
         float* normalsBuffer;
+        int numberOfTextures;
+        float* texturesBuffer;
 
 };
 

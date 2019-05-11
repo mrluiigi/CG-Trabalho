@@ -1,7 +1,7 @@
 <scene> 
 	<group> 
 		<models> 
-			<model file="../../Models/caixaNormal.3d" />
+			<model file="../../Models/esferaText.3d" />
 		</models> 
 	</group>  
 </scene>

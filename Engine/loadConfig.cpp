@@ -39,6 +39,11 @@ void toNormal(string s, float* res){
     }
 }
 
+
+
+
+
+
 void toIndice(string s, int* array){
     int i = 0;
 
@@ -122,6 +127,22 @@ void Models::loadModels() {
             //Cada normal é constituida por 3 floats
             offset += 3;
         }
+
+
+        m.numberOfTextures = m.numberOfVertices;
+        m.texturesBuffer = (float *)malloc(sizeof(float) * m.numberOfTextures * 2);
+
+        offset = 0;
+        
+        for(int i = 0; i < m.numberOfTextures; i++){
+            getline(file, s);
+            toNormal(s, m.texturesBuffer + offset);
+            //Cada textura é constituida por 2 floats
+            offset += 2;
+        }
+
+
+
 
         file.close();
     }

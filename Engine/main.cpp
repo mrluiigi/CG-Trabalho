@@ -5,6 +5,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <IL/il.h>
+
 #include "loadConfig.h"
 #include "catmull-Rom.h"
 #include <iostream>
@@ -35,6 +37,11 @@ GLuint indexes[1];
 
 /** Buffers de normais */
 GLuint normals[1];
+
+/** Buffers de texturas */
+GLuint textures[1];
+
+GLuint texIDEarth;
 
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
@@ -157,19 +164,27 @@ void drawGroup(Group group) {
 
 
 
+        // Iniciar as texturas
+        glBindBuffer(GL_ARRAY_BUFFER,textures[0]);
+        glTexCoordPointer(2,GL_FLOAT,0,0);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfTextures * 2, m.texturesBuffer, GL_STATIC_DRAW);
 
 
 
 
-        //Desenhar os buffers
-        float red[4] = {0.8f, 0.2f, 0.2f, 1.0f};
+
+        float red[4] = {1.0f, 1.0f, 1.0f, 1.0f};
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
         glMaterialf(GL_FRONT,GL_SHININESS,128);
 
 
 
+        //Desenhar os buffers
+
+        glBindTexture(GL_TEXTURE_2D, texIDEarth);
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
     }
+
 
     //Desenhar subgrupos
     for(int i = 0; i < group.subGroups.size(); i++ ){
@@ -183,6 +198,44 @@ void loadBuffers() {
     glGenBuffers(1, buffers);
     glGenBuffers(1, indexes);
     glGenBuffers(1, normals);
+    glGenBuffers(1, textures);
+
+}
+
+int loadTexture(std::string s) {
+
+    unsigned int t,tw,th;
+    unsigned char *texData;
+    unsigned int texID;
+
+    ilInit();
+    ilEnable(IL_ORIGIN_SET);
+    ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
+
+    ilGenImages(1,&t);
+    ilBindImage(t);
+    ilLoadImage((ILstring)s.c_str());
+
+    tw = ilGetInteger(IL_IMAGE_WIDTH);
+    th = ilGetInteger(IL_IMAGE_HEIGHT);
+    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+    texData = ilGetData();
+
+    glGenTextures(1,&texID);
+
+    glBindTexture(GL_TEXTURE_2D,texID);
+    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return texID;
 
 }
 
@@ -199,6 +252,8 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
     // set the camera
     glLoadIdentity();
 
@@ -309,6 +364,7 @@ int main(int argc, char **argv) {
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
         glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
         glutInitWindowPosition(100, 100);
@@ -328,11 +384,15 @@ int main(int argc, char **argv) {
         //OpenGL settings
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         //Light Settings
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
+
+        glEnable(GL_TEXTURE_2D);
+
         GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
         GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
         // light colors
@@ -343,6 +403,9 @@ int main(int argc, char **argv) {
 
         //Para poder usar o glGenBuffer
         glewInit();
+
+        texIDEarth = loadTexture("../../Textures/earth.jpg");
+
 
         //enter GLUT's main cycle
         glutMainLoop();

@@ -427,6 +427,8 @@ void esfera(float radius, int slices, int stacks, string fileName){
 
     float alpha = (2*M_PI)/slices;
     float beta = (M_PI)/stacks;
+    float s = 0;
+    float t = 0;
 
     //Número de índices para a camada superior da esfera
     int indicesNumber = slices * 3;
@@ -527,6 +529,21 @@ void esfera(float radius, int slices, int stacks, string fileName){
 
     //Vetor normal para fundo da esfera da esfera
     file << 0 << "," << -1 << "," << 0 << "," << endl;
+
+    //--------------------------------------------------------TEXTURA---------------------------------------------------------------
+
+    //número de coordenadas da textura igual a número de vértices e normais?
+    file << 0 << "," << 0 << "," << endl;
+
+    for(int j = 1; j < stacks; j++) {
+        for(int i = 0; i < slices; i++) { 
+            s = (float)i / slices;
+            t = (float)j / stacks;
+            file << s << "," << t << "," << endl;
+        }
+    }
+
+    file << 1 << "," << 1 << "," << endl;
 
     file.close();
 }
