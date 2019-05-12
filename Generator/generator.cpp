@@ -464,8 +464,8 @@ void esfera(float radius, int slices, int stacks, string fileName){
     //Índices das camadas da esfera (excepto as das extremidades)
     for (int i = 0; i < stacks-2; i++) {
         for (j = 0; j < slices; j++){
-            stackTop = i * slices + topVertexOffset;
-            stackBase = (i+1) * slices + topVertexOffset;
+            stackTop = i * (slices+1) + topVertexOffset;
+            stackBase = (i+1) * (slices+1) + topVertexOffset;
             //cima esquerda -> baixo esquerda -> baixo direita
             file << stackTop + j << "," << stackBase + j << "," << stackBase + j + 1 << ",";
             //cima esquerda -> baixo direita -> cima direita
@@ -481,7 +481,7 @@ void esfera(float radius, int slices, int stacks, string fileName){
 
 
     //Índices da camada inferior da esfera 
-    stackTop = (stacks-2) * slices + topVertexOffset;
+    stackTop = (stacks-2) * (slices+1) + topVertexOffset;
     int bottomStackOffset =  verticesNumber - slices;
     for (int j = 0; j < slices; j++){
         file << stackTop + j << "," << bottomStackOffset + j << "," << stackTop + j + 1 << ",";
