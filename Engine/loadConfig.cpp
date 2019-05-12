@@ -59,9 +59,9 @@ void toIndice(string s, int* array){
 }
 
 //Se contem retorna o índice do modelo, caso contrário retorna -1
-int Models::contains(string name) {
+int Models::contains(string name, string texture) {
     for (int i = 0; i < vec.size(); i++){
-        if(name.compare(vec[i].name) == 0) {
+        if(name.compare(vec[i].name) == 0 && texture.compare(vec[i].texture) == 0) {
             return i;
         }
     }
@@ -70,11 +70,9 @@ int Models::contains(string name) {
 
 /** Adiciona o model dado o nome do modelo */
 //Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
-int Models::addModel(string name) {
-    int id = contains(name);
+int Models::addModel(Model m) {
+    int id = contains(m.name, m.texture);
     if(id == -1) {
-        Model m;
-        m.name = name;
         vec.push_back(m);
         return vec.size()-1;
     }
@@ -222,10 +220,18 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
         }  
         else if( string(child->Name()).compare("models") == 0) {
                 for(tinyxml2::XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
-                    string name = modelXML->Attribute("file");
+                    Model m;
+                    m.name = modelXML->Attribute("file");
+                    if(modelXML->Attribute("texture") != NULL){
+                        m.texture = modelXML->Attribute("texture");
+                        m.hasTexture = true;
+                    }
+                    else{
+                        m.hasTexture = false;
+                    }
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
-                    int id = allModels.addModel(name);
+                    int id = allModels.addModel(m);
                     g.models.push_back(id);
                 }
         }

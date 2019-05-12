@@ -179,10 +179,18 @@ void drawGroup(Group group) {
 
 
 
+
+
         //Desenhar os buffers
 
-        glBindTexture(GL_TEXTURE_2D, texIDEarth);
+        glBindTexture(GL_TEXTURE_2D, m.textureId);
+        /*
+        if(m.textureId != 0) {
+            printf("%d\n", m.textureId);
+        }*/
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
     }
 
 
@@ -202,41 +210,54 @@ void loadBuffers() {
 
 }
 
-int loadTexture(std::string s) {
+void loadTexture() {
 
     unsigned int t,tw,th;
     unsigned char *texData;
     unsigned int texID;
 
-    ilInit();
-    ilEnable(IL_ORIGIN_SET);
-    ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
 
-    ilGenImages(1,&t);
-    ilBindImage(t);
-    ilLoadImage((ILstring)s.c_str());
+    for(int i = 0; i < allModels.vec.size(); i++) {
+        Model &m = allModels.vec[i];
 
-    tw = ilGetInteger(IL_IMAGE_WIDTH);
-    th = ilGetInteger(IL_IMAGE_HEIGHT);
-    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-    texData = ilGetData();
+        string s = m.texture;
 
-    glGenTextures(1,&texID);
+        if (m.hasTexture){
+            //cout << "oi";
+            ilInit();
+            ilEnable(IL_ORIGIN_SET);
+            ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
 
-    glBindTexture(GL_TEXTURE_2D,texID);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
+            ilGenImages(1, &t);
+            ilBindImage(t);
+            ilLoadImage((ILstring) s.c_str());
 
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            tw = ilGetInteger(IL_IMAGE_WIDTH);
+            th = ilGetInteger(IL_IMAGE_HEIGHT);
+            ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+            texData = ilGetData();
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-    glGenerateMipmap(GL_TEXTURE_2D);
+            glGenTextures(1, &texID);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+            glBindTexture(GL_TEXTURE_2D, texID);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    return texID;
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+            m.textureId = texID;
+
+        }
+        else{
+            m.textureId = 0;
+        }
+    }
 }
 
 
@@ -245,6 +266,7 @@ void renderScene(void) {
     if(firstRenderSceneCall) {
         loadBuffers();
         firstRenderSceneCall = false;
+        loadTexture();
     }
     glClearColor(0.0f,0.0f,0.0f,0.0f);
 
@@ -267,7 +289,6 @@ void renderScene(void) {
     glColor3f(1,0,0);
 
 
-        
     for(int k = 0; k < groups.size(); k++) {
         drawGroup(groups[k]);
     }
@@ -359,6 +380,7 @@ int main(int argc, char **argv) {
     else {
         loadConfig(argv[1], allModels, groups);
 
+
         //init GLUT and the window
         glutInit(&argc, argv);
 
@@ -404,7 +426,6 @@ int main(int argc, char **argv) {
         //Para poder usar o glGenBuffer
         glewInit();
 
-        texIDEarth = loadTexture("../../Textures/earth.jpg");
 
 
         //enter GLUT's main cycle

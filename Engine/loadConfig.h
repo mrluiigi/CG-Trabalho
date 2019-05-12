@@ -9,6 +9,9 @@ class Model{
     public:
     	//nome do ficheiro a partir do qual o modelo foi carregado	
         string name;
+        string texture;
+        int textureId;
+        bool hasTexture;
 		int numberOfIndices;
 		int* indicesBuffer;
 		int numberOfVertices;
@@ -24,9 +27,9 @@ class Models{
     public:
         vector<Model> vec;
 
-	    int contains(string name);
+	    int contains(string name, string texture);
         //Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
-	    int addModel(string name);
+	    int addModel(Model m);
 
 	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
 	    void loadModels();			

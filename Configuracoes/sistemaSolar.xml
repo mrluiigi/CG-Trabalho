@@ -5,14 +5,14 @@
 		<scale X="10.91" Y="10.91" Z="10.91" />
 		<rotate time="60" axisX="0" axisY="1" axisZ="0" />
 		<models> 
-			<model file="../../ModelsSolarSystem/sol.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/sun.jpg"/>
 		</models>
 	</group>  
 
 	<group>
 		Mercurio
 		<rotate angle="27.61" axisX="0" axisY="1" axisZ="0" />
-		<translate time="7.5" >
+		<translate time="55557.5" >
 			<point X="80" Y="0" Z="0" />
 			<point X="56.56854" Y="0" Z="-56.568547" /> 
 			<point X="0" Y="0" Z="-80" />
@@ -25,7 +25,7 @@
 		<rotate time="1160" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.038" Y=".038" Z=".038" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/mercury.jpg"/>
 		</models>
 	</group>
 
@@ -45,7 +45,7 @@
 		<rotate time="580" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.095" Y="0.095" Z="0.095" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/venus.jpg"/>
 		</models>
 	</group>
 
@@ -64,7 +64,7 @@
 		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
 		<scale X="0.3" Y="0.3" Z="0.3" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/earth.jpg"/>
 		</models>
 		<group> 
 			Lua
@@ -80,7 +80,7 @@
 			</translate>
 			<scale X="0.37" Y="0.37" Z="0.37" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/moon.jpg"/>
 			</models> 
 		</group>
 	</group>
@@ -101,14 +101,14 @@
 		<rotate time="10" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".053" Y=".053" Z=".053" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/mars.jpg"/>
 		</models>
 		<group> 
 			Lua1
 			<translate X="-10" Y="12" Z="10" />
 			<scale X="0.15" Y="0.15" Z="0.15" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -116,7 +116,7 @@
 			<translate X="20" Y="10" Z="15" />
 			<scale X="0.10" Y="0.10" Z="0.10" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 	</group>
@@ -137,7 +137,7 @@
 		<rotate time="3.75" axisX="0" axisY="1" axisZ="0" />
 		<scale X="1.12" Y="1.12" Z="1.12" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/jupiter.jpg"/>
 		</models>
 	</group>	
 
@@ -170,7 +170,7 @@
 			<rotate angle="0" axisX="1" axisY="0" axisZ="0" /> 
 			<rotate time="4.16" axisX="0" axisY="1" axisZ="0" />
 			<models>
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/saturn.jpg"/>
 			</models>
 		</group>
 		<group> 
@@ -178,7 +178,7 @@
 			<translate X="3" Y="-8" Z="5" />
 			<scale X="0.08" Y="0.08" Z="0.08" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -186,7 +186,7 @@
 			<translate X="-7" Y="9" Z="2" />
 			<scale X="0.075" Y="0.075" Z="0.075" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -194,7 +194,7 @@
 			<translate X="4" Y="-6" Z="-7" />
 			<scale X="0.07" Y="0.07" Z="0.07" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -202,7 +202,7 @@
 			<translate X="8" Y="10" Z="5" />
 			<scale X="0.037" Y="0.037" Z="0.037" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -210,7 +210,7 @@
 			<translate X="0" Y="3" Z="-15" />
 			<scale X="0.09" Y="0.09" Z="0.09" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -218,7 +218,7 @@
 			<translate X="2" Y="-7" Z="8" />
 			<scale X="0.083" Y="0.083" Z="0.083" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 	</group>
@@ -239,14 +239,14 @@
 		<rotate time="7.08" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".4" Y=".4" Z=".4" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/uranus.jpg"/>
 		</models>
 		<group> 
 			Lua1
 			<translate X="-8" Y="6" Z="3" />
 			<scale X="0.07" Y="0.07" Z="0.07" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -254,7 +254,7 @@
 			<translate X="6" Y="3" Z="-8" />
 			<scale X="0.06" Y="0.06" Z="0.06" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -262,7 +262,7 @@
 			<translate X="10" Y="-5" Z="3" />
 			<scale X="0.075" Y="0.075" Z="0.075" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 	</group>
@@ -283,14 +283,14 @@
 		<rotate time="6.66" axisX="0" axisY="1" axisZ="0" />
 		<scale X=".388" Y=".388" Z=".388" />
 		<models>
-			<model file="../../ModelsSolarSystem/esfera.3d" />
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/neptune.jpg"/>
 		</models>
 		<group> 
 			Lua1
 			<translate X="6" Y="-4" Z="-4" />
 			<scale X="0.1" Y="0.1" Z="0.1" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 		<group> 
@@ -298,7 +298,7 @@
 			<translate X="-5" Y="7" Z="2" />
 			<scale X="0.13" Y="0.13" Z="0.13" /> 
 			<models> 
-				<model file="../../ModelsSolarSystem/esfera.3d" />
+				<model file="../../ModelsSolarSystem/esferaText.3d" />
 			</models> 
 		</group>
 	</group>
