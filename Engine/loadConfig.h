@@ -70,9 +70,27 @@ public:
 
 };
 
+class Light{
+public:
+    //Vetor com os Ids(posição no vetor do objeto Models) dos modelos 
+    string type;
+
+    float posX;
+    float posY;
+    float posZ;
+
+    float dirX;
+    float dirY;
+    float dirZ;
+    
+    float cutoffAngle;
+    float exponent;
+
+};
+
 /**Recebe o nome do ficheiro XML onde se encontra a configuração.
   Recebe uma referência para um objecto da classe Models para o preencher com a informação dos ficheiros .3d
   Recebe uma referência para um vetor de objetos Group para o preencher 
   com a informação dos grupos presente no ficheiro configuração	
 */
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups);
+void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights);

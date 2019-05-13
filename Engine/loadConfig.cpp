@@ -244,8 +244,59 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
 }
 
 
+
+void parseLights(tinyxml2::XMLElement *light, vector<Light>& lights){
+    for(tinyxml2::XMLElement *child = light->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
+
+        Light l;
+        string type = string(child->Attribute("type"));
+
+
+        if( type.compare("POINT") == 0 ) {
+            l.type = "POINT";
+
+            l.posX = atof(child->Attribute("posX"));
+            l.posY = atof(child->Attribute("posY"));
+            l.posZ = atof(child->Attribute("posZ"));
+        }
+
+
+        else if( type.compare("DIRECTIONAL") == 0) {
+            l.type = "DIRECTIONAL";
+
+            l.dirX = atof(child->Attribute("dirX"));
+            l.dirY = atof(child->Attribute("dirY"));
+            l.dirZ = atof(child->Attribute("dirZ"));
+        }
+
+
+        else if( type.compare("SPOTLIGHT") == 0 ) {
+            l.type = "SPOTLIGHT";
+
+            l.posX = atof(child->Attribute("posX"));
+            l.posY = atof(child->Attribute("posY"));
+            l.posZ = atof(child->Attribute("posZ"));        
+
+            l.dirX = atof(child->Attribute("dirX"));
+            l.dirY = atof(child->Attribute("dirY"));
+            l.dirZ = atof(child->Attribute("dirZ"));
+
+            l.cutoffAngle = atof(child->Attribute("cutoffAngle"));
+            l.exponent = atof(child->Attribute("exponent"));
+        }
+
+        lights.push_back(l);
+    }
+}
+
+
+
+
+
+
+
 /** Parse ao ficheiro XML */
-void parseXML(char* file, Models& allModels, vector<Group>& groups){
+void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light>& lights){
     tinyxml2::XMLDocument doc;
 
     //Se conseguir carregar o ficheiro
@@ -256,12 +307,15 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups){
                 Group g = parseGroup(child, allModels);
                 groups.push_back(g);
             }
+            else if( string(child->Name()).compare("lights") == 0) {
+                parseLights(child, lights);
+            }
         }
     }
 }
 
 /** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups){
-    parseXML(fileXML, allModels,groups);
+void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights){
+    parseXML(fileXML, allModels,groups, lights);
     allModels.loadModels();
 }

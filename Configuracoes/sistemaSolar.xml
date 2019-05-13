@@ -1,5 +1,8 @@
 <scene> 
-	
+	<lights>
+		<light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0" />
+		<light type="DIRECTIONAL" dirX="0" dirY="-1" dirZ="0" />
+	</lights>
 
 	<group>
 		Sol
@@ -322,11 +325,5 @@
 		</models>
 		
 	</group>
-
-	<lights>
-		<light type="POINT" posX="0" posY="10" posZ="0" />
-		<light type="DIRECTIONAL" dirX="0" dirY="10" dirZ="0" />
-		<light type="SPOTLIGHT" posX="0" posY="10" posZ="0" dirX="0" dirY="0" dirZ="0" cutoffAngle="45" exponent="0" />
-	</lights>
 
 </scene>

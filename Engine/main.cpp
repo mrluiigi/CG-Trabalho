@@ -21,13 +21,16 @@ float alfa = 0;
 /** Ângulo vertical da câmera */
 float beta = 0;
 /** Raio/distância da câmera à origem */
-float r = 40;
+float r = 400;
 
 /** Contém todos os modelos */
 Models allModels;
 
 /** Contém todos os grupos */
 vector<Group> groups;
+
+/** Contém todas as luzes */
+vector<Light> lights;
 
 /** Buffers de vértices */
 GLuint buffers[1];
@@ -40,8 +43,6 @@ GLuint normals[1];
 
 /** Buffers de texturas */
 GLuint textures[1];
-
-GLuint texIDEarth;
 
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
@@ -173,21 +174,22 @@ void drawGroup(Group group) {
 
 
 
-        float red[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
+        float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+        float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+        glMaterialfv(GL_FRONT, GL_EMISSION, black);
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
         glMaterialf(GL_FRONT,GL_SHININESS,128);
 
+        if(m.textureId == 1) {
+            glMaterialfv(GL_FRONT, GL_EMISSION, white);
+        }
 
 
 
 
-        //Desenhar os buffers
+
 
         glBindTexture(GL_TEXTURE_2D, m.textureId);
-        /*
-        if(m.textureId != 0) {
-            printf("%d\n", m.textureId);
-        }*/
         glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
         glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -207,8 +209,65 @@ void loadBuffers() {
     glGenBuffers(1, indexes);
     glGenBuffers(1, normals);
     glGenBuffers(1, textures);
+}
+
+
+void setLights() {
+
+    GLuint luzes[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
+
+
+    GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
+    GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
+
+
+    for(int i = 0; i < lights.size(); i++){
+
+        Light l = lights[i];
+
+        glLightfv(luzes[i], GL_DIFFUSE, diff);
+
+        if(l.type.compare("POINT") == 0){
+            GLfloat pos[4] = {l.posX, l.posY , l.posZ, 1.0};
+            glLightfv(luzes[i], GL_POSITION, pos);
+            glLightfv(luzes[i], GL_AMBIENT, amb);
+        }
+
+        else if(l.type.compare("DIRECTIONAL") == 0){
+
+            GLfloat dir[4] = {l.dirX, l.dirY, l.dirZ, 0.0};
+            glLightfv(luzes[i], GL_POSITION, dir);
+            glLightfv(luzes[i], GL_AMBIENT, amb);
+        }
+
+        else if(l.type.compare("SPOTLIGHT") == 0){
+            GLfloat pos[4] = {l.posX, l.posY, l.posZ, 1.0};
+            GLfloat spotDir[3] = {l.dirX, l.dirY, l.dirZ};
+
+            glLightfv(luzes[i], GL_POSITION, pos);
+            glLightfv(luzes[i], GL_SPOT_DIRECTION, spotDir);
+            glLightf(luzes[i], GL_SPOT_CUTOFF, l.cutoffAngle);
+            glLightf(luzes[i], GL_SPOT_EXPONENT, l.exponent);
+        }
+
+    }
+
+
+
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
 
 void loadTexture() {
 
@@ -263,10 +322,11 @@ void loadTexture() {
 
 void renderScene(void) {
 
+
     if(firstRenderSceneCall) {
         loadBuffers();
-        firstRenderSceneCall = false;
         loadTexture();
+        firstRenderSceneCall = false;
     }
     glClearColor(0.0f,0.0f,0.0f,0.0f);
 
@@ -283,8 +343,10 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-    GLfloat dir[4] = {0.0, 0.0 , 1.0, 0.0};
-    glLightfv(GL_LIGHT0, GL_POSITION, dir);
+
+    setLights();
+
+
 
     glColor3f(1,0,0);
 
@@ -378,7 +440,7 @@ int main(int argc, char **argv) {
         return 0;
     }
     else {
-        loadConfig(argv[1], allModels, groups);
+        loadConfig(argv[1], allModels, groups, lights);
 
 
         //init GLUT and the window
@@ -409,17 +471,18 @@ int main(int argc, char **argv) {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+
         //Light Settings
         glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-
+        GLuint luzes[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
+        for(int i = 0; i < lights.size(); i++) {
+            glEnable(luzes[i]);
+        }
         glEnable(GL_TEXTURE_2D);
 
-        GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
-        GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
-        // light colors
-        glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+
+
+
 
 
 
