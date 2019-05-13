@@ -708,30 +708,28 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 
     float bx1, by1, bz1, bx2, by2, bz2;
 
+    float s = 0;
+    float t = 0;
+
     
     //Escreve os índices
-    file <<  (slices-1)*6*2+4*6<< endl;
+    file << 3*2*(slices+1) << endl;
 
     int j;
-    for (j = 0; j < slices-1; j++){   
-        //baixo esquerda -> baixo direita -> cima esquerda
-        file <<  j  << "," << j + 1 << "," << slices + j << ",";
-        file <<  slices + j  << "," << j + 1 << "," << j << ",";
-        //cima esquerda -> baixo direita -> cima direita
-        file << slices + j << "," <<  j + 1 << "," << slices + j + 1 << ",";
-        file << slices + j + 1 << "," <<  j + 1 << "," << slices + j << ",";
+    for (j = 0; j < slices+1; j++){   
+        file <<  (slices+1) + j  << "," << j + 1 << "," << j << ",";
+        file << (slices+1) + j + 1 << "," <<  j + 1 << "," << (slices + 1) + j << ",";
     }
-    file <<  j  << "," << 0 << "," << slices + j << ",";
-	file << slices + j << "," <<  0 << "," << slices << ",";
-	file <<  slices + j  << "," << 0 << "," << j << ",";
-	file << slices << "," <<  0 << "," << slices + j << "," << endl;
+    file << endl;
 
+
+    //--------------------------------------------------------VÉRTICES---------------------------------------------------------------
 
     //Escreve o número de vértices no ficheiro
-    file << slices*2 << endl;
+    file << (slices+1)*2 << endl;
 
-    //Vértices para cima
-    for(int i = 0; i < slices; i++) {
+    //Vértices parte de fora do anel
+    for(int i = 0; i < slices+1; i++) {
         bx1 = radius1 * sin((i+1)*alpha);
         by1 = 0;
         bz1 = radius1 * cos((i+1)*alpha);
@@ -739,8 +737,8 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
         file << bx1 << "," << by1 << "," << bz1 << "," << endl;
     }
 
-    //Vértices para baixo
-    for(int i = 0; i < slices; i++) {
+    //Vértices parte de dentro do anel
+    for(int i = 0; i < slices+1; i++) {
 	    bx2 = radius2 * sin((i+1)*alpha);
 	    by2 = 0;
 	    bz2 = radius2 * cos((i+1)*alpha);
@@ -749,26 +747,30 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 	}
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
-
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //PRECISO FAZER 2X POR CAUSA DOS VERTICES TODOS?//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    //Normais para cima
-    for(int z = 0; z < (slices*2); z++) {
+    //Normais
+    for(int z = 0; z < ((slices+1)*2); z++) {
         file << 0 << "," << 1 << "," << 0 << "," << endl;
     }
 
-    //Normais para baixo
-    for(int h = 0; h < (slices*2); h++) {
-        file << 0 << "," << -1 << "," << 0 << "," << endl;
+    //--------------------------------------------------------TEXTURAS---------------------------------------------------------------
+
+   
+    for(int i = 0; i < slices; i++){
+        s = (float)i / slices;
+        t = 0;
+        file << s << "," << t << "," << endl;
     }
+    file << 1 << "," << 0 << "," << endl;
+
+    for(int i = 0; i < slices; i++){
+        s = (float)i / slices;
+        t = 1;
+        file << s << "," << t << "," << endl;
+    }
+    file << 1 << "," << 1 << "," << endl;
+    
+
 
     file.close();
 }

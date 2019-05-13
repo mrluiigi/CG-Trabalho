@@ -1,7 +1,9 @@
 <scene> 
 	<group> 
+		Aneis
 		<models> 
-			<model file="../../Models/esferaText.3d" />
-		</models> 
+			<model file="../../ModelsSolarSystem/saturnRings1.3d" />
+			<model file="../../ModelsSolarSystem/saturnRings2.3d" />
+		</models>
 	</group>  
 </scene>

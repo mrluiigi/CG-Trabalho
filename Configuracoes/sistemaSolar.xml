@@ -1,7 +1,6 @@
 <scene> 
 	<lights>
-		<light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0" />
-		<light type="DIRECTIONAL" dirX="0" dirY="-1" dirZ="0" />
+		<light type="POINT" posX="0" posY="0" posZ="0" />
 	</lights>
 
 	<group>
@@ -161,14 +160,22 @@
 		</translate>  
 
 		<scale X=".945" Y=".945" Z=".945" />
-		<rotate angle="25" axisX="1" axisY="0" axisZ="0" /> 
+		<rotate angle="25" axisX="1" axisY="0" axisZ="1" /> 
 		<rotate time="25" axisX="0" axisY="1" axisZ="0" /> 
 		Aneis
+
 		<models> 
-			<model file="../../ModelsSolarSystem/saturnRings1.3d" />
-			<model file="../../ModelsSolarSystem/saturnRings2.3d" />
+			<model file="../../ModelsSolarSystem/saturnRings1.3d" texture="../../Textures/saturnRings.jpg"/>
+			<model file="../../ModelsSolarSystem/saturnRings2.3d" texture="../../Textures/saturnRings.jpg"/>
 		</models>
 
+		<group> 
+			<rotate angle="180" axisX="1" axisY="0" axisZ="0" /> 
+			<models>
+				<model file="../../ModelsSolarSystem/saturnRings1.3d" texture="../../Textures/saturnRings.jpg"/>
+				<model file="../../ModelsSolarSystem/saturnRings2.3d" texture="../../Textures/saturnRings.jpg"/>
+			</models>
+		</group>
 		
 		<group> 
 			<rotate angle="0" axisX="1" axisY="0" axisZ="0" /> 
