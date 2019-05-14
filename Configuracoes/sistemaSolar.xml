@@ -8,7 +8,7 @@
 		<scale X="10.91" Y="10.91" Z="10.91" />
 		<rotate time="60" axisX="0" axisY="1" axisZ="0" />
 		<models> 
-			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/sun.jpg"/>
+			<model file="../../ModelsSolarSystem/esferaText.3d" texture="../../Textures/sun.jpg" emiR="1.0" emiG="1.0" emiB="1.0" emiA="1.0"/>
 		</models>
 	</group>  
 

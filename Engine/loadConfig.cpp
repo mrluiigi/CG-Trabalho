@@ -251,6 +251,42 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Texture*
                     else{
                         m.hasTexture = false;
                     }
+                    m.diffuse = NULL;
+                    m.specular = NULL;
+                    m.emissive = NULL;
+                    m.ambient = NULL;
+                    if(modelXML->Attribute("diffR") != NULL){
+                        m.diffuse = new Colour;
+                        m.diffuse->colour[0] = atof(modelXML->Attribute("diffR"));
+                        m.diffuse->colour[1] = atof(modelXML->Attribute("diffG"));
+                        m.diffuse->colour[2] = atof(modelXML->Attribute("diffB"));
+                        m.diffuse->colour[3] = atof(modelXML->Attribute("diffA"));
+
+                    }
+                    if(modelXML->Attribute("specR") != NULL){
+                        m.specular = new Colour;
+                        m.specular->colour[0] = atof(modelXML->Attribute("specR"));
+                        m.specular->colour[1] = atof(modelXML->Attribute("specG"));
+                        m.specular->colour[2] = atof(modelXML->Attribute("specB"));
+                        m.specular->colour[3] = atof(modelXML->Attribute("specA"));
+
+                    }
+                    if(modelXML->Attribute("emiR") != NULL){
+                        m.emissive = new Colour;
+                        m.emissive->colour[0] = atof(modelXML->Attribute("emiR"));
+                        m.emissive->colour[1] = atof(modelXML->Attribute("emiG"));
+                        m.emissive->colour[2] = atof(modelXML->Attribute("emiB"));
+                        m.emissive->colour[3] = atof(modelXML->Attribute("emiA"));
+
+                    }
+                    if(modelXML->Attribute("ambR") != NULL){
+                        m.ambient = new Colour;
+                        m.ambient->colour[0] = atof(modelXML->Attribute("ambR"));
+                        m.ambient->colour[1] = atof(modelXML->Attribute("ambG"));
+                        m.ambient->colour[2] = atof(modelXML->Attribute("ambB"));
+                        m.ambient->colour[3] = atof(modelXML->Attribute("ambA"));
+
+                    }
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
                     m.modelInfo = allModels.addModel(filename);

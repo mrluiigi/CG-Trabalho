@@ -24,11 +24,22 @@ class Texture{
         int textureId;
 };
 
+class Colour{
+    public:
+        //Red Green Blue
+        float colour[4];
+};
+
 class Model{
     public:    
         bool hasTexture;
         Texture* texture;
         ModelInfo* modelInfo;
+        Colour* diffuse;
+        Colour* specular;
+        Colour* emissive;
+        Colour* ambient;
+
 };
 
 class Models{

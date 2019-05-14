@@ -92,7 +92,22 @@ void drawTimedTranslate(TimedTranslate tt) {
     glEnd();
 }
 
+void clearMaterials(){
 
+    float diff[4] = {0.2,0.2,0.2,1};
+    float spec[4] = {0.8,0.8,0.8,1};
+    float emi[4] = {0,0,0,1};
+    float amb[4] = {0,0,0,1};
+
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+
+            glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+
+            glMaterialfv(GL_FRONT, GL_EMISSION, emi);
+
+            glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
+        
+}
 
 void drawGroup(Group group) {
     int  t = glutGet(GLUT_ELAPSED_TIME);
@@ -174,18 +189,18 @@ void drawGroup(Group group) {
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.modelInfo->numberOfTextures * 2, m.modelInfo->texturesBuffer, GL_STATIC_DRAW);
 
 
-
-
-
-        float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-        float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_EMISSION, black);
-        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
-        glMaterialf(GL_FRONT,GL_SHININESS,128);
-
-      /*  if(m.textureId == 1) {
-            glMaterialfv(GL_FRONT, GL_EMISSION, white);
-        }*/
+        if(m.diffuse != NULL){
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, m.diffuse->colour);
+        }
+        if(m.specular != NULL){
+            glMaterialfv(GL_FRONT, GL_SPECULAR, m.specular->colour);
+        }
+        if(m.emissive != NULL){
+            glMaterialfv(GL_FRONT, GL_EMISSION, m.emissive->colour);
+        }
+        if(m.ambient != NULL){
+            glMaterialfv(GL_FRONT, GL_AMBIENT, m.ambient->colour);
+        }
 
 
 
@@ -194,7 +209,12 @@ void drawGroup(Group group) {
 
         glBindTexture(GL_TEXTURE_2D, m.texture->textureId);
         glDrawElements(GL_TRIANGLES, m.modelInfo->numberOfIndices, GL_UNSIGNED_INT, NULL);
+
+
+
         glBindTexture(GL_TEXTURE_2D, 0);
+        
+        clearMaterials();
 
     }
 
