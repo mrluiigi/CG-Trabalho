@@ -217,9 +217,9 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
         buildControlPointsMatrix(*bezierPatches, i, 2, controlPointsMatrixZ);
 
         //
-        m = 0;
+        n = 0;
         for(int j = 0; j <= tess; j++){
-            n = 0;
+            m = 0;
             for(int k = 0; k <= tess; k++){
                 tangentVectorU[0] = calculaCoordenadaTangentesU(m, n, controlPointsMatrixX);
                 tangentVectorU[1] = calculaCoordenadaTangentesU(m, n, controlPointsMatrixY);
@@ -229,14 +229,14 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
                 tangentVectorV[1] = calculaCoordenadaTangentesV(m, n, controlPointsMatrixY);
                 tangentVectorV[2] = calculaCoordenadaTangentesV(m, n, controlPointsMatrixZ);
 
-                cross(tangentVectorU, tangentVectorV, temp);
+                cross(tangentVectorV, tangentVectorU, temp);
                 normalize(temp);
                 
 
                 file << temp[0] << "," << temp[1] << "," << temp[2] << "," << endl;
-                n += step;
+                m += step;
             }
-            m += step;
+            n += step;
         }
     
     }
@@ -588,12 +588,12 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     file << indicesNumber << endl;
 
     //Vértice do centro da base do cone
-    int verticesNumber = 1;
+    int verticesNumber = 1+slices;
     //MUDAR corpo para outra coisa!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Número de vértices o "corpo?" do cone 
     verticesNumber += slices * stacks;
     //Vértice do topo do cone
-    verticesNumber += 1;
+    verticesNumber += slices;
 
     //-------------------------------------------------------INDICES---------------------------------------------------------------
 
@@ -611,7 +611,7 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     int j = 0;
     int i = 0;
     //Índices para cada stack do cone (excepto o último)
-    for (i = 0; i < stacks -1; i++) {
+    for (i = 1; i < stacks; i++) {
         for (j = 0; j < slices-1; j++){
             stackBase = i * slices + 1;
             stackTop = (i+1) * slices + 1;
@@ -628,13 +628,13 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     }
 
     stackBase = i * slices + 1;
-    int lastVertexIndex = verticesNumber - 1;
+    int lastVertexIndex = verticesNumber - slices;
     //indices do topo do cone
     for (j = 0; j < slices-1; j++){
-        file << stackBase + j + 1 << "," << lastVertexIndex << "," << stackBase + j  << ",";
+        file << stackBase + j + 1 << "," << lastVertexIndex + j << "," << stackBase + j  << ",";
     }
     //indices para "fechar" o topo do cone
-    file << stackBase << "," << lastVertexIndex << "," << stackBase + j << ",";
+    file << stackBase << "," << lastVertexIndex + j << "," << stackBase + j << ",";
 
     // \n para terminar os indices
     file << endl;
@@ -657,7 +657,7 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     file << 0 << "," << 0 << "," << 0 << "," << endl;
 
     //Vértices da borda da base do cone
-    for(int i = 0; i < slices; i++) {
+    for(int i = 0; i < slices*2; i++) {
         file << radius * sin(i*alpha) << "," << 0 << "," << radius * cos(i*alpha) << "," << endl;
     }
 
@@ -675,7 +675,9 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     }
 
     //Vértice no topo do cone
-    file << 0 << "," << height << "," << 0 << "," << endl;
+    for(int i = 0; i < slices; i++){
+        file << 0 << "," << height << "," << 0 << "," << endl;
+    }
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
 
@@ -685,16 +687,16 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     }
 
     //Normais da superfície lateral
-    for(int i = 0; i < stacks; i++){
+    for(int i = 0; i < stacks+1; i++){
         for(int j = 0; j < slices; j++){
             file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << endl;
         }
     }
     
-
-
-    //Normal no topo
-    file << 0 << "," << 1 << "," << 0 << "," << endl;
+    //Normais do topo
+    for(int j = 0; j < slices; j++){
+        file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << endl;
+    }
 
 
     file.close();
