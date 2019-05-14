@@ -199,9 +199,6 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
 
-    //The normal vector at any point of the surface is defined as the normalized result of the cross product of the tangent vectors.
-
-    // Número de normais de cada patch * 
     file << (tess+1)*(tess+1)*bezierPatches->numberOfPatches << endl;
 
     
@@ -238,7 +235,19 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
             }
             n += step;
         }
-    
+
+    }
+
+
+    //--------------------------------------------------------TEXTURA---------------------------------------------------------------
+
+    float stride = 1.0f/(tess+1);
+    for(int i = 0; i < numberOfPatches; i++) {
+        for(int j = 0; j <= tess; j++){
+            for(int k = 0; k <= tess; k++){
+                file << j*stride << "," << k*stride << "," << endl;
+            }
+        }
     }
 
 
@@ -271,11 +280,21 @@ void plano(float lado, string fileName){
 
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
     
     file << 0 << "," << 1 << "," << 0 << "," << endl;
     file << 0 << "," << 1 << "," << 0 << "," << endl;
     file << 0 << "," << 1 << "," << 0 << "," << endl;
     file << 0 << "," << 1 << "," << 0 << "," << endl;
+
+
+    //--------------------------------------------------------TEXTURA---------------------------------------------------------------
+
+
+    file << 0 << "," << 0 << "," << endl;
+    file << 1 << "," << 0 << "," << endl;
+    file << 0 << "," << 1 << "," << endl;
+    file << 1 << "," << 1 << "," << endl;
 
     file.close();
 }

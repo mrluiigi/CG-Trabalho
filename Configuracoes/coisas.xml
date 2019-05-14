@@ -1,11 +1,11 @@
 <scene> 
 	<lights>
-			<light type="DIRECTIONAL" dirX="1" dirY="0" dirZ="0" />
+			<light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0" />
 	</lights>
 
 	<group> 
 		<models> 
-			<model file="../../Models/cone.3d" />
+			<model file="../../Models/plano.3d" texture="../../Textures/grass.jpg"/>
 		</models>
 	</group>  
 </scene>
