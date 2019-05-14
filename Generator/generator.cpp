@@ -290,13 +290,16 @@ void caixa(float x, float y, float z, int divisions, string fileName){
     float divZ = z/divisions;
 
 
-    ///Número de índicesdivisions
-    file <<  3 * divisions * divisions * 2 * 6<< endl;
+    //-------------------------------------------------------INDICES---------------------------------------------------------------
+
+
+    //Número de indices
+    file << 6 * (divisions * divisions) * 3 * 2 << endl;
 
 
     int currentLine, nextLine, currentFace;
     //Escreve os índices
-    for(int q = 0; q < 3; q++){
+    for(int q = 0; q < 6; q++){
         currentFace = q * (divisions+1) * (divisions+1);
         for(int h = 0; h < divisions; h++){
             currentLine = (divisions+1)*h + currentFace;
@@ -309,113 +312,161 @@ void caixa(float x, float y, float z, int divisions, string fileName){
         }
     }
 
-    for(int q = 3; q < 6; q++){
-        currentFace = q * (divisions+1) * (divisions+1);
-        for(int h = 0; h < divisions; h++){
-            currentLine = (divisions+1)*h + currentFace;
-            nextLine = (divisions+1)*(h+1) + currentFace;
-
-            for(int g = 0;  g < divisions ; g++){
-                file << nextLine + g + 1 << "," << currentLine + g <<  "," << currentLine + g + 1 << ",";
-                file << nextLine + g + 1 << "," << nextLine + g << "," << currentLine + g << ",";
-            }
-        }
-    }
 
     file << endl;
 
 
-    //Escreve o número de vértices na primeira linha do ficheiro
-    file << (divisions+1) * (divisions+1) * 6 << endl;
+    //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
 
-    //Vértices face de cima
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << -x/2 + divX*j << "," << y/2 << "," << -z/2 + divZ*i << "," << endl;
+
+    //Número de vértices
+    file << 6 * ( (divisions+1) * (divisions+1) ) << endl;
+
+
+    //Top
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << -x/2 + divX*i << "," << y/2 << "," << -z/2 + divZ*j << "," << endl;
         }
     }
 
-    //Vértices face lateral direita
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+
+    //Left
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << -x/2 << "," << y/2 - divY*j << "," << -z/2 + divZ*i << "," << endl;
         }
     }
 
-    //Vértices face de trás
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << -z/2 << "," << endl;
+
+    //Front
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << -x/2 + divX*i << "," << y/2 - divY*j << "," << z/2 << "," << endl;
         }
     }
 
-    //Vértices face de baixo
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << -x/2 + divX*j << "," << -y/2 << "," << -z/2 + divZ*i << "," << endl;
+
+    //Right
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << x/2 << "," << y/2 - divY*j << "," << z/2 - divZ*i << "," << endl;
         }
     }
 
-    //Vértices face lateral esquerda
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << -x/2 << "," << -y/2 + divY*i << "," << -z/2 + divZ*j << "," << endl;
+
+    //Back
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << x/2 - divX*i << "," << y/2 - divY*j << "," << -z/2 << "," << endl;
         }
     }
 
-    //Vértices face da frente
-    for(int i = 0; i <= divisions; i++){
-        for(int j = 0; j <= divisions; j++){
-            file << -x/2 + divX*j << "," << -y/2 + divY*i << "," << z/2 << "," << endl;
+
+    //Bottom
+    for(int j = 0; j <= divisions; j++){
+        for(int i = 0; i <= divisions; i++){
+            file << -x/2 + divX*i << "," << -y/2 << "," << z/2 - divZ*j << "," << endl;
         }
     }
+
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
 
-    //Escreve o número de normias no ficheiro
-    file << (divisions+1) * (divisions+1) * 6 << endl;
 
-    //Normais face de cima
+    //Top
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
             file << 0 << "," << 1 << "," << 0 << "," << endl;
         }
     }
 
-    //Normais face lateral direita
+
+    //Left
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
-            file << 1 << "," << 0 << "," << 0 << "," << endl;            
+            file << -1 << "," << 0 << "," << 0 << "," << endl;            
         }
     }
 
-    //Normais face de trás
+
+    //Front
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 0 << "," << 0 << "," << 1 << "," << endl;
+        }
+    }
+
+
+    //Right
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << 1 << "," << 0 << "," << 0 << "," << endl;
+        }
+    }
+
+
+    //Back
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
             file << 0 << "," << 0 << "," << -1 << "," << endl;
         }
     }
 
-    //Normais face de baixo
+
+    //Bottom
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
             file << 0 << "," << -1 << "," << 0 << "," << endl;
         }
     }
 
-    //Normais face lateral esquerda
+
+    //--------------------------------------------------------TEXTURA---------------------------------------------------------------
+
+
+    //Top
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
-            file << -1 << "," << 0 << "," << 0 << "," << endl;
+            file << .25f + j*(.25/divisions) << "," << i*(1.0f/3.0f)/divisions << "," << endl;
         }
     }
 
-    //Normais face da frente
+    //Left
     for(int i = 0; i <= divisions; i++){
         for(int j = 0; j <= divisions; j++){
-            file << 0 << "," << 0 << "," << 1 << "," << endl;
+            file << j*(.25/divisions) << "," << 1.0f/3.0f + i*(1.0f/3.0f)/divisions << "," << endl;
         }
     }
+
+    //Front
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << .25f + j*(.25/divisions) << "," << 1.0f/3.0f + i*(1.0f/3.0f)/divisions << "," << endl;
+        }
+    }
+
+    //Right
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << .5f + j*(.25/divisions) << "," << 1.0f/3.0f + i*(1.0f/3.0f)/divisions << "," << endl;
+        }
+    }
+
+    //Back
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << .75f + j*(.25/divisions) << "," << 1.0f/3.0f + i*(1.0f/3.0f)/divisions << "," << endl;
+        }
+    }
+
+    //Bottom
+    for(int i = 0; i <= divisions; i++){
+        for(int j = 0; j <= divisions; j++){
+            file << .25f + j*(.25/divisions) << "," << 2.0f/3.0f + i*(1.0f/3.0f)/divisions << "," << endl;
+        }
+    }
+
 
     file.close();
 }
