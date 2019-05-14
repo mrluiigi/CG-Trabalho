@@ -684,12 +684,13 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
         file << 0 << "," << -1 << "," << 0 << "," << endl;
     }
 
-    for(int jj = 1; jj < stacks ; jj++) {
-        for(int ii = 0; ii < slices; ii++){
-            file << 0 << "," << -1 << "," << 0 << "," << endl;
+    //Normais da superfície lateral
+    for(int i = 0; i < stacks; i++){
+        for(int j = 0; j < slices; j++){
+            file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << endl;
         }
     }
-
+    
 
 
     //Normal no topo

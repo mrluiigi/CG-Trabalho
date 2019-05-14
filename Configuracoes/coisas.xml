@@ -1,9 +1,11 @@
 <scene> 
+	<lights>
+			<light type="DIRECTIONAL" dirX="1" dirY="-1" dirZ="0" />
+	</lights>
+
 	<group> 
-		Aneis
 		<models> 
-			<model file="../../ModelsSolarSystem/saturnRings1.3d" />
-			<model file="../../ModelsSolarSystem/saturnRings2.3d" />
+			<model file="../../Models/cone.3d" />
 		</models>
 	</group>  
 </scene>
