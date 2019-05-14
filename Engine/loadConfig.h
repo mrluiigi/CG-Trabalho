@@ -3,18 +3,13 @@ using namespace std;
 #include <string>
 #include <vector>
 
-
-
-class Model{
+class ModelInfo{
     public:
-    	//nome do ficheiro a partir do qual o modelo foi carregado	
+        //nome do ficheiro a partir do qual o modelo foi carregado  
         string name;
-        string texture;
-        int textureId;
-        bool hasTexture;
-		int numberOfIndices;
-		int* indicesBuffer;
-		int numberOfVertices;
+        int numberOfIndices;
+        int* indicesBuffer;
+        int numberOfVertices;
         float* verticesBuffer;
         int numberOfNormals;
         float* normalsBuffer;
@@ -23,18 +18,31 @@ class Model{
 
 };
 
+class Texture{
+    public:
+        string name;
+        int textureId;
+};
+
+class Model{
+    public:    
+        bool hasTexture;
+        Texture* texture;
+        ModelInfo* modelInfo;
+};
+
 class Models{
     public:
-        vector<Model> vec;
+        vector<ModelInfo*> vec;
 
 	    int contains(string name, string texture);
         //Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
-	    int addModel(Model m);
+	    ModelInfo* addModel(string filename);
 
 	    //preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros
-	    void loadModels();			
+	    void loadModelsInfo();			
         // Devolve o model dado o seu identificador 
-	    Model getModel(int id);
+	    ModelInfo* getModel(string filename);
 };
 
 
@@ -65,7 +73,7 @@ class Group{
 public:
     vector<GeometricTransforms> transforms;
     //Vetor com os Ids(posição no vetor do objeto Models) dos modelos 
-    vector<int> models;
+    vector<Model> models;
     vector<Group> subGroups;
 
 };
@@ -93,4 +101,4 @@ public:
   Recebe uma referência para um vetor de objetos Group para o preencher 
   com a informação dos grupos presente no ficheiro configuração	
 */
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights);
+void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures);

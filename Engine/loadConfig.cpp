@@ -57,7 +57,7 @@ void toIndice(string s, int* array){
         s.erase(0, pos + delimiter.length());
     }
 }
-
+/*
 //Se contem retorna o índice do modelo, caso contrário retorna -1
 int Models::contains(string name, string texture) {
     for (int i = 0; i < vec.size(); i++){
@@ -66,75 +66,88 @@ int Models::contains(string name, string texture) {
         }
     }
     return -1;
+}*/
+
+// Devolve o model dado o seu identificador 
+ModelInfo* Models::getModel(string filename) {
+    for (int i = 0; i < vec.size(); i++){
+        ModelInfo* mip = vec[i];
+        if(filename.compare(mip->name) == 0){
+            return mip;
+        }
+    }
+    return NULL;
 }
 
 /** Adiciona o model dado o nome do modelo */
 //Retorna um identificador para o modelo adicionado, se já existir um modelo com o mesmo nome retorna o identificador desse
-int Models::addModel(Model m) {
-    int id = contains(m.name, m.texture);
-    if(id == -1) {
-        vec.push_back(m);
-        return vec.size()-1;
+ModelInfo* Models::addModel(string filename) {
+    ModelInfo* mip = getModel(filename);
+    if(mip == NULL) {
+        mip = new ModelInfo;
+        mip->name = filename;
+        vec.push_back(mip);
+        return mip;
     }
-    else return id;
+    else return mip;
 }
 
 /** Preenche o vetor vertices de cada modelo com os dados presentes nos respetivos ficheiros */
-void Models::loadModels() {
+void Models::loadModelsInfo() {
     for (int i = 0; i < vec.size(); i++){
-        Model &m = vec[i];
+        ModelInfo* m = vec[i];
 
         //Abre o ficheiro .3d
-        ifstream file(m.name);
+        ifstream file(m->name);
         string s;
 
         //Lê o número de índices presente na 1º linha
         getline(file,s);
-        m.numberOfIndices = stoi(s);
-        m.indicesBuffer = (int *)malloc(sizeof(int) * m.numberOfIndices);
+        m->numberOfIndices = stoi(s);
+        m->indicesBuffer = (int *)malloc(sizeof(int) * m->numberOfIndices);
 
         //Lê os índices
         getline(file,s);
-        toIndice(s, m.indicesBuffer);
+        toIndice(s, m->indicesBuffer);
 
         //Lê o número de vértices presenta na 3º linha
         getline(file,s);
-        m.numberOfVertices = stoi(s);
-        m.verticesBuffer = (float *)malloc(sizeof(float) * m.numberOfVertices * 3);
+        m->numberOfVertices = stoi(s);
+        m->verticesBuffer = (float *)malloc(sizeof(float) * m->numberOfVertices * 3);
 
         int offset = 0;
 
         //Para cada linha processa um vértice
-        for(int i = 0; i < m.numberOfVertices; i++){
+        for(int i = 0; i < m->numberOfVertices; i++){
             getline(file, s);
-            toVertice(s, m.verticesBuffer + offset);
+            toVertice(s, m->verticesBuffer + offset);
             //Cada vértice é constituido por 3 floats
             offset += 3;
         }
 
         //Lê o número de normais
-        m.numberOfNormals = m.numberOfVertices;
-        m.normalsBuffer = (float *)malloc(sizeof(float) * m.numberOfNormals * 3);
+        m->numberOfNormals = m->numberOfVertices;
+        m->normalsBuffer = (float *)malloc(sizeof(float) * m->numberOfNormals * 3);
 
         offset = 0;
 
         //Para cada linha processa uma normal
-        for(int i = 0; i < m.numberOfNormals; i++){
+        for(int i = 0; i < m->numberOfNormals; i++){
             getline(file, s);
-            toNormal(s, m.normalsBuffer + offset);
+            toNormal(s, m->normalsBuffer + offset);
             //Cada normal é constituida por 3 floats
             offset += 3;
         }
 
 
-        m.numberOfTextures = m.numberOfVertices;
-        m.texturesBuffer = (float *)malloc(sizeof(float) * m.numberOfTextures * 2);
+        m->numberOfTextures = m->numberOfVertices;
+        m->texturesBuffer = (float *)malloc(sizeof(float) * m->numberOfTextures * 2);
 
         offset = 0;
         
-        for(int i = 0; i < m.numberOfTextures; i++){
+        for(int i = 0; i < m->numberOfTextures; i++){
             getline(file, s);
-            toNormal(s, m.texturesBuffer + offset);
+            toNormal(s, m->texturesBuffer + offset);
             //Cada textura é constituida por 2 floats
             offset += 2;
         }
@@ -146,10 +159,7 @@ void Models::loadModels() {
     }
 }
 
-// Devolve o model dado o seu identificador 
-Model Models::getModel(int id) {
-    return vec[id];
-}
+
 
 void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
     tt->time = atoi(element->Attribute("time"));
@@ -176,7 +186,7 @@ void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
     tt->controlPointsNumber = c;
 }
 
-Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
+Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Texture*>& textures){
     Group g;
     for(tinyxml2::XMLElement *child = group->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
         string childName = string(child->Name());
@@ -221,9 +231,21 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
         else if( string(child->Name()).compare("models") == 0) {
                 for(tinyxml2::XMLElement *modelXML = child->FirstChildElement(); modelXML != NULL; modelXML = modelXML->NextSiblingElement()){
                     Model m;
-                    m.name = modelXML->Attribute("file");
+                    string filename = modelXML->Attribute("file");
+                    Texture* txt = NULL;
                     if(modelXML->Attribute("texture") != NULL){
-                        m.texture = modelXML->Attribute("texture");
+                        string textureName = modelXML->Attribute("texture");
+                        for (int i = 0; i < textures.size(); i++){
+                            if(textureName.compare(textures[i]->name) == 0){
+                                txt = textures[i];
+                            }
+                        }
+                        if(txt == NULL){
+                            txt = new Texture;
+                            txt->name = textureName;
+                            textures.push_back(txt);                         
+                        }
+                        m.texture = txt;
                         m.hasTexture = true;
                     }
                     else{
@@ -231,13 +253,13 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels){
                     }
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
-                    int id = allModels.addModel(m);
-                    g.models.push_back(id);
+                    m.modelInfo = allModels.addModel(filename);
+                    g.models.push_back(m);
                 }
         }
         //caso o grupo contenha subgrupos
         else if( childName.compare("group") == 0) {
-            g.subGroups.push_back(parseGroup(child, allModels));
+            g.subGroups.push_back(parseGroup(child, allModels, textures));
         }
     }
     return g;
@@ -296,7 +318,7 @@ void parseLights(tinyxml2::XMLElement *light, vector<Light>& lights){
 
 
 /** Parse ao ficheiro XML */
-void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light>& lights){
+void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures){
     tinyxml2::XMLDocument doc;
 
     //Se conseguir carregar o ficheiro
@@ -304,7 +326,7 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light
         tinyxml2::XMLElement* root = doc.FirstChildElement();
         for(tinyxml2::XMLElement *child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()){
             if( string(child->Name()).compare("group") == 0) {
-                Group g = parseGroup(child, allModels);
+                Group g = parseGroup(child, allModels, textures);
                 groups.push_back(g);
             }
             else if( string(child->Name()).compare("lights") == 0) {
@@ -315,7 +337,7 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light
 }
 
 /** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights){
-    parseXML(fileXML, allModels,groups, lights);
-    allModels.loadModels();
+void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures){
+    parseXML(fileXML, allModels,groups, lights,textures);
+    allModels.loadModelsInfo();
 }

@@ -29,6 +29,9 @@ Models allModels;
 /** Contém todos os grupos */
 vector<Group> groups;
 
+/** Contém todas as texturas */
+vector<Texture*> textures;
+
 /** Contém todas as luzes */
 vector<Light> lights;
 
@@ -42,7 +45,7 @@ GLuint indexes[1];
 GLuint normals[1];
 
 /** Buffers de texturas */
-GLuint textures[1];
+GLuint texturesBuffer[1];
 
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
@@ -135,7 +138,7 @@ void drawGroup(Group group) {
         }
     }
     //Modelos do grupo
-    std::vector<int> models = group.models;
+    std::vector<Model> models = group.models;
 
 
 
@@ -145,30 +148,30 @@ void drawGroup(Group group) {
 
 
     for(int i = 0; i < models.size(); i++ ){
-        Model m = allModels.getModel(models[i]);
+        Model m = models[i];
 
 
         // Iniciar os vértices
         glBindBuffer(GL_ARRAY_BUFFER,buffers[0]);
         glVertexPointer(3,GL_FLOAT,0,0);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfVertices * 3, m.verticesBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.modelInfo->numberOfVertices * 3, m.modelInfo->verticesBuffer, GL_STATIC_DRAW);
 
         // Iniciar os indices
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes[0]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.numberOfIndices, m.indicesBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * m.modelInfo->numberOfIndices, m.modelInfo->indicesBuffer, GL_STATIC_DRAW);
 
         // Iniciar as normais
         glBindBuffer(GL_ARRAY_BUFFER,normals[0]);
         glNormalPointer(GL_FLOAT,0,0);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfNormals * 3, m.normalsBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.modelInfo->numberOfNormals * 3, m.modelInfo->normalsBuffer, GL_STATIC_DRAW);
 
 
 
 
         // Iniciar as texturas
-        glBindBuffer(GL_ARRAY_BUFFER,textures[0]);
+        glBindBuffer(GL_ARRAY_BUFFER,texturesBuffer[0]);
         glTexCoordPointer(2,GL_FLOAT,0,0);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numberOfTextures * 2, m.texturesBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.modelInfo->numberOfTextures * 2, m.modelInfo->texturesBuffer, GL_STATIC_DRAW);
 
 
 
@@ -180,17 +183,17 @@ void drawGroup(Group group) {
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
         glMaterialf(GL_FRONT,GL_SHININESS,128);
 
-        if(m.textureId == 1) {
+      /*  if(m.textureId == 1) {
             glMaterialfv(GL_FRONT, GL_EMISSION, white);
-        }
+        }*/
 
 
 
 
 
 
-        glBindTexture(GL_TEXTURE_2D, m.textureId);
-        glDrawElements(GL_TRIANGLES, m.numberOfIndices, GL_UNSIGNED_INT, NULL);
+        glBindTexture(GL_TEXTURE_2D, m.texture->textureId);
+        glDrawElements(GL_TRIANGLES, m.modelInfo->numberOfIndices, GL_UNSIGNED_INT, NULL);
         glBindTexture(GL_TEXTURE_2D, 0);
 
     }
@@ -208,7 +211,7 @@ void loadBuffers() {
     glGenBuffers(1, buffers);
     glGenBuffers(1, indexes);
     glGenBuffers(1, normals);
-    glGenBuffers(1, textures);
+    glGenBuffers(1, texturesBuffer);
 }
 
 
@@ -249,23 +252,8 @@ void setLights() {
             glLightf(luzes[i], GL_SPOT_CUTOFF, l.cutoffAngle);
             glLightf(luzes[i], GL_SPOT_EXPONENT, l.exponent);
         }
-
     }
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -276,46 +264,39 @@ void loadTexture() {
     unsigned int texID;
 
 
-    for(int i = 0; i < allModels.vec.size(); i++) {
-        Model &m = allModels.vec[i];
+    for(int i = 0; i < textures.size(); i++) {
+        Texture* txt = textures[i];
 
-        string s = m.texture;
+        string s = txt->name;
 
-        if (m.hasTexture){
-            //cout << "oi";
-            ilInit();
-            ilEnable(IL_ORIGIN_SET);
-            ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
+        ilInit();
+        ilEnable(IL_ORIGIN_SET);
+        ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
 
-            ilGenImages(1, &t);
-            ilBindImage(t);
-            ilLoadImage((ILstring) s.c_str());
+        ilGenImages(1, &t);
+        ilBindImage(t);
+        ilLoadImage((ILstring) s.c_str());
 
-            tw = ilGetInteger(IL_IMAGE_WIDTH);
-            th = ilGetInteger(IL_IMAGE_HEIGHT);
-            ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-            texData = ilGetData();
+        tw = ilGetInteger(IL_IMAGE_WIDTH);
+        th = ilGetInteger(IL_IMAGE_HEIGHT);
+        ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+        texData = ilGetData();
 
-            glGenTextures(1, &texID);
+        glGenTextures(1, &texID);
 
-            glBindTexture(GL_TEXTURE_2D, texID);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-            glGenerateMipmap(GL_TEXTURE_2D);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
-            glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
-            m.textureId = texID;
-
-        }
-        else{
-            m.textureId = 0;
-        }
+        txt->textureId = texID;
     }
 }
 
@@ -440,7 +421,7 @@ int main(int argc, char **argv) {
         return 0;
     }
     else {
-        loadConfig(argv[1], allModels, groups, lights);
+        loadConfig(argv[1], allModels, groups, lights, textures);
 
 
         //init GLUT and the window
