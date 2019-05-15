@@ -287,6 +287,12 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Texture*
                     m.specular = parseSpecular(modelXML);
                     m.emissive = parseEmissive(modelXML);
                     m.ambient = parseAmbient(modelXML);
+                    if(modelXML->Attribute("shininess") != NULL){
+                        m.shininess = atof(modelXML->Attribute("shininess"));
+                    }
+                    else{
+                        m.shininess = 0;
+                    }
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
                     m.modelInfo = allModels.addModel(filename);

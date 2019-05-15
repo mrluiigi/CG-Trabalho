@@ -3,7 +3,6 @@
 			<light type="DIRECTIONAL" dirX="0" dirY="0" dirZ="1" />
 	</lights>
 	<group> 
-		<scale X="10" Y="10" Z="10" /> 
 		<models> 
 			<model file="../../Models/esfera.3d" />
 		</models>

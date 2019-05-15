@@ -39,6 +39,7 @@ class Model{
         Colour* specular;
         Colour* emissive;
         Colour* ambient;
+        float shininess;
 
 };
 

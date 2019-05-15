@@ -106,7 +106,9 @@ void clearMaterials(){
 
     glMaterialfv(GL_FRONT, GL_EMISSION, emi);
 
-    glMaterialfv(GL_FRONT, GL_AMBIENT, amb);     
+    glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
+
+    glMaterialf(GL_FRONT, GL_SHININESS, 0);
 }
 
 void drawGroup(Group group) {
@@ -197,6 +199,7 @@ void drawGroup(Group group) {
         if(m.ambient != NULL){
             glMaterialfv(GL_FRONT, GL_AMBIENT, m.ambient->colour);
         }
+        glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);
 
 
         if(m.hasTexture){
