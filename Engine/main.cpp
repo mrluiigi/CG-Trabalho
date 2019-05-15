@@ -256,7 +256,7 @@ void setLights() {
 
         Light l = lights[i];
 
-        glLightfv(luzes[i], GL_DIFFUSE, diff);
+       glLightfv(luzes[i], GL_DIFFUSE, diff);
 
         if(l.type.compare("POINT") == 0){
             GLfloat pos[4] = {l.posX, l.posY , l.posZ, 1.0};
@@ -423,23 +423,25 @@ void processSpecialKeys(int key, int xx, int yy) {
 
 
 void printHelp(){
-    cout << "##################################################" << endl;
-    cout << "#                                                #" << endl;
-    cout << "# Como invocar: ./engine <XML file>              #" << endl;
-    cout << "#                                                #" << endl;
-    cout << "#                                                #" << endl;
-    cout << "# Movimentos:                                    #" << endl;
-    cout << "#          w: Move a câmara para cima            #" << endl;
-    cout << "#          s: Move a câmara para baixo           #" << endl;
-    cout << "#          a: Move a câmara para a esquerda      #" << endl;
-    cout << "#          d: Move a câmara para a direita       #" << endl;
-    cout << "#     KEY_UP: Reduz o raio da câmara             #" << endl;
-    cout << "#   KEY_DOWN: Aumenta o raio da câmara           #" << endl;
-    cout << "#          1: GL_POINT                           #" << endl;
-    cout << "#          2: GL_LINE                            #" << endl;
-    cout << "#          3: GL_FILL                            #" << endl;
-    cout << "#                                                #" << endl;
-    cout << "##################################################" << endl;
+    cout << "##################################################################" << endl;
+    cout << "#                                                                #" << endl;
+    cout << "# Como invocar: ./engine <XML file>                              #" << endl;
+    cout << "#                                                                #" << endl;
+    cout << "#                                                                #" << endl;
+    cout << "# Movimentos:                                                    #" << endl;
+    cout << "#          w: Move a câmara para cima                            #" << endl;
+    cout << "#          s: Move a câmara para baixo                           #" << endl;
+    cout << "#          a: Move a câmara para a esquerda                      #" << endl;
+    cout << "#          d: Move a câmara para a direita                       #" << endl;
+    cout << "#     KEY_UP: Reduz o raio da câmara                             #" << endl;
+    cout << "#   KEY_DOWN: Aumenta o raio da câmara                           #" << endl;
+    cout << "#          1: GL_POINT                                           #" << endl;
+    cout << "#          2: GL_LINE                                            #" << endl;
+    cout << "#          3: GL_FILL                                            #" << endl
+    cout << "#          p: Parar transfomações temporais                      #" << endl;
+    cout << "#          o: Desenhar percurso das translações temporais        #" << endl;
+    cout << "#                                                                #" << endl;
+    cout << "##################################################################" << endl;
 }
 
 
