@@ -5,7 +5,7 @@
 
 
 
-// a matriz M é igual à transposta
+//A matriz M é igual à transposta
 float mMatrix [16] = {-1,  3, -3, 1,   
                        3, -6,  3, 0,
                       -3,  3,  0, 0, 
@@ -13,10 +13,10 @@ float mMatrix [16] = {-1,  3, -3, 1,
 
 
 void multVectorMatrix(float *v, float *m, float *res){
-    //percorre vetor
+    //Percorre vetor
     for(int i = 0; i < 4; i++){
         res[i] = 0;
-        //percorre coluna matriz
+        //Percorre coluna matriz
         for (int j = 0; j < 4; j++){
             res[i] += v[j] * m[j * 4 + i];
         }
@@ -123,14 +123,14 @@ coordenada:
     2 -> z  
 */
 void buildControlPointsMatrix(BezierPatches bp, int patchNumber, int coordenada, float* controlPointsMatrix){
-    //obtem a localização dos índices dos pontos de controlo
+    //Obtem a localização dos índices dos pontos de controlo
     int* patch = bp.patches[patchNumber];
     int indice;
 
     for (int i = 0; i < 16; ++i){
-        //obtem o indice de um ponto de controlo
+        //Obtem o indice de um ponto de controlo
         indice = patch[i];
-        //guarda a coordenada necessária do ponto de controlo
+        //Guarda a coordenada necessária do ponto de controlo
         controlPointsMatrix[i] = bp.points[indice][coordenada];
     }
 
@@ -145,7 +145,11 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
     float step = 1.0/tess;
     int nVerticesPatch = (tess+1)*(tess+1);
     int numberOfPatches = bezierPatches->numberOfPatches;
+
+
     //-------------------------------------------------------INDICES---------------------------------------------------------------
+
+
     //Número de índices de cada patch * número de patches
     int indicesNumber = (tess * tess * 3 * 2) * numberOfPatches;
     file << indicesNumber << endl;
@@ -161,9 +165,11 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
             }
         }
     }
-        file << endl;
+    file << endl;
+
 
     //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
 
     // Número de vértices de cada patch * 
     file << (tess+1)*(tess+1)*bezierPatches->numberOfPatches << endl;
@@ -197,7 +203,9 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
     
     }
 
+
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
 
     float m,n;
 
@@ -238,11 +246,12 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
 
     //--------------------------------------------------------TEXTURA---------------------------------------------------------------
 
-    float stride = 1.0f/(tess+1);
+
+    float stride = 1.0f/(tess);
     for(int i = 0; i < numberOfPatches; i++) {
         for(int j = 0; j <= tess; j++){
             for(int k = 0; k <= tess; k++){
-                file << j*stride << "," << k*stride << "," << endl;
+                file << k*stride << "," << j*stride << "," << endl;
             }
         }
     }
@@ -262,12 +271,20 @@ void plano(float lado, string fileName){
     x = lado/2;
     z = lado/2;
 
+
+    //--------------------------------------------------------INDICES---------------------------------------------------------------
+
+
     //Número de índices
     file << 6 << ", " << endl; 
     //Índices
     file << 0 << ", " << 2 << ", " << 1 << ", " << 1 << ", " << 2 << ", " << 3 <<  ", " << endl; 
     //Escreve o número de vértices na primeira linha do ficheiro
     file << 4 << ", " << endl;
+
+
+    //--------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
 
     //Escreve os vértices de um triangulo no ficheiro
     file << -x << "," << y << "," << -z << "," << endl; // 0
@@ -511,7 +528,9 @@ void esfera(float radius, int slices, int stacks, string fileName){
     //Vértice no fundo da esfera
     verticesNumber += slices;
 
+
     //-------------------------------------------------------INDICES---------------------------------------------------------------
+
 
     //Escreve o número de indices 
     file << indicesNumber << endl;
@@ -538,14 +557,8 @@ void esfera(float radius, int slices, int stacks, string fileName){
             //cima esquerda -> baixo direita -> cima direita
             file << stackTop + j  << "," << stackBase + j + 1 << "," << stackTop + j + 1 << ",";
         }
-        //Última slice de cada camada
-        //cima esquerda -> baixo esquerda -> baixo direita
-        //file << stackTop + j << "," << stackBase + j << "," << stackBase << ",";
-
-        //cima esquerda -> baixo direita -> cima direita
-        //file << stackTop + j  << "," << stackBase << "," << stackTop << ",";
+       
     }
-
 
     //Índices da camada inferior da esfera 
     stackTop = (stacks-2) * (slices+1) + topVertexOffset;
@@ -553,19 +566,12 @@ void esfera(float radius, int slices, int stacks, string fileName){
     for (int j = 0; j < slices; j++){
         file << stackTop + j << "," << bottomStackOffset + j << "," << stackTop + j + 1 << ",";
     }
-    //Índices para a última slice da camada inferior da esfera
-    //file << stackTop + j << "," << lastVertexIndex << "," << stackTop << ",";
-
-
-
-
-
-
-    // \n para terminar os indices
     file << endl;
 
 
     //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
+
     float x = 0;
     float z = 0;
 
@@ -592,7 +598,9 @@ void esfera(float radius, int slices, int stacks, string fileName){
         file << 0 << "," << -radius << "," << 0 << "," << endl;
     }
 
+
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
 
     //Vetor normal para topo da esfera
     for(int i = 0; i < slices; i++){
@@ -602,7 +610,7 @@ void esfera(float radius, int slices, int stacks, string fileName){
     for(int j = 1; j < stacks; j++) {
         float y = sin(M_PI/2 - beta * j);
         for(int i = 0; i < slices+1; i++) {         
-            x = cos(M_PI/2 - beta * j) * sin(i * alpha);     
+            x = cos(M_PI/2 - beta * j) * sin(i * alpha);
             z = cos(M_PI/2 - beta * j) * cos(i * alpha);
             file << x << "," << y << "," << z << "," << endl;
         }
@@ -613,9 +621,10 @@ void esfera(float radius, int slices, int stacks, string fileName){
         file << 0 << "," << -1 << "," << 0 << "," << endl;
     }
 
+
     //--------------------------------------------------------TEXTURA---------------------------------------------------------------
 
-    //número de coordenadas da textura igual a número de vértices e normais?
+
     float offset = (1.0f/slices)/2.0f;
 
     for(int i = 0; i < slices; i++){
@@ -638,6 +647,7 @@ void esfera(float radius, int slices, int stacks, string fileName){
         file << s << "," << t << "," << endl;
     }
 
+
     file.close();
 }
 
@@ -646,23 +656,28 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     ofstream file;
     file.open(fileName);
 
+
     //Número de índices para a base do cone
     int indicesNumber = slices * 3;
     //Número de índices para cada stack do cone (excepto a última)
     indicesNumber += slices * (stacks -1) * 3 * 2;
     //Número de índices para o último stack do cone 
     indicesNumber += slices * 3;
-    file << indicesNumber << endl;
+
 
     //Vértice do centro da base do cone
     int verticesNumber = 1+slices;
-    //MUDAR corpo para outra coisa!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Número de vértices o "corpo?" do cone 
+    //Número de vértices da superfície lateral do cone 
     verticesNumber += slices * stacks;
     //Vértice do topo do cone
     verticesNumber += slices;
 
+
+    file << indicesNumber << endl;
+
+
     //-------------------------------------------------------INDICES---------------------------------------------------------------
+
 
     //Índices da base do cone
     for (int i = 0; i < slices-1; i++){
@@ -703,10 +718,11 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     //indices para "fechar" o topo do cone
     file << stackBase << "," << lastVertexIndex + j << "," << stackBase + j << ",";
 
-    // \n para terminar os indices
     file << endl;
 
+
     //-------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
 
     float alpha = (2*M_PI)/slices;
     float coneSlant = sqrt(height*height+radius*radius);
@@ -746,7 +762,9 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
         file << 0 << "," << height << "," << 0 << "," << endl;
     }
 
+
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
+
 
     //Normal no fundo
     for(int z = 0; z < (slices+1); z++){
@@ -754,15 +772,10 @@ void cone(float radius, float height, int slices, int stacks, string fileName){
     }
 
     //Normais da superfície lateral
-    for(int i = 0; i < stacks+1; i++){
+    for(int i = 0; i < stacks+1+1; i++){
         for(int j = 0; j < slices; j++){
-            file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << endl;
+            file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << "," << endl;
         }
-    }
-    
-    //Normais do topo
-    for(int j = 0; j < slices; j++){
-        file << sin(alpha*j) << "," << sin(90-beta) << "," << cos(alpha*j) << endl;
     }
 
 
@@ -785,6 +798,10 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
     //Escreve os índices
     file << 3*2*(slices+1) << endl;
 
+
+    //--------------------------------------------------------INDICES---------------------------------------------------------------
+
+
     int j;
     for (j = 0; j < slices+1; j++){   
         file <<  (slices+1) + j  << "," << j + 1 << "," << j << ",";
@@ -794,6 +811,7 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 
 
     //--------------------------------------------------------VÉRTICES---------------------------------------------------------------
+
 
     //Escreve o número de vértices no ficheiro
     file << (slices+1)*2 << endl;
@@ -816,12 +834,15 @@ void saturnRings(float radius1, float radius2, int slices, string fileName){
 	    file << bx2 << "," << by2 << "," << bz2 << "," << endl;
 	}
 
+
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
     
+
     //Normais
     for(int z = 0; z < ((slices+1)*2); z++) {
         file << 0 << "," << 1 << "," << 0 << "," << endl;
     }
+
 
     //--------------------------------------------------------TEXTURAS---------------------------------------------------------------
 
@@ -865,22 +886,6 @@ void printHelp(){
 }
 
 int main(int argc, char **argv){
-
-    //saturnRingsIndice(7, 11, 20, "saturnRings1.3d");
-    //saturnRingsIndice(12, 14, 20, "saturnRings2.3d");
-    //esferaIndices(5, 10, 20, "esfera.3d");
-    //esferaIndices(5, 20, 30, "sol.3d");
-
-    //bezierPatchesGenerator(bezierPatches, 0, 20, "teapot.3d");
-
-    //planoIndices(4, "plano.3d");
-
-    //esferaIndices(8, 50, 50, "esfera.3d");
-
-    //saturnRingsIndice(15, 13, 30, "aneis.3d");
-
-    //caixaIndices(6, 6, 6, 16, "caixa.3d");
-
     
     if (argc < 2){
         cout << "Parâmetros insuficientes" << endl;
@@ -909,20 +914,19 @@ int main(int argc, char **argv){
         else if(strcmp(argv[1], "Esfera") == 0 && argc == 6){
             esfera(atof(argv[2]), atoi(argv[3]), atoi(argv[4]), file);
         }
-        //raio, altura, slices, stacks,
+        //Cone: raio, altura, slices, stacks,
         else if(strcmp(argv[1], "Cone") == 0 && argc == 7){
             cone(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), file);
         }
-        //raio1, raio2, slices
+        //Aneis de saturno: raio1, raio2, slices
         else if(strcmp(argv[1], "SaturnRings") == 0 && argc == 6){
             saturnRings(atof(argv[2]), atof(argv[3]), atoi(argv[4]), file);
         }
+        //Bezier Patch: ficheiro patch, tesselação
         else if(strcmp(argv[1], "BezierPatch") == 0 && argc == 5){
             BezierPatches* bezierPatches = loadBezierPatches(argv[2]);
             bezierPatchesGenerator(bezierPatches, atof(argv[3]), file);
         }
-
-
         else{
             cout << "Introduza os parâmetros corretamente" << endl;
             cout << "Faça ./generator -h para ajuda." << endl;
