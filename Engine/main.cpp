@@ -50,7 +50,11 @@ GLuint texturesBuffer[1];
 //Na primeira chamada da função renderScene() vão ser carregados os buffers
 bool firstRenderSceneCall = true;
 
+bool timeStopped = false;
 
+bool drawOrbits = false;
+
+int glutTime = 0;
 
 
 void changeSize(int w, int h) {
@@ -110,7 +114,9 @@ void clearMaterials(){
 }
 
 void drawGroup(Group group) {
-    int  t = glutGet(GLUT_ELAPSED_TIME);
+    if(timeStopped == false){
+        glutTime = glutGet(GLUT_ELAPSED_TIME);
+    }
     glPushMatrix();
     //Transformações a aplicar ao grupo
     vector<GeometricTransforms> &gts = group.transforms;
@@ -129,11 +135,13 @@ void drawGroup(Group group) {
         }
         else if(gt.type == 3) {
             //Desenha a curva que a translação segue
-            drawTimedTranslate(*gt.tt);
+            if(drawOrbits == true){
+                drawTimedTranslate(*gt.tt);
+            }
             //Passar tempo para milissegundos
             int time = gt.tt->time * 1000;
             //Tempo desde o inicio da volta atual
-            float ct = t % time;
+            float ct = glutTime % time;
             //Transformar num valor entre 0 e 1
             ct = ct / time;
             float pos[3];
@@ -146,7 +154,7 @@ void drawGroup(Group group) {
             //Passar tempo para milissegundos
             int time = gt.rotateTime * 1000;
             //Tempo desde o inicio da volta atual
-            float angle = t % time;
+            float angle = glutTime % time;
             //Transformar num valor em graus
             angle = angle / time * 360;
             glRotatef(angle,gt.x,gt.y,gt.z);
@@ -386,6 +394,12 @@ void processKeys(unsigned char c, int xx, int yy) {
     }
     else if(c == '3'){
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+    else if(c == 'p'){
+        timeStopped = !timeStopped;
+    }
+    else if(c == 'o'){
+        drawOrbits = !drawOrbits;
     }
 
     glutPostRedisplay();
