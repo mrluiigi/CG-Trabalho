@@ -1,4 +1,7 @@
 <scene> 
+	<lights>
+			<light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0" />
+	</lights>
 	<group> 
 		<scale X="10" Y="10" Z="10" /> 
 		<models> 

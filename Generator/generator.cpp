@@ -199,9 +199,6 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
 
     //--------------------------------------------------------NORMAIS---------------------------------------------------------------
 
-    file << (tess+1)*(tess+1)*bezierPatches->numberOfPatches << endl;
-
-    
     float m,n;
 
     float* tangentVectorU = new float[3];

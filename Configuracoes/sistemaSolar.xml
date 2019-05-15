@@ -328,7 +328,7 @@
 		<scale X=".5" Y=".5" Z=".5" />
 
 		<models>
-			<model file="../../ModelsSolarSystem/teapot.3d" texture="../../Textures/haumea.jpg"/>
+			<model file="../../ModelsSolarSystem/comet.3d" texture="../../Textures/haumea.jpg"/>
 		</models>
 		
 	</group>

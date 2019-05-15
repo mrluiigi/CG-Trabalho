@@ -21,7 +21,7 @@ float alfa = 0;
 /** Ângulo vertical da câmera */
 float beta = 0;
 /** Raio/distância da câmera à origem */
-float r = 40;
+float r = 400;
 
 /** Contém todos os modelos */
 Models allModels;
@@ -94,10 +94,10 @@ void drawTimedTranslate(TimedTranslate tt) {
 
 void clearMaterials(){
 
-    float diff[4] = {0.2,0.2,0.2,1};
-    float spec[4] = {0.8,0.8,0.8,1};
+    float amb[4] = {0.2,0.2,0.2,1};
+    float diff[4] = {1,1,1,1};
+    float spec[4] = {0,0,0,1};
     float emi[4] = {0,0,0,1};
-    float amb[4] = {0,0,0,1};
 
             glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
 

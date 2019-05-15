@@ -5,7 +5,7 @@
 
 	<group> 
 		<models> 
-			<model file="../../Models/teapotNormal.3d" texture="../../Textures/teapotTeste.jpg"/>
+			<model file="../../Models/teapot.3d" />
 		</models>
 	</group>  
 </scene>
