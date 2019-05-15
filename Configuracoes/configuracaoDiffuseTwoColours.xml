@@ -1,0 +1,42 @@
+<scene> 
+	<lights>
+		<light type="POINT" posX="0" posY="5" posZ="0" diffR="1" diffG="1" diffB="0" diffA="1.0"/>
+	</lights>
+	<group>
+		<translate X="0" Y="5" Z="0" /> 
+		<scale X="0.1" Y="0.1" Z="0.1" />
+		<models>
+			<model file="../../Models/esfera.3d" emiR="1" emiG="1" emiB="0" emiA="1.0"/>
+		</models>
+	</group>
+
+
+	<group> 
+		<translate X="-5" Y="0" Z="0" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" diffR="1" diffG="1" diffB="0" diffA="1.0"/>
+		</models> 
+	</group>
+
+	<group> 
+		<translate X="5" Y="0" Z="0" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" diffR="1" diffG="0.3" diffB="0" diffA="1.0"/>
+		</models> 
+	</group>
+
+	<group> 
+		<translate X="0" Y="0" Z="5" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" diffR="1" diffG="0.6" diffB="0" diffA="1.0"/>
+		</models> 
+	</group>	
+
+	<group> 
+			<translate X="0" Y="0" Z="-5" /> 
+			<models> 
+				<model file="../../Models/caixa.3d" diffR="1" diffG="0" diffB="0" diffA="1.0"/>
+			</models> 
+	</group>
+
+</scene>

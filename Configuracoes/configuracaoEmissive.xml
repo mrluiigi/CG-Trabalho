@@ -1,0 +1,30 @@
+<scene> 
+	<group> 
+		<translate X="-5" Y="0" Z="0" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" emiR="0" emiG="1" emiB="0" emiA="1.0"/>
+		</models> 
+	</group>
+
+	<group> 
+		<translate X="5" Y="0" Z="0" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" emiR="0" emiG="0.3" emiB="0" emiA="1.0"/>
+		</models> 
+	</group>
+
+	<group> 
+		<translate X="0" Y="0" Z="5" /> 
+		<models> 
+			<model file="../../Models/caixa.3d" emiR="0" emiG="0.6" emiB="0" emiA="1.0"/>
+		</models> 
+	</group>	
+
+	<group> 
+			<translate X="0" Y="0" Z="-5" /> 
+			<models> 
+				<model file="../../Models/caixa.3d" emiR="0" emiG="0" emiB="0" emiA="1.0"/>
+			</models> 
+	</group>
+
+</scene>
