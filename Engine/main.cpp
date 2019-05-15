@@ -100,14 +100,13 @@ void clearMaterials(){
     float spec[4] = {0,0,0,1};
     float emi[4] = {0,0,0,1};
 
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
 
-            glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
 
-            glMaterialfv(GL_FRONT, GL_EMISSION, emi);
+    glMaterialfv(GL_FRONT, GL_EMISSION, emi);
 
-            glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
-        
+    glMaterialfv(GL_FRONT, GL_AMBIENT, amb);     
 }
 
 void drawGroup(Group group) {
@@ -161,12 +160,6 @@ void drawGroup(Group group) {
     std::vector<Model> models = group.models;
 
 
-
-
-
-
-
-
     for(int i = 0; i < models.size(); i++ ){
         Model m = models[i];
 
@@ -184,8 +177,6 @@ void drawGroup(Group group) {
         glBindBuffer(GL_ARRAY_BUFFER,normals[0]);
         glNormalPointer(GL_FLOAT,0,0);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.modelInfo->numberOfNormals * 3, m.modelInfo->normalsBuffer, GL_STATIC_DRAW);
-
-
 
 
         // Iniciar as texturas
@@ -208,9 +199,6 @@ void drawGroup(Group group) {
         }
 
 
-
-
-
         if(m.hasTexture){
             glBindTexture(GL_TEXTURE_2D, m.texture->textureId);
         }
@@ -221,9 +209,7 @@ void drawGroup(Group group) {
         glBindTexture(GL_TEXTURE_2D, 0);
         
         clearMaterials();
-
     }
-
 
     //Desenhar subgrupos
     for(int i = 0; i < group.subGroups.size(); i++ ){
@@ -264,7 +250,6 @@ void setLights() {
         }
 
 
-
         if(l.type.compare("POINT") == 0){
             GLfloat pos[4] = {l.posX, l.posY , l.posZ, 1.0};
             glLightfv(luzes[i], GL_POSITION, pos);
@@ -287,7 +272,6 @@ void setLights() {
         }
     }
 }
-
 
 
 void loadTexture() {
@@ -357,9 +341,7 @@ void renderScene(void) {
             0.0,0.0,0.0,
             0.0f,1.0f,0.0f);
 
-
     setLights();
-
 
 
     glColor3f(1,0,0);
@@ -375,7 +357,6 @@ void renderScene(void) {
 
 void processKeys(unsigned char c, int xx, int yy) {
 
-// put code to process regular keys in here
     //rodar horizontalmente
     if (c == 'a') {
         alfa -= M_PI/48;
@@ -400,9 +381,11 @@ void processKeys(unsigned char c, int xx, int yy) {
     else if(c == '3'){
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+    //Para as transformações temporais
     else if(c == 'p'){
         timeStopped = !timeStopped;
     }
+    //desenha orbitas
     else if(c == 'o'){
         drawOrbits = !drawOrbits;
     }
@@ -503,14 +486,8 @@ int main(int argc, char **argv) {
         glEnable(GL_TEXTURE_2D);
 
 
-
-
-
-
-
         //Para poder usar o glGenBuffer
         glewInit();
-
 
 
         //enter GLUT's main cycle

@@ -40,10 +40,6 @@ void toNormal(string s, float* res){
 }
 
 
-
-
-
-
 void toIndice(string s, int* array){
     int i = 0;
 
@@ -57,16 +53,6 @@ void toIndice(string s, int* array){
         s.erase(0, pos + delimiter.length());
     }
 }
-/*
-//Se contem retorna o índice do modelo, caso contrário retorna -1
-int Models::contains(string name, string texture) {
-    for (int i = 0; i < vec.size(); i++){
-        if(name.compare(vec[i].name) == 0 && texture.compare(vec[i].texture) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}*/
 
 // Devolve o model dado o seu identificador 
 ModelInfo* Models::getModel(string filename) {
@@ -365,12 +351,6 @@ void parseLights(tinyxml2::XMLElement *light, vector<Light>& lights){
         lights.push_back(l);
     }
 }
-
-
-
-
-
-
 
 /** Parse ao ficheiro XML */
 void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures){
