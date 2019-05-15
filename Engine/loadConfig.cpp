@@ -185,6 +185,52 @@ void parseTimedTranslate(tinyxml2::XMLElement * element, TimedTranslate* tt) {
     }
     tt->controlPointsNumber = c;
 }
+Colour* parseDiffuse(tinyxml2::XMLElement *xml){
+    Colour* diffuse = NULL;
+    if(xml->Attribute("diffR") != NULL){
+        diffuse = new Colour;
+        diffuse->colour[0] = atof(xml->Attribute("diffR"));
+        diffuse->colour[1] = atof(xml->Attribute("diffG"));
+        diffuse->colour[2] = atof(xml->Attribute("diffB"));
+        diffuse->colour[3] = atof(xml->Attribute("diffA"));
+    }
+    return diffuse;
+}
+
+Colour* parseSpecular(tinyxml2::XMLElement *xml){
+    Colour* specular = NULL;
+    if(xml->Attribute("specR") != NULL){
+        specular = new Colour;
+        specular->colour[0] = atof(xml->Attribute("specR"));
+        specular->colour[1] = atof(xml->Attribute("specG"));
+        specular->colour[2] = atof(xml->Attribute("specB"));
+        specular->colour[3] = atof(xml->Attribute("specA"));
+    }
+    return specular;
+}
+Colour* parseEmissive(tinyxml2::XMLElement *xml){
+    Colour* emissive = NULL;
+    if(xml->Attribute("emiR") != NULL){
+        emissive = new Colour;
+        emissive->colour[0] = atof(xml->Attribute("emiR"));
+        emissive->colour[1] = atof(xml->Attribute("emiG"));
+        emissive->colour[2] = atof(xml->Attribute("emiB"));
+        emissive->colour[3] = atof(xml->Attribute("emiA"));
+    }
+    return emissive;
+}
+
+Colour* parseAmbient(tinyxml2::XMLElement *xml){
+    Colour* ambient = NULL;
+    if(xml->Attribute("ambR") != NULL){
+        ambient = new Colour;
+        ambient->colour[0] = atof(xml->Attribute("ambR"));
+        ambient->colour[1] = atof(xml->Attribute("ambG"));
+        ambient->colour[2] = atof(xml->Attribute("ambB"));
+        ambient->colour[3] = atof(xml->Attribute("ambA"));
+    }
+    return ambient;
+}
 
 Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Texture*>& textures){
     Group g;
@@ -251,42 +297,10 @@ Group parseGroup(tinyxml2::XMLElement *group, Models& allModels, vector<Texture*
                     else{
                         m.hasTexture = false;
                     }
-                    m.diffuse = NULL;
-                    m.specular = NULL;
-                    m.emissive = NULL;
-                    m.ambient = NULL;
-                    if(modelXML->Attribute("diffR") != NULL){
-                        m.diffuse = new Colour;
-                        m.diffuse->colour[0] = atof(modelXML->Attribute("diffR"));
-                        m.diffuse->colour[1] = atof(modelXML->Attribute("diffG"));
-                        m.diffuse->colour[2] = atof(modelXML->Attribute("diffB"));
-                        m.diffuse->colour[3] = atof(modelXML->Attribute("diffA"));
-
-                    }
-                    if(modelXML->Attribute("specR") != NULL){
-                        m.specular = new Colour;
-                        m.specular->colour[0] = atof(modelXML->Attribute("specR"));
-                        m.specular->colour[1] = atof(modelXML->Attribute("specG"));
-                        m.specular->colour[2] = atof(modelXML->Attribute("specB"));
-                        m.specular->colour[3] = atof(modelXML->Attribute("specA"));
-
-                    }
-                    if(modelXML->Attribute("emiR") != NULL){
-                        m.emissive = new Colour;
-                        m.emissive->colour[0] = atof(modelXML->Attribute("emiR"));
-                        m.emissive->colour[1] = atof(modelXML->Attribute("emiG"));
-                        m.emissive->colour[2] = atof(modelXML->Attribute("emiB"));
-                        m.emissive->colour[3] = atof(modelXML->Attribute("emiA"));
-
-                    }
-                    if(modelXML->Attribute("ambR") != NULL){
-                        m.ambient = new Colour;
-                        m.ambient->colour[0] = atof(modelXML->Attribute("ambR"));
-                        m.ambient->colour[1] = atof(modelXML->Attribute("ambG"));
-                        m.ambient->colour[2] = atof(modelXML->Attribute("ambB"));
-                        m.ambient->colour[3] = atof(modelXML->Attribute("ambA"));
-
-                    }
+                    m.diffuse = parseDiffuse(modelXML);
+                    m.specular = parseSpecular(modelXML);
+                    m.emissive = parseEmissive(modelXML);
+                    m.ambient = parseAmbient(modelXML);
                     //Guarda apenas o nome do ficheiro 3d
                     //O ficheiro será processado quando for invocada a função loadModels()
                     m.modelInfo = allModels.addModel(filename);
@@ -343,6 +357,11 @@ void parseLights(tinyxml2::XMLElement *light, vector<Light>& lights){
             l.exponent = atof(child->Attribute("exponent"));
         }
 
+        l.diffuse = parseDiffuse(child);
+        l.specular = parseSpecular(child);
+        l.emissive = parseEmissive(child);
+        l.ambient = parseAmbient(child);
+
         lights.push_back(l);
     }
 }
@@ -373,7 +392,8 @@ void parseXML(char* file, Models& allModels, vector<Group>& groups, vector<Light
 }
 
 /** Processa os vértices lidos do ficheiro e coloca o modelo obtido no vector de modelos global*/
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures){
+void loadConfig(char* fileXML, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures){
+    Models allModels;
     parseXML(fileXML, allModels,groups, lights,textures);
     allModels.loadModelsInfo();
 }

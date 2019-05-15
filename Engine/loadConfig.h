@@ -105,6 +105,11 @@ public:
     float cutoffAngle;
     float exponent;
 
+    Colour* diffuse;
+    Colour* specular;
+    Colour* emissive;
+    Colour* ambient;
+
 };
 
 /**Recebe o nome do ficheiro XML onde se encontra a configuração.
@@ -112,4 +117,4 @@ public:
   Recebe uma referência para um vetor de objetos Group para o preencher 
   com a informação dos grupos presente no ficheiro configuração	
 */
-void loadConfig(char* fileXML, Models& allModels, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures);
+void loadConfig(char* fileXML, vector<Group>& groups, vector<Light>& lights, vector<Texture*>& textures);

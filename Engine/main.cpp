@@ -23,9 +23,6 @@ float beta = 0;
 /** Raio/distância da câmera à origem */
 float r = 40;
 
-/** Contém todos os modelos */
-Models allModels;
-
 /** Contém todos os grupos */
 vector<Group> groups;
 
@@ -214,8 +211,9 @@ void drawGroup(Group group) {
 
 
 
-
-        glBindTexture(GL_TEXTURE_2D, m.texture->textureId);
+        if(m.hasTexture){
+            glBindTexture(GL_TEXTURE_2D, m.texture->textureId);
+        }
         glDrawElements(GL_TRIANGLES, m.modelInfo->numberOfIndices, GL_UNSIGNED_INT, NULL);
 
 
@@ -248,27 +246,34 @@ void setLights() {
     GLuint luzes[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7};
 
 
-    GLfloat amb[4] = {0.2, 0.2, 0.2, 1.0};
-    GLfloat diff[4] = {1.0, 1.0, 1.0, 1.0};
-
-
     for(int i = 0; i < lights.size(); i++){
 
         Light l = lights[i];
 
-       glLightfv(luzes[i], GL_DIFFUSE, diff);
+        if(l.diffuse != NULL){
+            glLightfv(luzes[i], GL_DIFFUSE, l.diffuse->colour);
+        }
+        if(l.specular != NULL){
+            glLightfv(luzes[i], GL_SPECULAR, l.specular->colour);
+        }
+        if(l.emissive != NULL){
+            glLightfv(luzes[i], GL_EMISSION, l.emissive->colour);
+        }
+        if(l.ambient != NULL){
+            glLightfv(luzes[i], GL_AMBIENT, l.ambient->colour);
+        }
+
+
 
         if(l.type.compare("POINT") == 0){
             GLfloat pos[4] = {l.posX, l.posY , l.posZ, 1.0};
             glLightfv(luzes[i], GL_POSITION, pos);
-            glLightfv(luzes[i], GL_AMBIENT, amb);
         }
 
         else if(l.type.compare("DIRECTIONAL") == 0){
 
             GLfloat dir[4] = {l.dirX, l.dirY, l.dirZ, 0.0};
             glLightfv(luzes[i], GL_POSITION, dir);
-            glLightfv(luzes[i], GL_AMBIENT, amb);
         }
 
         else if(l.type.compare("SPOTLIGHT") == 0){
@@ -437,7 +442,7 @@ void printHelp(){
     cout << "#   KEY_DOWN: Aumenta o raio da câmara                           #" << endl;
     cout << "#          1: GL_POINT                                           #" << endl;
     cout << "#          2: GL_LINE                                            #" << endl;
-    cout << "#          3: GL_FILL                                            #" << endl
+    cout << "#          3: GL_FILL                                            #" << endl;
     cout << "#          p: Parar transfomações temporais                      #" << endl;
     cout << "#          o: Desenhar percurso das translações temporais        #" << endl;
     cout << "#                                                                #" << endl;
@@ -457,7 +462,7 @@ int main(int argc, char **argv) {
         return 0;
     }
     else {
-        loadConfig(argv[1], allModels, groups, lights, textures);
+        loadConfig(argv[1], groups, lights, textures);
 
 
         //init GLUT and the window
