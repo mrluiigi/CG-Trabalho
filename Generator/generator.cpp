@@ -251,7 +251,7 @@ float* bezierPatchesGenerator(BezierPatches* bezierPatches, int tess, string fil
     for(int i = 0; i < numberOfPatches; i++) {
         for(int j = 0; j <= tess; j++){
             for(int k = 0; k <= tess; k++){
-                file << k*stride << "," << j*stride << "," << endl;
+                file << j*stride << "," << k*stride << "," << endl;
             }
         }
     }
